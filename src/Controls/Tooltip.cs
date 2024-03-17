@@ -11,8 +11,8 @@ public class Tooltip : ControlBase
     public Tooltip(ILocator context)
         : base(context)
     {
-        content = new Label(Context.Locator("[data-tid='Tooltip__content']"));
-        closeLocator = Context.Locator("[data-tid='Tooltip__crossIcon']");
+        content = new Label(context.Locator("[data-tid='Tooltip__content']"));
+        closeLocator = context.Locator("[data-tid='Tooltip__crossIcon']");
     }
 
     public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)

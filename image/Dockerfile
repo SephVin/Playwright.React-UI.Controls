@@ -1,7 +1,6 @@
-FROM mcr-proxy.kontur.host/playwright/dotnet:v1.41.2-jammy
+FROM mcr.microsoft.com/playwright/dotnet:v1.41.2-jammy
 
 COPY src ./tmp/src
-COPY RunStorybook.ps1 ./tmp/
 
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash \
 	&& apt update \
