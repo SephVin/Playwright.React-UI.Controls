@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>11</LangVersion>
+        <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>Playwright.ReactUI.Controls.Extensions</AssemblyName>
+        <RootNamespace>Playwright.ReactUI.Controls.Extensions</RootNamespace>
+        <OutputPath>..\bin</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Controls\Controls.csproj" />
+    </ItemGroup>
+
+</Project>

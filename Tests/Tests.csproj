@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>11</LangVersion>
+        <TargetFramework>net6.0</TargetFramework>
+        <AssemblyName>Playwright.ReactUI.Tests</AssemblyName>
+        <RootNamespace>Playwright.ReactUI.Tests</RootNamespace>
+        <OutputPath>..\bin\tests</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Controls.Extensions\Controls.Extensions.csproj" />
+        <ProjectReference Include="..\Controls\Controls.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="NUnit" Version="3.14.0" />
+    </ItemGroup>
+
+</Project>
