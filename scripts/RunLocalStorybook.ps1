@@ -3,12 +3,12 @@ $version = "0.0.0"
 $version = npm --version
 $major, $minor, $patch = $version.Split('.')
 
-if (($major -lt 8) -or (($major -eq 8) -and ($minor -lt 19))) {
-  'installing new npm version'
-  npm -g install npm@8
+if (($major -lt 10) -or (($major -eq 10) -and ($minor -lt 5))) {
+  Write-Host "Installing new npm version" -ForegroundColor Green
+  npm -g install npm@10
 }
 
-'npm version is ok'
+Write-Host "npm version is ok" -ForegroundColor Green
 
 cd src\web
 npm i
