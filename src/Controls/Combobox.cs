@@ -23,34 +23,33 @@ public class Combobox : ControlBase
     public async Task<string> GetSelectedValueAsync(LocatorInnerTextOptions? options = default)
         => await Context.InnerTextAsync(options).ConfigureAwait(false);
 
-    public async Task SelectFirstAsync(string value, LocatorPressSequentiallyOptions? options = default)
+    public async Task SelectFirstAsync(string value, LocatorFillOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
-        var items = await FillAndGetItemsAsync(value, options).ConfigureAwait(false);
+        await FillAsync(value, options).ConfigureAwait(false);
+        var items = await GetItemsByValueAsync(value).ConfigureAwait(false);
         await items.First.ClickAsync().ConfigureAwait(false);
         await BlurAsync().ConfigureAwait(false);
     }
 
-    public async Task SelectSingleAsync(string value, LocatorPressSequentiallyOptions? options = default)
+    public async Task SelectSingleAsync(string value, LocatorFillOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
-        var items = await FillAndGetItemsAsync(value, options).ConfigureAwait(false);
+        await FillAsync(value, options).ConfigureAwait(false);
+        var items = await GetItemsByValueAsync(value).ConfigureAwait(false);
         await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
         await items.ClickAsync().ConfigureAwait(false);
         await BlurAsync().ConfigureAwait(false);
     }
 
-    public async Task FillAsync(string text, LocatorPressSequentiallyOptions? options = default)
-    {
-        await ClearAsync().ConfigureAwait(false);
-        await inputLocator.PressSequentiallyAsync(text, options).ConfigureAwait(false);
-    }
-
-    public async Task ClearAsync(LocatorPressOptions? options = default)
+    public async Task FillAsync(string text, LocatorFillOptions? options = default)
     {
         await FocusAsync().ConfigureAwait(false);
-        await inputLocator.PressAsync("Control+A", options).ConfigureAwait(false);
-        await inputLocator.PressAsync("Backspace", options).ConfigureAwait(false);
+        await inputLocator.FillAsync(text, options).ConfigureAwait(false);
+    }
+
+    public async Task ClearAsync(LocatorClearOptions? options = default)
+    {
+        await FocusAsync().ConfigureAwait(false);
+        await inputLocator.ClearAsync(options).ConfigureAwait(false);
     }
 
     public async Task FocusAsync(LocatorClickOptions? options = default)
@@ -65,18 +64,10 @@ public class Combobox : ControlBase
         await base.ClickAsync(options).ConfigureAwait(false);
     }
 
-    private async Task<ILocator> FillAndGetItemsAsync(string value, LocatorPressSequentiallyOptions? options = default)
-    {
-        await FocusAsync().ConfigureAwait(false);
-        await inputLocator.PressSequentiallyAsync(value, options).ConfigureAwait(false);
-
-        return await GetItemsAsync().ConfigureAwait(false);
-    }
-
-    private async Task<ILocator> GetItemsAsync()
+    private async Task<ILocator> GetItemsByValueAsync(string value)
     {
         var portalContainer = await portal.GetContainerAsync().ConfigureAwait(false);
-        return portalContainer.Locator("[data-tid='ComboBoxMenu__item']");
+        return portalContainer.Locator("[data-tid='ComboBoxMenu__item']").GetByText(value);
     }
 
     public override ILocatorAssertions Expect() => new ComboboxAssertions(Context.Expect(), inputLocator.Expect());

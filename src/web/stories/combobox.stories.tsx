@@ -18,6 +18,21 @@ export const Default = () => {
     <Gapped>
       <ComboBox
         data-tid="ComboboxId"
+        getItems={getNumbers}
+        onValueChange={selectNumber}
+        value={selectedNumber}
+      />
+    </Gapped>
+  );
+};
+
+export const Loading = () => {
+  const [selectedNumber, selectNumber] = useState<ComboBoxItem>();
+
+  return (
+    <Gapped>
+      <ComboBox
+        data-tid="ComboboxId"
         getItems={getNumbersWithDelay}
         onValueChange={selectNumber}
         value={selectedNumber}
@@ -61,7 +76,6 @@ export const Filled = () => {
         onValueChange={selectNumber}
         value={selectedNumber}
       />
-      default
     </Gapped>
   );
 };

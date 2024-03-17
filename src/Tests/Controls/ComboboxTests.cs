@@ -146,6 +146,29 @@ public sealed class ComboboxTests : TestsBase
     }
 
     [Test]
+    public async Task SelectFirst_With_Loading()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("combobox--loading")).ConfigureAwait(false);
+        var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
+
+        await combobox.SelectFirstAsync("th").ConfigureAwait(false);
+
+        await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task SelectFirst_Multiple_Selects()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
+        var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
+
+        await combobox.SelectFirstAsync("th").ConfigureAwait(false);
+        await combobox.SelectFirstAsync("Second").ConfigureAwait(false);
+
+        await combobox.Expect().ToHaveTextAsync("Second").ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task SelectSingle_Set_Single_Value_From_Combobox()
     {
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
@@ -154,6 +177,29 @@ public sealed class ComboboxTests : TestsBase
         await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task SelectSingle_With_Loading()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("combobox--loading")).ConfigureAwait(false);
+        var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
+
+        await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
+
+        await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task SelectSingle_Multiple_Selects()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
+        var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
+
+        await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
+        await combobox.SelectSingleAsync("Second").ConfigureAwait(false);
+
+        await combobox.Expect().ToHaveTextAsync("Second").ConfigureAwait(false);
     }
 
     [Test]
