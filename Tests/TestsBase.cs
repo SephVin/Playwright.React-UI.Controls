@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Playwright;
 using NUnit.Framework;
 
-[assembly: LevelOfParallelism(8)]
+[assembly: LevelOfParallelism(4)]
 
 namespace Playwright.ReactUI.Tests;
 
