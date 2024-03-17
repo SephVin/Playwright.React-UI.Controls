@@ -11,7 +11,7 @@ if (($major -lt 8) -or (($major -eq 8) -and ($minor -lt 19))) {
 
 'npm version is ok'
 
-cd src\Web
+cd src\web
 npm i
 npm run build-storybook
 npm run storybook
