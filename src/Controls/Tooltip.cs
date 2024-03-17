@@ -9,8 +9,7 @@ public class Tooltip : ControlBase
     private readonly Label content;
 
     public Tooltip(ILocator context)
-        // note: remove Locator("[data-tid='PopupContent']") after deleting react-selenium-testing.js
-        : base(context.Locator("[data-tid='PopupContent']"))
+        : base(context)
     {
         content = new Label(Context.Locator("[data-tid='Tooltip__content']"));
         closeLocator = Context.Locator("[data-tid='Tooltip__crossIcon']");
