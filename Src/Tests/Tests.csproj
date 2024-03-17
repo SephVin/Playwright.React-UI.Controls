@@ -5,7 +5,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>Playwright.ReactUI.Tests</AssemblyName>
         <RootNamespace>Playwright.ReactUI.Tests</RootNamespace>
-        <OutputPath>..\bin\tests</OutputPath>
+        <OutputPath>..\..\bin\tests</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <Nullable>enable</Nullable>

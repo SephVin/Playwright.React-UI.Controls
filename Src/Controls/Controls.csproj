@@ -3,16 +3,17 @@
     <PropertyGroup>
         <LangVersion>11</LangVersion>
         <TargetFramework>net6.0</TargetFramework>
-        <AssemblyName>Playwright.ReactUI.Controls.Extensions</AssemblyName>
-        <RootNamespace>Playwright.ReactUI.Controls.Extensions</RootNamespace>
-        <OutputPath>..\bin</OutputPath>
+        <AssemblyName>Playwright.ReactUI.Controls</AssemblyName>
+        <RootNamespace>Playwright.ReactUI.Controls</RootNamespace>
+        <OutputPath>..\..\bin</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Controls\Controls.csproj" />
+        <PackageReference Include="Microsoft.Playwright" Version="1.41.2" />
+        <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 
 </Project>
