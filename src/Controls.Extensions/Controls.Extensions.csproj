@@ -2,17 +2,45 @@
 
     <PropertyGroup>
         <LangVersion>11</LangVersion>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
         <AssemblyName>Playwright.ReactUI.Controls.Extensions</AssemblyName>
         <RootNamespace>Playwright.ReactUI.Controls.Extensions</RootNamespace>
         <OutputPath>..\..\bin</OutputPath>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Controls\Controls.csproj" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     </ItemGroup>
+
+    <!-- NuGet package -->
+    <PropertyGroup>
+        <PackageId>Playwright.ReactUI.Controls.Extensions</PackageId>
+        <Title>Playwright.ReactUI.Controls.Extensions</Title>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
+        <Version>0.1.0</Version>
+        <Authors>Evgeniy Ivanov</Authors>
+        <Product>Playwright.ReactUI.Controls.Extensions</Product>
+        <Description>Extensions for Playwright.ReactUI.Controls</Description>
+        <Summary>Extensions for Playwright.ReactUI.Controls</Summary>
+        <PackageTags>playwright react-ui page-elements extensions</PackageTags>
+        <!--        <PackageIcon>logo128x128.png</PackageIcon>-->
+        <!--        <PackageIconFullPath>$(MSBuildThisFileDirectory)\..\..\logo128x128.png</PackageIconFullPath>-->
+        <!--        <PackageProjectUrl>https://github.com/pepelev/PullStream</PackageProjectUrl>-->
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <MinClientVersion>2.12</MinClientVersion>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSource>true</IncludeSource>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <RepositoryType>git</RepositoryType>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
 
 </Project>
