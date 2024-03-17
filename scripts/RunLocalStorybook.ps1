@@ -1,3 +1,4 @@
+Set-Location (Get-Item -Path $PSScriptRoot).Parent.FullName
 $version = "0.0.0"
 $version = npm --version
 $major, $minor, $patch = $version.Split('.')
