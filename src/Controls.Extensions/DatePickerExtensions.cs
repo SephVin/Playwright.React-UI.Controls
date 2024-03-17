@@ -19,8 +19,9 @@ public static class DatePickerExtensions
     public static async Task WaitValueAsync(
         this DatePicker datePicker,
         DateTime value,
+        string dateFormat = "dd.MM.yyyy",
         LocatorAssertionsToHaveTextOptions? options = default)
-        => await datePicker.WaitValueAsync(value.ToString("dd.MM.yyyy"), options).ConfigureAwait(false);
+        => await datePicker.WaitValueAsync(value.ToString(dateFormat), options).ConfigureAwait(false);
 
     public static async Task WaitValueAsync(
         this DatePicker datePicker,
@@ -30,8 +31,8 @@ public static class DatePickerExtensions
 
     public static async Task WaitValueAbsenceAsync(
         this DatePicker datePicker,
-        LocatorAssertionsToHaveTextOptions? options = default)
-        => await datePicker.Expect().ToHaveTextAsync("  .  .    ", options).ConfigureAwait(false);
+        LocatorAssertionsToBeEmptyOptions? options = default)
+        => await datePicker.Expect().ToBeEmptyAsync(options).ConfigureAwait(false);
 
     public static async Task FocusAndBlurAsync(this DatePicker datePicker)
     {

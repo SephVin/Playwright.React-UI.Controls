@@ -230,40 +230,4 @@ public class SelectTests : TestsBase
 
         await context.Expect().ToHaveTextAsync("Two").ConfigureAwait(false);
     }
-
-    [Test]
-    public async Task WaitEnabled_For_SelectButton()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitEnabledAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitEnabled_For_SelectLink()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitEnabledAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitDisabled_For_SelectButton()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("select--disabled-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitDisabledAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitDisabled_For_SelectLink()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("select--disabled-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitDisabledAsync().ConfigureAwait(false);
-    }
 }

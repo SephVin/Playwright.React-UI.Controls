@@ -23,6 +23,6 @@ public static class ComboboxExtensions
 
     public static async Task WaitValueAbsenceAsync(
         this Combobox combobox,
-        LocatorAssertionsToHaveTextOptions? options = default)
-        => await combobox.Expect().ToHaveTextAsync(string.Empty, options).ConfigureAwait(false);
+        LocatorAssertionsToBeEmptyOptions? options = default)
+        => await combobox.Expect().ToBeEmptyAsync(options).ConfigureAwait(false);
 }

@@ -30,4 +30,10 @@ public static class RadioExtensions
         this Radio radio,
         LocatorAssertionsToBeCheckedOptions? options = default)
         => await radio.Expect().Not.ToBeCheckedAsync(options).ConfigureAwait(false);
+
+    public static async Task WaitValueAsync(
+        this Radio radio,
+        string value,
+        LocatorAssertionsToHaveValueOptions? options = default)
+        => await radio.Expect().ToHaveValueAsync(value, options).ConfigureAwait(false);
 }

@@ -108,4 +108,13 @@ public class RadioExtensionsTests : TestsBase
 
         await radio.WaitUncheckedAsync().ConfigureAwait(false);
     }
+
+    [Test]
+    public async Task WaitValue()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("radio--default")).ConfigureAwait(false);
+        var radio = new Radio(Page.GetByTestId("RadioId"));
+
+        await radio.WaitValueAsync("1").ConfigureAwait(false);
+    }
 }

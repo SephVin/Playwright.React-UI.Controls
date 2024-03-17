@@ -27,4 +27,22 @@ public class KebabExtensionsTests : TestsBase
 
         await notExistingKebab.WaitAbsenceAsync().ConfigureAwait(false);
     }
+
+    [Test]
+    public async Task WaitDisabled()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("kebab--disabled")).ConfigureAwait(false);
+        var kebab = new Kebab(Page.GetByTestId("KebabId"));
+
+        await kebab.WaitDisabledAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitEnabled()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("kebab--default")).ConfigureAwait(false);
+        var kebab = new Kebab(Page.GetByTestId("KebabId"));
+
+        await kebab.WaitEnabledAsync().ConfigureAwait(false);
+    }
 }

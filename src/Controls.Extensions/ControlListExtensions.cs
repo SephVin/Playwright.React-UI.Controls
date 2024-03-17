@@ -5,6 +5,22 @@ namespace Playwright.ReactUI.Controls.Extensions;
 
 public static class ControlListExtensions
 {
+    public static async Task WaitPresenceAsync<T>(
+        this ControlList<T> controlList,
+        LocatorAssertionsToBeVisibleOptions? options = default) where T : ControlBase
+        => await controlList.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
+
+    public static async Task WaitAbsenceAsync<T>(
+        this ControlList<T> controlList,
+        LocatorAssertionsToBeVisibleOptions? options = default) where T : ControlBase
+        => await controlList.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
+
+    public static async Task WaitCountAsync<T>(
+        this ControlList<T> controlList,
+        int count,
+        LocatorAssertionsToHaveCountOptions? options = default) where T : ControlBase
+        => await controlList.Expect().ToHaveCountAsync(count, options).ConfigureAwait(false);
+
     public static async Task ClickFirstItemAsync<T>(
         this ControlList<T> controlList,
         LocatorClickOptions? options = default) where T : ControlBase

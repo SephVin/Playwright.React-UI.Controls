@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
@@ -62,33 +63,13 @@ public class Select : ControlBase
     public async Task FocusAsync()
         => await ClickAsync().ConfigureAwait(false);
 
-    public async Task WaitEnabledAsync()
-    {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        if (await buttonLocator.IsVisibleAsync().ConfigureAwait(false))
-        {
-            await buttonLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        }
-        else
-        {
-            await linkLocator.Expect().Not.ToHaveAttributeAsync("tabindex", "-1").ConfigureAwait(false);
-        }
-    }
-
-    public async Task WaitDisabledAsync()
-    {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        if (await buttonLocator.IsVisibleAsync().ConfigureAwait(false))
-        {
-            await buttonLocator.Expect().ToBeDisabledAsync().ConfigureAwait(false);
-        }
-        else
-        {
-            await linkLocator.Expect().ToHaveAttributeAsync("tabindex", "-1").ConfigureAwait(false);
-        }
-    }
+    public override ILocatorAssertions Expect() => new SelectAssertions(
+        Context,
+        Context.Expect(),
+        buttonLocator,
+        buttonLocator.Expect(),
+        linkLocator,
+        linkLocator.Expect());
 
     private async Task<IReadOnlyList<ILocator>> GetItemsAsync()
     {

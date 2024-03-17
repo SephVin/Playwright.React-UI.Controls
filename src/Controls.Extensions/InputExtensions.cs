@@ -23,8 +23,8 @@ public static class InputExtensions
 
     public static async Task WaitValueAbsenceAsync(
         this Input input,
-        LocatorAssertionsToHaveValueOptions? options = default)
-        => await input.Expect().ToHaveValueAsync(string.Empty, options).ConfigureAwait(false);
+        LocatorAssertionsToBeEmptyOptions? options = default)
+        => await input.Expect().ToBeEmptyAsync(options).ConfigureAwait(false);
 
     // note: for input with mask
     public static async Task ClearAndFillAsync(

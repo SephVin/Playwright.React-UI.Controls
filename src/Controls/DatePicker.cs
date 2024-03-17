@@ -50,6 +50,7 @@ public class DatePicker : ControlBase
         => await inputLocator.PressAsync("Tab", options).ConfigureAwait(false);
 
     public override DatePickerAssertions Expect() => new(
+        Context,
         Context.Expect(),
         inputLocator.Expect(),
         nativeInputLocator.Expect());

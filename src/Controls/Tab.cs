@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -15,4 +17,6 @@ public class Tab : ControlBase
 
     public async Task<bool> IsActiveAsync(LocatorGetAttributeOptions? options = default)
         => await GetAttributeValueAsync("data-active", options).ConfigureAwait(false) == "true";
+
+    public override ILocatorAssertions Expect() => new TabAssertions(Context.Expect());
 }

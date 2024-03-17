@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
@@ -40,11 +41,7 @@ public class Kebab : ControlBase
         await items[index].ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task WaitEnabledAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await captionLocator.Expect().Not.ToHaveAttributeAsync("tabindex", "-1", options).ConfigureAwait(false);
-
-    public async Task WaitDisabledAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await captionLocator.Expect().ToHaveAttributeAsync("tabindex", "-1", options).ConfigureAwait(false);
+    public override ILocatorAssertions Expect() => new KebabAssertions(Context.Expect(), captionLocator.Expect());
 
     private async Task<IReadOnlyList<ILocator>> GetItemsAsync()
     {

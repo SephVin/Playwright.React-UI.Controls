@@ -77,10 +77,10 @@ public class RadioGroup : ControlBase
     public async Task<int> GetRadioIndexByValueAsync(string value)
     {
         var values = await GetValuesAsync().ConfigureAwait(false);
-        return values.FindIndex(x => x != null && x.Equals(value, StringComparison.OrdinalIgnoreCase));
+        return values.FindIndex(x => x.Equals(value, StringComparison.OrdinalIgnoreCase));
     }
 
-    private async Task<List<string?>> GetValuesAsync()
+    private async Task<List<string>> GetValuesAsync()
     {
         var radioList = await list.GetItemsAsync().ConfigureAwait(false);
         var values = await radioList.ToAsyncEnumerable()

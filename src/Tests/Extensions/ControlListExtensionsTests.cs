@@ -10,6 +10,36 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class ControlListExtensionsTests : TestsBase
 {
     [Test]
+    public async Task WaitPresence()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
+        var list = new ControlList<Radio>(
+            Page.GetByTestId("RadioGroupId"),
+            "[data-tid='Radio__root']",
+            x => new Radio(x));
+        await list.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+
+        await list.WaitPresenceAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitAbsence()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
+        var visibleList = new ControlList<Radio>(
+            Page.GetByTestId("RadioGroupId"),
+            "[data-tid='Radio__root']",
+            x => new Radio(x));
+        var notExistList = new ControlList<Radio>(
+            Page.GetByTestId("RadioGroupId2"),
+            "[data-tid='Radio__root']",
+            x => new Radio(x));
+        await visibleList.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+
+        await notExistList.WaitAbsenceAsync().ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task WaitCount()
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);

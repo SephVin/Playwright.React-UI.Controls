@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -18,4 +20,6 @@ public class Link : ControlBase
 
     public async Task<string?> GetUrlAsync(LocatorGetAttributeOptions? options = default)
         => await Context.GetAttributeAsync("href", options).ConfigureAwait(false);
+
+    public override ILocatorAssertions Expect() => new LinkAssertions(Context.Expect());
 }

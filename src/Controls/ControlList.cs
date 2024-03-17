@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
@@ -18,6 +19,9 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         this.itemFactory = itemFactory;
         items = context.Locator(itemSelector);
     }
+
+    public override async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
+        => await items.First.IsVisibleAsync(options).ConfigureAwait(false);
 
     public async Task<IReadOnlyList<TItem>> GetItemsAsync()
     {
@@ -55,18 +59,14 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
     public async Task<int> CountAsync()
         => await items.CountAsync().ConfigureAwait(false);
 
-    public async Task WaitCountAsync(int count, LocatorAssertionsToHaveCountOptions? options = default)
-        => await items.Expect().ToHaveCountAsync(count, options).ConfigureAwait(false);
-
-    public async Task WaitPresenceAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await items.First.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
-
-    public async Task WaitAbsenceAsync(LocatorAssertionsToHaveCountOptions? options = default)
-        => await items.Expect().ToHaveCountAsync(0, options).ConfigureAwait(false);
-
     private async Task<IReadOnlyList<ILocator>> GetItemLocatorsAsync()
     {
         await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
         return await items.AllAsync().ConfigureAwait(false);
     }
+
+    public override ILocatorAssertions Expect() => new ControlListAssertions(
+        Context.Expect(),
+        items.Expect(),
+        items.First.Expect());
 }

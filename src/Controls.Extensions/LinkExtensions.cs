@@ -19,11 +19,11 @@ public static class LinkExtensions
 
     public static async Task WaitEnabledAsync(
         this Link link,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await link.Expect().Not.ToHaveAttributeAsync("tabindex", "-1", options).ConfigureAwait(false);
+        LocatorAssertionsToBeEnabledOptions? options = default)
+        => await link.Expect().ToBeEnabledAsync(options).ConfigureAwait(false);
 
     public static async Task WaitDisabledAsync(
         this Link link,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await link.Expect().ToHaveAttributeAsync("tabindex", "-1", options).ConfigureAwait(false);
+        LocatorAssertionsToBeDisabledOptions? options = default)
+        => await link.Expect().ToBeDisabledAsync(options).ConfigureAwait(false);
 }
