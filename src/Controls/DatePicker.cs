@@ -55,7 +55,7 @@ public class DatePicker : ControlBase
             .ConfigureAwait(false);
     }
 
-    public override DatePickerAssertions Expect() => new(
+    public override ILocatorAssertions Expect() => new DatePickerAssertions(
         Context,
         Context.Expect(),
         inputLocator.Expect(),

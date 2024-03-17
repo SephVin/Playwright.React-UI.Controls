@@ -79,5 +79,5 @@ public class Combobox : ControlBase
         return portalContainer.Locator("[data-tid='ComboBoxMenu__item']");
     }
 
-    public override ComboboxAssertions Expect() => new(Context.Expect(), inputLocator.Expect());
+    public override ILocatorAssertions Expect() => new ComboboxAssertions(Context.Expect(), inputLocator.Expect());
 }
