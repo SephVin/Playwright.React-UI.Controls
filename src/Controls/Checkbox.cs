@@ -16,6 +16,6 @@ public class Checkbox : ControlBase
     public async Task<bool> IsCheckedAsync(LocatorIsCheckedOptions? options = default)
         => await Context.IsCheckedAsync(options).ConfigureAwait(false);
 
-    public async Task<string?> GetTextAsync(LocatorInnerTextOptions? options = default)
+    public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
         => await Context.InnerTextAsync(options).ConfigureAwait(false);
 }

@@ -10,13 +10,6 @@ public class CurrencyInput : Input
     {
     }
 
-    public override async Task FillAsync(string value, LocatorFillOptions? options = default)
-    {
-        // note: not working without clear
-        await ClearAsync().ConfigureAwait(false);
-        await base.FillAsync(value, options).ConfigureAwait(false);
-    }
-
     public override async Task PressAsync(string value, LocatorPressOptions? options = default)
     {
         await ClearAsync().ConfigureAwait(false);

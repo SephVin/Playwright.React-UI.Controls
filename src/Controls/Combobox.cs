@@ -25,6 +25,7 @@ public class Combobox : ControlBase
 
     public async Task SelectFirstAsync(string value, LocatorPressSequentiallyOptions? options = default)
     {
+        await ClearAsync().ConfigureAwait(false);
         var items = await FillAndGetItemsAsync(value, options).ConfigureAwait(false);
         await items.First.ClickAsync().ConfigureAwait(false);
         await BlurAsync().ConfigureAwait(false);
@@ -32,10 +33,17 @@ public class Combobox : ControlBase
 
     public async Task SelectSingleAsync(string value, LocatorPressSequentiallyOptions? options = default)
     {
+        await ClearAsync().ConfigureAwait(false);
         var items = await FillAndGetItemsAsync(value, options).ConfigureAwait(false);
         await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
         await items.ClickAsync().ConfigureAwait(false);
         await BlurAsync().ConfigureAwait(false);
+    }
+
+    public async Task FillAsync(string text, LocatorPressSequentiallyOptions? options = default)
+    {
+        await ClearAsync().ConfigureAwait(false);
+        await inputLocator.PressSequentiallyAsync(text, options).ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorPressOptions? options = default)
@@ -46,10 +54,16 @@ public class Combobox : ControlBase
     }
 
     public async Task FocusAsync(LocatorClickOptions? options = default)
-        => await Context.ClickAsync(options).ConfigureAwait(false);
+        => await ClickAsync(options).ConfigureAwait(false);
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)
         => await inputLocator.BlurAsync(options).ConfigureAwait(false);
+
+    public override async Task ClickAsync(LocatorClickOptions? options = default)
+    {
+        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await base.ClickAsync(options).ConfigureAwait(false);
+    }
 
     private async Task<ILocator> FillAndGetItemsAsync(string value, LocatorPressSequentiallyOptions? options = default)
     {

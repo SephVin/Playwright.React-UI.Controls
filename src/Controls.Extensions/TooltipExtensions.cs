@@ -5,7 +5,7 @@ namespace Playwright.ReactUI.Controls.Extensions;
 
 public static class TooltipExtensions
 {
-    public static async Task WaitPresenceWithTextAsync(
+    public static async Task WaitOpenedWithTextAsync(
         this Tooltip tooltip,
         string text,
         LocatorAssertionsToHaveTextOptions? options = default)

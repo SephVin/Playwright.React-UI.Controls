@@ -38,7 +38,7 @@ public class Select : ControlBase
 
     public async Task SelectValueAsync(string text)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await ClickAsync().ConfigureAwait(false);
 
         var items = await GetItemsAsync().ConfigureAwait(false);
         var value = await items.ToAsyncEnumerable()
@@ -49,7 +49,7 @@ public class Select : ControlBase
 
     public async Task SelectFirstValueBySearchAsync(string text)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await ClickAsync().ConfigureAwait(false);
 
         var searchInput = await GetSearchInputAsync().ConfigureAwait(false);
         await searchInput.FillAsync(text).ConfigureAwait(false);
@@ -60,8 +60,11 @@ public class Select : ControlBase
         await value.ClickAsync().ConfigureAwait(false);
     }
 
-    public async Task FocusAsync()
-        => await ClickAsync().ConfigureAwait(false);
+    public override async Task ClickAsync(LocatorClickOptions? options = default)
+    {
+        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await base.ClickAsync(options).ConfigureAwait(false);
+    }
 
     public override ILocatorAssertions Expect() => new SelectAssertions(
         Context,

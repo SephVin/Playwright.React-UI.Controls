@@ -1,5 +1,13 @@
-import React from "react";
-import { Dropdown, Gapped, MenuItem, Toast } from "@skbkontur/react-ui";
+import React, { useState } from "react";
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  DropdownMenu,
+  Gapped,
+  MenuItem,
+  Toast,
+} from "@skbkontur/react-ui";
 import { Meta } from "@storybook/react";
 
 export default {
@@ -46,6 +54,27 @@ export const Warning = () => {
         <MenuItem onClick={() => Toast.push("Clicked TODO 1")}>TODO 1</MenuItem>
         <MenuItem onClick={() => Toast.push("Clicked TODO 2")}>TODO 2</MenuItem>
       </Dropdown>
+    </Gapped>
+  );
+};
+export const NotClosed = () => {
+  const [checked, setChecked] = useState(false);
+
+  return (
+    <Gapped>
+      <DropdownMenu
+        data-tid="DropdownId"
+        caption={<Button use="primary">Open Menu</Button>}
+      >
+        <MenuItem
+          onClick={(e) => {
+            e.preventDefault();
+            setChecked(!checked);
+          }}
+        >
+          <Checkbox checked={checked}>TODO</Checkbox>
+        </MenuItem>
+      </DropdownMenu>
     </Gapped>
   );
 };

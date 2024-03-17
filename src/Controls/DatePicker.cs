@@ -25,7 +25,7 @@ public class DatePicker : ControlBase
 
     public async Task FillAsync(string date, LocatorPressOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await ClearAsync().ConfigureAwait(false);
 
         // note: PressSequentiallyAsync is not working
         foreach (var @char in date)
@@ -42,12 +42,18 @@ public class DatePicker : ControlBase
     }
 
     public async Task FocusAsync()
-        => await inputLocator.Locator("span[data-fragment]").First
-            .ClickAsync(new LocatorClickOptions { Force = true })
-            .ConfigureAwait(false);
+        => await ClickAsync().ConfigureAwait(false);
 
     public async Task BlurAsync(LocatorPressOptions? options = default)
         => await inputLocator.PressAsync("Tab", options).ConfigureAwait(false);
+
+    public override async Task ClickAsync(LocatorClickOptions? options = default)
+    {
+        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await inputLocator.Locator("span[data-fragment]").First
+            .ClickAsync(new LocatorClickOptions { Force = true })
+            .ConfigureAwait(false);
+    }
 
     public override DatePickerAssertions Expect() => new(
         Context,

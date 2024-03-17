@@ -26,16 +26,6 @@ public static class InputExtensions
         LocatorAssertionsToBeEmptyOptions? options = default)
         => await input.Expect().ToBeEmptyAsync(options).ConfigureAwait(false);
 
-    // note: for input with mask
-    public static async Task ClearAndFillAsync(
-        this Input input,
-        string value,
-        LocatorFillOptions? options = default)
-    {
-        await input.ClearAsync().ConfigureAwait(false);
-        await input.FillAsync(value, options).ConfigureAwait(false);
-    }
-
     public static async Task AppendTextAsync(
         this Input input,
         string value,

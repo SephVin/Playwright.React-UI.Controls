@@ -17,7 +17,7 @@ public class Button : ControlBase
     public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
         => await buttonLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
-    public async Task<string?> GetTextAsync(LocatorInnerTextOptions? options = default)
+    public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
         => await buttonLocator.InnerTextAsync(options).ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)

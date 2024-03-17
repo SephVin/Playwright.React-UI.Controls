@@ -41,13 +41,19 @@ public class Kebab : ControlBase
         await items[index].ClickAsync(options).ConfigureAwait(false);
     }
 
+    public override async Task ClickAsync(LocatorClickOptions? options = default)
+    {
+        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await captionLocator.ClickAsync().ConfigureAwait(false);
+    }
+
     public override ILocatorAssertions Expect() => new KebabAssertions(Context.Expect(), captionLocator.Expect());
 
     private async Task<IReadOnlyList<ILocator>> GetItemsAsync()
     {
         if (!await IsMenuOpenedAsync().ConfigureAwait(false))
         {
-            await captionLocator.ClickAsync().ConfigureAwait(false);
+            await ClickAsync().ConfigureAwait(false);
         }
 
         var container = await portal.GetContainerAsync().ConfigureAwait(false);

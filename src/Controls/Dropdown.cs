@@ -20,39 +20,68 @@ public class Dropdown : ControlBase
 
     protected Portal Portal { get; }
 
-    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
+    public virtual async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
         => await buttonLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
     public async Task<bool> IsMenuOpenedAsync()
         => await Portal.IsExistsInDomAsync().ConfigureAwait(false);
 
-    public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
+    public virtual async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
         => await buttonLocator.InnerTextAsync(options).ConfigureAwait(false);
 
-    public async Task SelectByTextAsync(string text, LocatorClickOptions? options = default)
+    public async Task SelectByTextAsync(
+        string text,
+        bool isMenuClosedAfterSelect = true,
+        LocatorClickOptions? options = default)
     {
         var items = await GetItemsAsync().ConfigureAwait(false);
         var item = await items.ToAsyncEnumerable()
-            .SingleAwaitAsync(async x => await x.InnerTextAsync().ConfigureAwait(false) == text)
+            .SingleAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Contains(text))
             .ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);
+
+        if (isMenuClosedAfterSelect)
+        {
+            await Portal.Expect().ToHaveCountAsync(0).ConfigureAwait(false);
+        }
     }
 
-    public async Task SelectByIndexAsync(Index index, LocatorClickOptions? options = default)
+    public async Task SelectByIndexAsync(
+        Index index,
+        bool isMenuClosedAfterSelect = true,
+        LocatorClickOptions? options = default)
     {
         var items = await GetItemsAsync().ConfigureAwait(false);
         await items[index].ClickAsync(options).ConfigureAwait(false);
+
+        if (isMenuClosedAfterSelect)
+        {
+            await Portal.Expect().ToHaveCountAsync(0).ConfigureAwait(false);
+        }
     }
 
-    public override ILocatorAssertions Expect() => buttonLocator.Expect();
+    public async Task WaitItemWithTextAsync(string text)
+    {
+        var items = await GetItemsAsync().ConfigureAwait(false);
+        var item = await items.ToAsyncEnumerable()
+            .SingleAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Equals(text))
+            .ConfigureAwait(false);
+        await item.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+    }
 
-    private async Task<IReadOnlyList<ILocator>> GetItemsAsync()
+    public virtual async Task OpenDropdownIfNeededAsync()
     {
         if (!await IsMenuOpenedAsync().ConfigureAwait(false))
         {
             await buttonLocator.ClickAsync().ConfigureAwait(false);
         }
+    }
 
+    public override ILocatorAssertions Expect() => buttonLocator.Expect();
+
+    protected async Task<IReadOnlyList<ILocator>> GetItemsAsync()
+    {
+        await OpenDropdownIfNeededAsync().ConfigureAwait(false);
         var container = await Portal.GetContainerAsync().ConfigureAwait(false);
 
         return await container.Locator("[data-tid='MenuItem__root']").AllAsync().ConfigureAwait(false);

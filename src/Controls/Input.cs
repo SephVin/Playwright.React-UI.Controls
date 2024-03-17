@@ -21,7 +21,11 @@ public class Input : ControlBase
         => await inputLocator.InputValueAsync(options).ConfigureAwait(false);
 
     public virtual async Task FillAsync(string value, LocatorFillOptions? options = default)
-        => await inputLocator.FillAsync(value, options).ConfigureAwait(false);
+    {
+        // note: for input with mask
+        await ClearAsync().ConfigureAwait(false);
+        await inputLocator.FillAsync(value, options).ConfigureAwait(false);
+    }
 
     public virtual async Task PressAsync(string value, LocatorPressOptions? options = default)
         => await inputLocator.PressAsync(value, options).ConfigureAwait(false);
@@ -37,6 +41,9 @@ public class Input : ControlBase
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)
         => await inputLocator.BlurAsync(options).ConfigureAwait(false);
+
+    public override async Task ClickAsync(LocatorClickOptions? options = default)
+        => await inputLocator.ClickAsync(options).ConfigureAwait(false);
 
     public override ILocatorAssertions Expect() => inputLocator.Expect();
 }

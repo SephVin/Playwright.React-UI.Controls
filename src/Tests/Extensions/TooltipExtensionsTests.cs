@@ -31,14 +31,14 @@ public class TooltipExtensionsTests : TestsBase
     }
 
     [Test]
-    public async Task WaitPresenceWithText()
+    public async Task WaitOpenedWithText()
     {
         await Page.GotoAsync(StorybookUrl.Get("tooltip--default")).ConfigureAwait(false);
         var tooltip = new Tooltip(Page.GetByTestId("TooltipId"));
         var input = new Input(Page.GetByTestId("InputId"));
         await input.HoverAsync().ConfigureAwait(false);
 
-        await tooltip.WaitPresenceWithTextAsync("TODO").ConfigureAwait(false);
+        await tooltip.WaitOpenedWithTextAsync("TODO").ConfigureAwait(false);
     }
 
     [Test]
