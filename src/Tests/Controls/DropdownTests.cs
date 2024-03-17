@@ -140,7 +140,7 @@ public class DropdownTests : TestsBase
     }
 
     [Test]
-    public async Task SelectByText_Throw_Exception_When_IsMenuClosedAfterSelect_Is_True_But_Menu_Is_Not_Closed()
+    public async Task SelectByText_Throws_When_IsMenuClosedAfterSelect_Is_True_But_Menu_Is_Not_Closed()
     {
         await Page.GotoAsync(StorybookUrl.Get("dropdown--not-closed")).ConfigureAwait(false);
         var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
@@ -175,7 +175,7 @@ public class DropdownTests : TestsBase
     }
 
     [Test]
-    public async Task SelectByIndex_Throw_Exception_When_IsMenuClosedAfterSelect_Is_True_But_Menu_Is_Not_Closed()
+    public async Task SelectByIndex_Throws_When_IsMenuClosedAfterSelect_Is_True_But_Menu_Is_Not_Closed()
     {
         await Page.GotoAsync(StorybookUrl.Get("dropdown--not-closed")).ConfigureAwait(false);
         var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));

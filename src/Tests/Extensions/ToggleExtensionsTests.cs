@@ -124,20 +124,20 @@ public class ToggleExtensionsTests : TestsBase
     }
 
     [Test]
-    public async Task Throw_On_Check_When_Checkbox_State_Is_Checked()
+    public async Task Check_Throws_When_Checkbox_State_Is_Checked()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--checked")).ConfigureAwait(false);
         var toggle = new Toggle(Page.GetByTestId("ToggleId"));
 
-        Assert.ThrowsAsync<Exception>(() => toggle.CheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => toggle.CheckAsync());
     }
 
     [Test]
-    public async Task Throw_On_Uncheck_When_Checkbox_State_Is_Unchecked()
+    public async Task Uncheck_Throws_When_Checkbox_State_Is_Unchecked()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);
         var toggle = new Toggle(Page.GetByTestId("ToggleId"));
 
-        Assert.ThrowsAsync<Exception>(() => toggle.UncheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => toggle.UncheckAsync());
     }
 }

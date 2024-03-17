@@ -21,7 +21,7 @@ public static class CheckboxExtensions
     {
         if (await checkbox.IsCheckedAsync().ConfigureAwait(false))
         {
-            throw new Exception("Checkbox already checked");
+            throw new InvalidOperationException("Checkbox already checked");
         }
 
         await checkbox.ClickAsync().ConfigureAwait(false);
@@ -31,7 +31,7 @@ public static class CheckboxExtensions
     {
         if (!await checkbox.IsCheckedAsync().ConfigureAwait(false))
         {
-            throw new Exception("Checkbox already unchecked");
+            throw new InvalidOperationException("Checkbox already unchecked");
         }
 
         await checkbox.ClickAsync().ConfigureAwait(false);

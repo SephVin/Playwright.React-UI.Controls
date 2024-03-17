@@ -30,7 +30,7 @@ public static class ToggleExtensions
     {
         if (await toggle.IsCheckedAsync().ConfigureAwait(false))
         {
-            throw new Exception("Toggle already checked");
+            throw new InvalidOperationException("Toggle already checked");
         }
 
         await toggle.ClickAsync().ConfigureAwait(false);
@@ -40,7 +40,7 @@ public static class ToggleExtensions
     {
         if (!await toggle.IsCheckedAsync().ConfigureAwait(false))
         {
-            throw new Exception("Toggle already unchecked");
+            throw new InvalidOperationException("Toggle already unchecked");
         }
 
         await toggle.ClickAsync().ConfigureAwait(false);

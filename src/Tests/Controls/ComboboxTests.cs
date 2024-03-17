@@ -157,7 +157,7 @@ public sealed class ComboboxTests : TestsBase
     }
 
     [Test]
-    public async Task Throw_On_SelectSingle_When_Menu_Have_More_Than_One_Values()
+    public async Task SelectSingle_Throws_When_Menu_Have_More_Than_One_Values()
     {
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));

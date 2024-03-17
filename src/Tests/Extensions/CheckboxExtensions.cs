@@ -124,20 +124,20 @@ public sealed class CheckboxExtensions : TestsBase
     }
 
     [Test]
-    public async Task Throw_On_Check_When_Checkbox_State_Is_Checked()
+    public async Task Check_Throws_When_Checkbox_State_Is_Checked()
     {
         await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
         var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
 
-        Assert.ThrowsAsync<Exception>(() => checkbox.CheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => checkbox.CheckAsync());
     }
 
     [Test]
-    public async Task Throw_On_Uncheck_When_Checkbox_State_Is_Unchecked()
+    public async Task Uncheck_Throws_When_Checkbox_State_Is_Unchecked()
     {
         await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
         var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
 
-        Assert.ThrowsAsync<Exception>(() => checkbox.UncheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => checkbox.UncheckAsync());
     }
 }
