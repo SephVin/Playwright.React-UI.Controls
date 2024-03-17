@@ -3,33 +3,23 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
-using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
 public class SelectAssertions : ILocatorAssertions
 {
-    private readonly ILocator buttonLocator;
-    private readonly ILocatorAssertions buttonLocatorAssertions;
     private readonly ILocatorAssertions contextAssertions;
-    private readonly ILocator contextLocator;
-    private readonly ILocatorAssertions linkAssertions;
-    private readonly ILocator linkLocator;
+    private readonly ILocatorAssertions buttonOrLinkAssertions;
+    private readonly ILocator buttonOrLinkLocator;
 
     public SelectAssertions(
-        ILocator contextLocator,
         ILocatorAssertions contextAssertions,
-        ILocator buttonLocator,
-        ILocatorAssertions buttonLocatorAssertions,
-        ILocator linkLocator,
-        ILocatorAssertions linkAssertions)
+        ILocatorAssertions buttonOrLinkAssertions,
+        ILocator buttonOrLinkLocator)
     {
-        this.contextLocator = contextLocator;
         this.contextAssertions = contextAssertions;
-        this.buttonLocator = buttonLocator;
-        this.buttonLocatorAssertions = buttonLocatorAssertions;
-        this.linkLocator = linkLocator;
-        this.linkAssertions = linkAssertions;
+        this.buttonOrLinkAssertions = buttonOrLinkAssertions;
+        this.buttonOrLinkLocator = buttonOrLinkLocator;
     }
 
     public async Task ToBeAttachedAsync(LocatorAssertionsToBeAttachedOptions? options = null)
@@ -40,19 +30,17 @@ public class SelectAssertions : ILocatorAssertions
 
     public async Task ToBeDisabledAsync(LocatorAssertionsToBeDisabledOptions? options = null)
     {
-        await contextLocator.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        if (await buttonLocator.IsVisibleAsync().ConfigureAwait(false))
+        if (await IsLinkAsync().ConfigureAwait(false))
         {
-            await buttonLocatorAssertions.ToBeDisabledAsync(options).ConfigureAwait(false);
-        }
-        else
-        {
-            await linkAssertions.ToHaveAttributeAsync(
+            await buttonOrLinkAssertions.ToHaveAttributeAsync(
                 "tabindex",
                 "-1",
                 new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout }
             ).ConfigureAwait(false);
+        }
+        else
+        {
+            await buttonOrLinkAssertions.ToBeDisabledAsync(options).ConfigureAwait(false);
         }
     }
 
@@ -64,19 +52,17 @@ public class SelectAssertions : ILocatorAssertions
 
     public async Task ToBeEnabledAsync(LocatorAssertionsToBeEnabledOptions? options = null)
     {
-        await contextLocator.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        if (await buttonLocator.IsVisibleAsync().ConfigureAwait(false))
+        if (await IsLinkAsync().ConfigureAwait(false))
         {
-            await buttonLocatorAssertions.ToBeEnabledAsync(options).ConfigureAwait(false);
-        }
-        else
-        {
-            await linkAssertions.Not.ToHaveAttributeAsync(
+            await buttonOrLinkAssertions.Not.ToHaveAttributeAsync(
                 "tabindex",
                 "-1",
                 new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout }
             ).ConfigureAwait(false);
+        }
+        else
+        {
+            await buttonOrLinkAssertions.ToBeEnabledAsync(options).ConfigureAwait(false);
         }
     }
 
@@ -182,10 +168,10 @@ public class SelectAssertions : ILocatorAssertions
         => await contextAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
 
     public ILocatorAssertions Not => new SelectAssertions(
-        contextLocator,
         contextAssertions.Not,
-        buttonLocator,
-        buttonLocatorAssertions.Not,
-        linkLocator,
-        linkAssertions.Not);
+        buttonOrLinkAssertions.Not,
+        buttonOrLinkLocator);
+
+    private async Task<bool> IsLinkAsync()
+        => await buttonOrLinkLocator.GetAttributeAsync("href").ConfigureAwait(false) != null;
 }

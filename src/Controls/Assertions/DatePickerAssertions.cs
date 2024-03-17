@@ -8,16 +8,13 @@ namespace Playwright.ReactUI.Controls.Assertions;
 
 public class DatePickerAssertions : ILocatorAssertions
 {
-    private readonly ILocator context;
     private readonly ILocatorAssertions contextAssertions;
     private readonly ILocatorAssertions inputLocator;
 
     public DatePickerAssertions(
-        ILocator context,
         ILocatorAssertions contextAssertions,
         ILocatorAssertions inputLocator)
     {
-        this.context = context;
         this.contextAssertions = contextAssertions;
         this.inputLocator = inputLocator;
     }
@@ -141,8 +138,5 @@ public class DatePickerAssertions : ILocatorAssertions
     public async Task ToHaveValuesAsync(IEnumerable<Regex> values, LocatorAssertionsToHaveValuesOptions? options = default)
         => await inputLocator.ToHaveValuesAsync(values, options).ConfigureAwait(false);
 
-    public ILocatorAssertions Not => new DatePickerAssertions(
-        context,
-        contextAssertions.Not,
-        inputLocator.Not);
+    public ILocatorAssertions Not => new DatePickerAssertions(contextAssertions.Not, inputLocator.Not);
 }

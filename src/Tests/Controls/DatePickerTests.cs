@@ -113,7 +113,7 @@ public class DatePickerTests : TestsBase
     }
 
     [Test]
-    public async Task GetSelectedValue_Return_Empty_When_DatePicker_Value_Is_Empty()
+    public async Task GetValue_Return_Empty_When_DatePicker_Value_Is_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
@@ -124,7 +124,7 @@ public class DatePickerTests : TestsBase
     }
 
     [Test]
-    public async Task GetSelectedValue_Return_Value_When_DatePicker_Value_Is_Not_Empty()
+    public async Task GetValue_Return_Value_When_DatePicker_Value_Is_Not_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
@@ -142,18 +142,19 @@ public class DatePickerTests : TestsBase
 
         await datePicker.FillAsync("01.01.2024").ConfigureAwait(false);
 
-        await datePicker.Expect().ToHaveTextAsync("01.01.2024").ConfigureAwait(false);
+        await datePicker.Expect().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task Fill_Existing_Value()
+    public async Task Fill_Rewrite_Existing_Value()
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
+        await datePicker.Expect().ToHaveValueAsync("24.08.2022").ConfigureAwait(false);
 
         await datePicker.FillAsync("01.01.2024").ConfigureAwait(false);
 
-        await datePicker.Expect().ToHaveTextAsync("01.01.2024").ConfigureAwait(false);
+        await datePicker.Expect().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
     }
 
     [Test]

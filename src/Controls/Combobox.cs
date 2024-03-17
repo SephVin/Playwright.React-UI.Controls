@@ -23,21 +23,23 @@ public class Combobox : ControlBase
     public async Task<string> GetSelectedValueAsync(LocatorInnerTextOptions? options = default)
         => await Context.InnerTextAsync(options).ConfigureAwait(false);
 
+    /// <summary>
+    ///     Use this method when multiple elements exist in the menu with the same value.
+    ///     In other cases, use SelectSingleAsync
+    /// </summary>
     public async Task SelectFirstAsync(string value, LocatorFillOptions? options = default)
     {
         await FillAsync(value, options).ConfigureAwait(false);
-        var items = await GetItemsByValueAsync(value).ConfigureAwait(false);
+        var items = await GetItemsAsync(value).ConfigureAwait(false);
         await items.First.ClickAsync().ConfigureAwait(false);
-        await BlurAsync().ConfigureAwait(false);
     }
 
     public async Task SelectSingleAsync(string value, LocatorFillOptions? options = default)
     {
         await FillAsync(value, options).ConfigureAwait(false);
-        var items = await GetItemsByValueAsync(value).ConfigureAwait(false);
+        var items = await GetItemsAsync().ConfigureAwait(false);
         await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
         await items.ClickAsync().ConfigureAwait(false);
-        await BlurAsync().ConfigureAwait(false);
     }
 
     public async Task FillAsync(string text, LocatorFillOptions? options = default)
@@ -64,10 +66,14 @@ public class Combobox : ControlBase
         await base.ClickAsync(options).ConfigureAwait(false);
     }
 
-    private async Task<ILocator> GetItemsByValueAsync(string value)
+    private async Task<ILocator> GetItemsAsync(string? byValue = null)
     {
         var portalContainer = await portal.GetContainerAsync().ConfigureAwait(false);
-        return portalContainer.Locator("[data-tid='ComboBoxMenu__item']").GetByText(value);
+        var items = portalContainer.Locator("[data-tid='ComboBoxMenu__item']");
+
+        return byValue == null
+            ? items
+            : items.GetByText(byValue);
     }
 
     public override ILocatorAssertions Expect() => new ComboboxAssertions(Context.Expect(), inputLocator.Expect());

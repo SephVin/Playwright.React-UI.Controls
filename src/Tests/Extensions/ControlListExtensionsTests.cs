@@ -82,7 +82,7 @@ public class ControlListExtensionsTests : TestsBase
     }
 
     [Test]
-    public async Task GetFirst()
+    public async Task GetFirstItem()
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
@@ -90,13 +90,13 @@ public class ControlListExtensionsTests : TestsBase
             "[data-tid='Radio__root']",
             x => new Radio(x));
 
-        var actual = await list.GetFirstAsync().ConfigureAwait(false);
+        var actual = await list.GetFirstItemAsync().ConfigureAwait(false);
 
         await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task GetLast()
+    public async Task GetLastItem()
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
@@ -104,13 +104,13 @@ public class ControlListExtensionsTests : TestsBase
             "[data-tid='Radio__root']",
             x => new Radio(x));
 
-        var actual = await list.GetLastAsync().ConfigureAwait(false);
+        var actual = await list.GetLastItemAsync().ConfigureAwait(false);
 
         await actual.Expect().ToHaveTextAsync("TODO 3").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task GetSingle()
+    public async Task GetSingleItem_By_Predicate()
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
@@ -118,14 +118,14 @@ public class ControlListExtensionsTests : TestsBase
             "[data-tid='Radio__root']",
             x => new Radio(x));
 
-        var actual = await list.GetSingleAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 1")
+        var actual = await list.GetSingleItemAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 1")
             .ConfigureAwait(false);
 
         await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task GetSingle_By_Predicate()
+    public async Task GetSingleItem()
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--single-element")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
@@ -133,7 +133,7 @@ public class ControlListExtensionsTests : TestsBase
             "[data-tid='Radio__root']",
             x => new Radio(x));
 
-        var actual = await list.GetSingleAsync().ConfigureAwait(false);
+        var actual = await list.GetSingleItemAsync().ConfigureAwait(false);
 
         await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
     }

@@ -27,32 +27,28 @@ public static class ControlListExtensions
     public static async Task ClickFirstItemAsync<T>(
         this ControlList<T> controlList,
         LocatorClickOptions? options = default) where T : ControlBase
-    {
-        var item = await controlList.GetFirstAsync().ConfigureAwait(false);
-        await item.ClickAsync(options).ConfigureAwait(false);
-    }
+        => await controlList.ClickItemAsync(0, options).ConfigureAwait(false);
 
     public static async Task ClickLastItemAsync<T>(
         this ControlList<T> controlList,
         LocatorClickOptions? options = default) where T : ControlBase
-    {
-        var item = await controlList.GetLastAsync().ConfigureAwait(false);
-        await item.ClickAsync(options).ConfigureAwait(false);
-    }
+        => await controlList.ClickItemAsync(^1, options).ConfigureAwait(false);
 
-    public static async Task<T> GetFirstAsync<T>(this ControlList<T> controlList) where T : ControlBase
+    public static async Task<T> GetFirstItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
         => await controlList.GetItemAsync(0).ConfigureAwait(false);
 
-    public static async Task<T> GetLastAsync<T>(this ControlList<T> controlList) where T : ControlBase
+    public static async Task<T> GetLastItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
         => await controlList.GetItemAsync(^1).ConfigureAwait(false);
 
-    public static async Task<T> GetSingleAsync<T>(this ControlList<T> controlList) where T : ControlBase
+    public static async Task<T> GetSingleItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
     {
         await controlList.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-        return await controlList.GetFirstAsync().ConfigureAwait(false);
+        return await controlList.GetFirstItemAsync().ConfigureAwait(false);
     }
 
-    public static async Task<T> GetSingleAsync<T>(this ControlList<T> controlList, Func<T, ValueTask<bool>> predicate)
+    public static async Task<T> GetSingleItemAsync<T>(
+        this ControlList<T> controlList,
+        Func<T, ValueTask<bool>> predicate)
         where T : ControlBase
     {
         var list = await controlList.GetItemsAsync().ConfigureAwait(false);

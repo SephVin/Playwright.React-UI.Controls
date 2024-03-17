@@ -142,7 +142,7 @@ public sealed class ComboboxTests : TestsBase
 
         await combobox.SelectFirstAsync("th").ConfigureAwait(false);
 
-        await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+        await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
     }
 
     [Test]
@@ -153,7 +153,7 @@ public sealed class ComboboxTests : TestsBase
 
         await combobox.SelectFirstAsync("th").ConfigureAwait(false);
 
-        await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+        await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
     }
 
     [Test]
@@ -165,7 +165,7 @@ public sealed class ComboboxTests : TestsBase
         await combobox.SelectFirstAsync("th").ConfigureAwait(false);
         await combobox.SelectFirstAsync("Second").ConfigureAwait(false);
 
-        await combobox.Expect().ToHaveTextAsync("Second").ConfigureAwait(false);
+        await combobox.Expect().ToHaveValueAsync("Second").ConfigureAwait(false);
     }
 
     [Test]
@@ -176,7 +176,7 @@ public sealed class ComboboxTests : TestsBase
 
         await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
 
-        await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+        await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
     }
 
     [Test]
@@ -187,7 +187,7 @@ public sealed class ComboboxTests : TestsBase
 
         await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
 
-        await combobox.Expect().ToHaveTextAsync("Third").ConfigureAwait(false);
+        await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
     }
 
     [Test]
@@ -199,7 +199,7 @@ public sealed class ComboboxTests : TestsBase
         await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
         await combobox.SelectSingleAsync("Second").ConfigureAwait(false);
 
-        await combobox.Expect().ToHaveTextAsync("Second").ConfigureAwait(false);
+        await combobox.Expect().ToHaveValueAsync("Second").ConfigureAwait(false);
     }
 
     [Test]

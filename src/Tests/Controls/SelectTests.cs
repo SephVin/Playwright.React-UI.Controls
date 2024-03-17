@@ -148,23 +148,23 @@ public class SelectTests : TestsBase
     }
 
     [Test]
-    public async Task GetValue_Return_Value_For_SelectButton_When_Filled()
+    public async Task GetSelectedValue_Return_Value_For_SelectButton_When_Filled()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--filled-button")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        var actual = await select.GetValueAsync().ConfigureAwait(false);
+        var actual = await select.GetSelectedValueAsync().ConfigureAwait(false);
 
         actual.Should().Be("Two");
     }
 
     [Test]
-    public async Task GetValue_Return_Placeholder_For_SelectButton_When_Empty()
+    public async Task GetSelectedValue_Return_Placeholder_For_SelectButton_When_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        var actual = await select.GetValueAsync().ConfigureAwait(false);
+        var actual = await select.GetSelectedValueAsync().ConfigureAwait(false);
 
         // ReSharper disable StringLiteralTypo
         actual.Should().Be("Ничего не выбрано");
@@ -172,23 +172,23 @@ public class SelectTests : TestsBase
     }
 
     [Test]
-    public async Task GetValue_Return_Value_For_SelectLink_When_Filled()
+    public async Task GetSelectedValue_Return_Value_For_SelectLink_When_Filled()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--filled-link")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        var actual = await select.GetValueAsync().ConfigureAwait(false);
+        var actual = await select.GetSelectedValueAsync().ConfigureAwait(false);
 
         actual.Should().Be("Two");
     }
 
     [Test]
-    public async Task GetValue_Return_Placeholder_For_SelectLink_When_Empty()
+    public async Task GetSelectedValue_Return_Placeholder_For_SelectLink_When_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        var actual = await select.GetValueAsync().ConfigureAwait(false);
+        var actual = await select.GetSelectedValueAsync().ConfigureAwait(false);
 
         // ReSharper disable StringLiteralTypo
         actual.Should().Be("Ничего не выбрано");
@@ -220,7 +220,7 @@ public class SelectTests : TestsBase
     }
 
     [Test]
-    public async Task SelectValueBySearch()
+    public async Task SelectFirstValueBySearch()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--search")).ConfigureAwait(false);
         var context = Page.GetByTestId("SelectId");

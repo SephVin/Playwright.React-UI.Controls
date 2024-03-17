@@ -56,7 +56,10 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
     }
 
     public async Task<int> CountAsync()
-        => await items.CountAsync().ConfigureAwait(false);
+    {
+        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        return await items.CountAsync().ConfigureAwait(false);
+    }
 
     private async Task<IReadOnlyList<ILocator>> GetItemLocatorsAsync()
     {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Extensions;
@@ -34,10 +33,7 @@ public class Dropdown : ControlBase
         bool isMenuClosedAfterSelect = true,
         LocatorClickOptions? options = default)
     {
-        var items = await GetItemsAsync().ConfigureAwait(false);
-        var item = await items.ToAsyncEnumerable()
-            .SingleAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Contains(text))
-            .ConfigureAwait(false);
+        var item = await GetItemAsync(text).ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);
 
         if (isMenuClosedAfterSelect)
@@ -62,10 +58,7 @@ public class Dropdown : ControlBase
 
     public async Task WaitItemWithTextAsync(string text)
     {
-        var items = await GetItemsAsync().ConfigureAwait(false);
-        var item = await items.ToAsyncEnumerable()
-            .SingleAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Equals(text))
-            .ConfigureAwait(false);
+        var item = await GetItemAsync(text).ConfigureAwait(false);
         await item.Expect().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
@@ -81,9 +74,19 @@ public class Dropdown : ControlBase
 
     protected async Task<IReadOnlyList<ILocator>> GetItemsAsync()
     {
-        await OpenDropdownIfNeededAsync().ConfigureAwait(false);
-        var container = await Portal.GetContainerAsync().ConfigureAwait(false);
-
+        var container = await GetPortalContainerAsync().ConfigureAwait(false);
         return await container.Locator("[data-tid='MenuItem__root']").AllAsync().ConfigureAwait(false);
+    }
+
+    protected async Task<ILocator> GetItemAsync(string text)
+    {
+        var container = await GetPortalContainerAsync().ConfigureAwait(false);
+        return container.Locator("[data-tid='MenuItem__root']").GetByText(text);
+    }
+
+    private async Task<ILocator> GetPortalContainerAsync()
+    {
+        await OpenDropdownIfNeededAsync().ConfigureAwait(false);
+        return await Portal.GetContainerAsync().ConfigureAwait(false);
     }
 }

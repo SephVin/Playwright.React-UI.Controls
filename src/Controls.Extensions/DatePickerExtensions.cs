@@ -20,14 +20,14 @@ public static class DatePickerExtensions
         this DatePicker datePicker,
         DateTime value,
         string dateFormat = "dd.MM.yyyy",
-        LocatorAssertionsToHaveTextOptions? options = default)
+        LocatorAssertionsToHaveValueOptions? options = default)
         => await datePicker.WaitValueAsync(value.ToString(dateFormat), options).ConfigureAwait(false);
 
     public static async Task WaitValueAsync(
         this DatePicker datePicker,
         string value,
-        LocatorAssertionsToHaveTextOptions? options = default)
-        => await datePicker.Expect().ToHaveTextAsync(value, options).ConfigureAwait(false);
+        LocatorAssertionsToHaveValueOptions? options = default)
+        => await datePicker.Expect().ToHaveValueAsync(value, options).ConfigureAwait(false);
 
     public static async Task WaitValueAbsenceAsync(
         this DatePicker datePicker,

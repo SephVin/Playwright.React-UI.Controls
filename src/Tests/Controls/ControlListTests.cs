@@ -130,7 +130,6 @@ public class ControlListTests : TestsBase
             Page.GetByTestId("RadioGroupId"),
             "[data-tid='Radio__root']",
             x => new Radio(x));
-        await list.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
         var actual = await list.CountAsync().ConfigureAwait(false);
 

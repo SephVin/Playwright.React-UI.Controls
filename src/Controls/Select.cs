@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
@@ -9,42 +7,36 @@ namespace Playwright.ReactUI.Controls;
 
 public class Select : ControlBase
 {
-    private readonly ILocator buttonLocator;
-    private readonly ILocator linkLocator;
     private readonly Portal portal;
+    private readonly ILocator buttonOrLinkLocator;
 
     public Select(ILocator context)
         : base(context)
     {
         portal = new Portal(context.Locator("noscript"));
-        buttonLocator = context.Locator("[data-tid='Button__root']");
-        linkLocator = context.Locator("[data-tid='Link__root']");
+        buttonOrLinkLocator = context
+            .Locator("[data-tid='Button__root']")
+            .Or(context.Locator("[data-tid='Link__root']"));
     }
 
     public async Task<bool> IsDisabledAsync()
     {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        if (await buttonLocator.IsVisibleAsync().ConfigureAwait(false))
+        if (await IsLinkAsync().ConfigureAwait(false))
         {
-            return await buttonLocator.IsDisabledAsync().ConfigureAwait(false);
+            return await buttonOrLinkLocator.GetAttributeValueAsync("tabindex").ConfigureAwait(false) is "-1";
         }
 
-        return await linkLocator.GetAttributeValueAsync("tabindex").ConfigureAwait(false) is "-1";
+        return await buttonOrLinkLocator.IsDisabledAsync().ConfigureAwait(false);
     }
 
-    public async Task<string> GetValueAsync()
-        => await Context.InnerTextAsync().ConfigureAwait(false);
+    public async Task<string> GetSelectedValueAsync(LocatorInnerTextOptions? options = default)
+        => await Context.InnerTextAsync(options).ConfigureAwait(false);
 
     public async Task SelectValueAsync(string text)
     {
         await ClickAsync().ConfigureAwait(false);
-
-        var items = await GetItemsAsync().ConfigureAwait(false);
-        var value = await items.ToAsyncEnumerable()
-            .FirstAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Equals(text))
-            .ConfigureAwait(false);
-        await value.ClickAsync().ConfigureAwait(false);
+        var items = await GetItemsByTextAsync(text).ConfigureAwait(false);
+        await items.First.ClickAsync().ConfigureAwait(false);
     }
 
     public async Task SelectFirstValueBySearchAsync(string text)
@@ -53,11 +45,8 @@ public class Select : ControlBase
 
         var searchInput = await GetSearchInputAsync().ConfigureAwait(false);
         await searchInput.FillAsync(text).ConfigureAwait(false);
-        var items = await GetItemsAsync().ConfigureAwait(false);
-        var value = await items.ToAsyncEnumerable()
-            .FirstAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Contains(text))
-            .ConfigureAwait(false);
-        await value.ClickAsync().ConfigureAwait(false);
+        var items = await GetItemsByTextAsync(text).ConfigureAwait(false);
+        await items.First.ClickAsync().ConfigureAwait(false);
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
@@ -67,20 +56,14 @@ public class Select : ControlBase
     }
 
     public override ILocatorAssertions Expect() => new SelectAssertions(
-        Context,
         Context.Expect(),
-        buttonLocator,
-        buttonLocator.Expect(),
-        linkLocator,
-        linkLocator.Expect());
+        buttonOrLinkLocator.Expect(),
+        buttonOrLinkLocator);
 
-    private async Task<IReadOnlyList<ILocator>> GetItemsAsync()
+    private async Task<ILocator> GetItemsByTextAsync(string text)
     {
         var container = await portal.GetContainerAsync().ConfigureAwait(false);
-
-        return await container.Locator("[data-tid='MenuItem__root']")
-            .AllAsync()
-            .ConfigureAwait(false);
+        return container.Locator("[data-tid='MenuItem__root']").GetByText(text);
     }
 
     private async Task<ILocator> GetSearchInputAsync()
@@ -88,4 +71,7 @@ public class Select : ControlBase
         var container = await portal.GetContainerAsync().ConfigureAwait(false);
         return container.Locator("[data-tid='Input__root']");
     }
+
+    private async Task<bool> IsLinkAsync()
+        => await buttonOrLinkLocator.GetAttributeAsync("href").ConfigureAwait(false) != null;
 }
