@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using NUnit.Framework;
@@ -29,6 +30,7 @@ public class TestsBase
                 Locale = "ru-RU"
             }
         ).ConfigureAwait(false);
+        SetAssertionsDefaultTimeout();
     }
 
     [SetUp]
@@ -75,5 +77,13 @@ public class TestsBase
 
             return await playwright.Chromium.LaunchAsync(options).ConfigureAwait(false);
         }
+    }
+
+    // https://github.com/microsoft/playwright-dotnet/issues/2603
+    private static void SetAssertionsDefaultTimeout()
+    {
+        typeof(Microsoft.Playwright.Playwright).Assembly.GetType("Microsoft.Playwright.Core.AssertionsBase")!
+            .GetMethod("SetDefaultTimeout", BindingFlags.Static | BindingFlags.Public)!
+            .Invoke(null, new object[] { 20 * 1000 });
     }
 }

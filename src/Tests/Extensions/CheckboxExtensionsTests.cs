@@ -7,7 +7,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Extensions;
 
-public sealed class CheckboxExtensions : TestsBase
+public sealed class CheckboxExtensionsTests : TestsBase
 {
     [Test]
     public async Task WaitPresence()
