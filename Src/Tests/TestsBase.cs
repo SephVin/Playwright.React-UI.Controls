@@ -54,7 +54,7 @@ public class TestsBase
     {
         var options = new BrowserTypeLaunchOptions
         {
-            Headless = false,
+            Headless = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true",
             IgnoreDefaultArgs = new[] { "--enable-automation" },
             Args = new[] { "--start-maximized" },
             ChromiumSandbox = false
