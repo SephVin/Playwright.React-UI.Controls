@@ -35,10 +35,10 @@ run-tests:
     - docker run -it --rm -d --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE_NAME
     - docker exec $DOCKER_CONTAINER_NAME bash -c "cd $SRC_DIRECTORY/web && npm i && npm run build-storybook && (npm run storybook &)"
     - timeout 60 docker exec $DOCKER_CONTAINER_NAME bash -c "while ! nc -z localhost 6006; do sleep 1; done"
-    - docker exec $DOCKER_CONTAINER_NAME dotnet test "$SRC_DIRECTORY/Tests/Tests.csproj" --logger:"junit;LogFilePath=$TMP_DIRECTORY/junit/Playwright.ReactUI.Tests.xml;MethodFormat=Class;FailureBodyFormat=Verbose" 
+    - docker exec $DOCKER_CONTAINER_NAME dotnet test "$SRC_DIRECTORY/Tests/Tests.csproj" --logger:"junit;LogFilePath=$TMP_DIRECTORY/junit/Playwright.ReactUI.Tests.xml;MethodFormat=Class;FailureBodyFormat=Verbose"  
+  after_script:
     - mkdir "$CI_PROJECT_DIR/junit"
     - docker cp $DOCKER_CONTAINER_NAME:$TMP_DIRECTORY/junit/Playwright.ReactUI.Tests.xml $CI_PROJECT_DIR/junit/Playwright.ReactUI.Tests.xml
-  after_script:
     - docker container stop $DOCKER_CONTAINER_NAME
     - docker image rm $DOCKER_IMAGE_NAME
   artifacts:
