@@ -1,0 +1,39 @@
+image: registry.kontur.host/library/idevops/docker:latest
+
+stages:
+  - build
+  - tests
+
+variables:
+  DOCKER_IMAGE_NAME: pw_controls_image
+  ARTIFACTS_PATH: artifacts
+  
+docker-build:
+  tags: [docker-build,kontur]
+  stage: build
+  script:
+    - docker build -t $DOCKER_IMAGE_NAME -f image/Dockerfile . --no-cache
+    - mkdir $ARTIFACTS_PATH
+    - docker save $DOCKER_IMAGE_NAME > $ARTIFACTS_PATH/$DOCKER_IMAGE_NAME.tar
+  after_script:
+    - docker image rm $DOCKER_IMAGE_NAME
+  artifacts:
+    paths:
+      - $ARTIFACTS_PATH
+    expire_in: 15 mins
+    
+run-tests:
+  tags: [docker,kontur]
+  stage: tests
+  variables:
+    DOCKER_CONTAINER_NAME: pw_controls_container
+    SRC_DIRECTORY: /tmp/src
+  script:
+    - docker load -i $ARTIFACTS_PATH/$DOCKER_IMAGE_NAME.tar
+    - docker run -it --rm -d --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE_NAME
+    - docker exec $DOCKER_CONTAINER_NAME bash -c "cd $SRC_DIRECTORY/web && npm i && npm run build-storybook && (npm run storybook &)"
+    - timeout 60 docker exec $DOCKER_CONTAINER_NAME bash -c "while ! nc -z localhost 6006; do sleep 1; done"
+    - docker exec $DOCKER_CONTAINER_NAME dotnet test "$SRC_DIRECTORY/Tests/Tests.csproj"
+  after_script:
+    - docker container stop $DOCKER_CONTAINER_NAME
+    - docker image rm $DOCKER_IMAGE_NAME
