@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions.Extensions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;

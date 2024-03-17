@@ -1,4 +1,4 @@
-namespace Playwright.ReactUI.Controls.Helpers;
+﻿namespace Playwright.ReactUI.Controls.Helpers;
 
 public static class DataPropNames
 {

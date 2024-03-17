@@ -1,4 +1,4 @@
-namespace Playwright.ReactUI.Tests.Helpers;
+﻿namespace Playwright.ReactUI.Tests.Helpers;
 
 public static class StorybookUrl
 {
