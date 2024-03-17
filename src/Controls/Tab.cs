@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
@@ -16,7 +17,16 @@ public class Tab : ControlBase
         => await GetAttributeValueAsync("tabindex", options).ConfigureAwait(false) is "-1";
 
     public async Task<bool> IsActiveAsync(LocatorGetAttributeOptions? options = default)
-        => await GetAttributeValueAsync("data-active", options).ConfigureAwait(false) == "true";
+    {
+        var attributeValue = await GetAttributeValueAsync("data-active", options).ConfigureAwait(false);
+
+        if (attributeValue == null)
+        {
+            throw new Exception("data-active attribute is not set");
+        }
+
+        return attributeValue == "true";
+    }
 
     public override ILocatorAssertions Expect() => new TabAssertions(Context.Expect());
 }

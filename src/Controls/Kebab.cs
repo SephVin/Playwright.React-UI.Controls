@@ -30,7 +30,7 @@ public class Kebab : ControlBase
     {
         var items = await GetItemsAsync().ConfigureAwait(false);
         var item = await items.ToAsyncEnumerable()
-            .SingleAwaitAsync(async x => await x.InnerTextAsync().ConfigureAwait(false) == text)
+            .SingleAwaitAsync(async x => (await x.InnerTextAsync().ConfigureAwait(false)).Contains(text))
             .ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);
     }

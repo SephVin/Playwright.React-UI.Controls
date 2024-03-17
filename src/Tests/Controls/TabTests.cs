@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
@@ -76,6 +77,15 @@ public class TabTests : TestsBase
         var actual = await tab.IsActiveAsync().ConfigureAwait(false);
 
         actual.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task IsActive_Throws_When_Attribute_Is_Not_Set()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("tab--attribute-is-not-set")).ConfigureAwait(false);
+        var tab = new Tab(Page.GetByTestId("TabId"));
+
+        Assert.ThrowsAsync<Exception>(() => tab.IsActiveAsync());
     }
 
     [Test]

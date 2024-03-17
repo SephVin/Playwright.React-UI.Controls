@@ -51,8 +51,7 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         Func<TItem, ValueTask<bool>> predicate,
         LocatorClickOptions? options = default)
     {
-        var list = await GetItemsAsync().ConfigureAwait(false);
-        var item = await list.ToAsyncEnumerable().SingleAwaitAsync(predicate).ConfigureAwait(false);
+        var item = await GetItemAsync(predicate).ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);
     }
 

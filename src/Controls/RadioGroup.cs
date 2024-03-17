@@ -71,7 +71,7 @@ public class RadioGroup : ControlBase
             .ToListAsync()
             .ConfigureAwait(false);
 
-        return radioText.FindIndex(x => x.Equals(text));
+        return radioText.FindIndex(x => x.Contains(text));
     }
 
     public async Task<int> GetRadioIndexByValueAsync(string value)

@@ -79,3 +79,17 @@ export const Warning = () => {
     </Gapped>
   );
 };
+
+export const AttributeIsNotSet = () => {
+  const [active, setActive] = useState("fuji");
+
+  return (
+    <Gapped>
+      <Tabs value={active} onValueChange={setActive}>
+        <Tabs.Tab data-tid="TabId" id="fuji">
+          Fuji
+        </Tabs.Tab>
+      </Tabs>
+    </Gapped>
+  );
+};
