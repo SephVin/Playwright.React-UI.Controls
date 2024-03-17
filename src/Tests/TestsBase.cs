@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using NUnit.Framework;
+using Playwright.ReactUI.Tests.Helpers;
 
 [assembly: LevelOfParallelism(4)]
 
@@ -56,7 +57,7 @@ public class TestsBase
     {
         var options = new BrowserTypeLaunchOptions
         {
-            Headless = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true",
+            Headless = BuildServerDetector.Detected,
             IgnoreDefaultArgs = new[] { "--enable-automation" },
             Args = new[] { "--start-maximized" },
             ChromiumSandbox = false
