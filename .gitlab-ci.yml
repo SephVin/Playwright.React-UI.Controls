@@ -23,7 +23,7 @@ docker-build:
     expire_in: 15 mins
     
 run-tests:
-  tags: [docker,kontur]
+  tags: [docker,ofd]
   stage: tests
   variables:
     DOCKER_CONTAINER_NAME: pw_controls_container
