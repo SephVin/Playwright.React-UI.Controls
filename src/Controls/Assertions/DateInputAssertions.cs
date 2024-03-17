@@ -6,12 +6,12 @@ using Microsoft.Playwright;
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
-public class DatePickerAssertions : ILocatorAssertions
+public class DateInputAssertions : ILocatorAssertions
 {
     private readonly ILocatorAssertions contextAssertions;
     private readonly ILocatorAssertions inputLocator;
 
-    public DatePickerAssertions(
+    public DateInputAssertions(
         ILocatorAssertions contextAssertions,
         ILocatorAssertions inputLocator)
     {
@@ -138,5 +138,5 @@ public class DatePickerAssertions : ILocatorAssertions
     public async Task ToHaveValuesAsync(IEnumerable<Regex> values, LocatorAssertionsToHaveValuesOptions? options = default)
         => await inputLocator.ToHaveValuesAsync(values, options).ConfigureAwait(false);
 
-    public ILocatorAssertions Not => new DatePickerAssertions(contextAssertions.Not, inputLocator.Not);
+    public ILocatorAssertions Not => new DateInputAssertions(contextAssertions.Not, inputLocator.Not);
 }

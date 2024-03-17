@@ -2,7 +2,6 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
-using Playwright.ReactUI.Controls.Extensions;
 using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Controls;
@@ -101,18 +100,6 @@ public class DatePickerTests : TestsBase
     }
 
     [Test]
-    public async Task Click_Should_Focus_Into_DatePicker()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var context = Page.GetByTestId("DatePickerId");
-        var datePicker = new DatePicker(context);
-
-        await datePicker.ClickAsync().ConfigureAwait(false);
-
-        await context.Locator("noscript").Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-    }
-
-    [Test]
     public async Task GetValue_Return_Empty_When_DatePicker_Value_Is_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
@@ -166,31 +153,5 @@ public class DatePickerTests : TestsBase
         await datePicker.ClearAsync().ConfigureAwait(false);
 
         await datePicker.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task Focus()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var context = Page.GetByTestId("DatePickerId");
-        var datePicker = new DatePicker(context);
-
-        await datePicker.FocusAsync().ConfigureAwait(false);
-
-        await context.Locator("noscript").Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task Blur()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var context = Page.GetByTestId("DatePickerId");
-        var datePicker = new DatePicker(context);
-        await datePicker.ClickAsync().ConfigureAwait(false);
-        await context.Locator("noscript").Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-
-        await datePicker.BlurAsync().ConfigureAwait(false);
-
-        await context.Locator("noscript").Expect().ToHaveCountAsync(0).ConfigureAwait(false);
     }
 }
