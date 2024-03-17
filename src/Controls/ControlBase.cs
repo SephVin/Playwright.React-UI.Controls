@@ -1,15 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Extensions;
-using Playwright.ReactUI.Controls.Helpers;
 
 namespace Playwright.ReactUI.Controls;
 
 public class ControlBase
 {
-    private const string errorPropAttribute = DataPropNames.Error;
-    private const string warningPropAttribute = DataPropNames.Warning;
-
     protected ControlBase(ILocator context)
     {
         Context = context;
@@ -20,11 +16,17 @@ public class ControlBase
     public virtual async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
         => await Context.IsVisibleAsync(options).ConfigureAwait(false);
 
-    public async Task<bool> HasErrorAsync(LocatorGetAttributeOptions? options = default)
-        => await Context.GetAttributeAsync(errorPropAttribute, options).ConfigureAwait(false) == "true";
+    public async Task<bool> HasErrorAsync()
+    {
+        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        return await Context.Locator("_react=[error]").First.IsVisibleAsync().ConfigureAwait(false);
+    }
 
-    public async Task<bool> HasWarningAsync(LocatorGetAttributeOptions? options = default)
-        => await Context.GetAttributeAsync(warningPropAttribute, options).ConfigureAwait(false) == "true";
+    public async Task<bool> HasWarningAsync()
+    {
+        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        return await Context.Locator("_react=[warning]").First.IsVisibleAsync().ConfigureAwait(false);
+    }
 
     public virtual async Task ClickAsync(LocatorClickOptions? options = default)
         => await Context.ClickAsync(options).ConfigureAwait(false);
@@ -37,21 +39,17 @@ public class ControlBase
     public async Task HoverAsync(LocatorHoverOptions? options = default)
         => await Context.HoverAsync(options).ConfigureAwait(false);
 
-    public async Task WaitErrorAsync(
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await Context.Expect().ToHaveAttributeAsync(errorPropAttribute, "true", options).ConfigureAwait(false);
+    public async Task WaitErrorAsync(LocatorAssertionsToBeVisibleOptions? options = default)
+        => await Context.Locator("_react=[error]").First.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
 
-    public async Task WaitErrorAbsenceAsync(
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await Context.Expect().Not.ToHaveAttributeAsync(errorPropAttribute, "true", options).ConfigureAwait(false);
+    public async Task WaitErrorAbsenceAsync(LocatorAssertionsToBeVisibleOptions? options = default)
+        => await Context.Locator("_react=[error]").First.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
 
-    public async Task WaitWarningAsync(
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await Context.Expect().ToHaveAttributeAsync(warningPropAttribute, "true", options).ConfigureAwait(false);
+    public async Task WaitWarningAsync(LocatorAssertionsToBeVisibleOptions? options = default)
+        => await Context.Locator("_react=[warning]").First.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
 
-    public async Task WaitWarningAbsenceAsync(
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await Context.Expect().Not.ToHaveAttributeAsync(warningPropAttribute, "true", options).ConfigureAwait(false);
+    public async Task WaitWarningAbsenceAsync(LocatorAssertionsToBeVisibleOptions? options = default)
+        => await Context.Locator("_react=[warning]").First.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
 
     public virtual ILocatorAssertions Expect() => Context.Expect();
 }

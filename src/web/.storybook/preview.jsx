@@ -1,6 +1,4 @@
 import React from "react";
-import "../react-selenium-testing";
-import "../react-selenium-testing-custom-props";
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
