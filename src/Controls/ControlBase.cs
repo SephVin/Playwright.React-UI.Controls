@@ -17,7 +17,7 @@ public class ControlBase
 
     protected ILocator Context { get; }
 
-    public async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
+    public virtual async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
         => await Context.IsVisibleAsync(options).ConfigureAwait(false);
 
     public async Task<bool> HasErrorAsync(LocatorGetAttributeOptions? options = default)
@@ -29,7 +29,7 @@ public class ControlBase
     public virtual async Task ClickAsync(LocatorClickOptions? options = default)
         => await Context.ClickAsync(options).ConfigureAwait(false);
 
-    protected async Task<string?> GetAttributeValueAsync(
+    public async Task<string?> GetAttributeValueAsync(
         string attributeName,
         LocatorGetAttributeOptions? options = default)
         => await Context.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
