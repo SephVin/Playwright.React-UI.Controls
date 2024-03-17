@@ -1,0 +1,58 @@
+name: Build & Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - master
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+defaults:
+  run:
+    working-directory: src
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 6
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 6.0.*
+
+    - name: Setup Node 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - run: npm -g install npm@10 
+
+    - name: Run Storybook
+      working-directory: src/web
+      run: |
+        npm i
+        npm run build-storybook
+        (npm run storybook &)
+
+    - name: Build
+      run: dotnet build --configuration Release
+      
+    - name: Run Tests
+      run: dotnet test --configuration Release --logger "trx;LogFileName=report.trx" --no-restore --no-build --verbosity normal Tests
+
+    - name: Tests Report
+      uses: dorny/test-reporter@v1.8.0
+      if: success() || failure()
+      with:
+        name: Tests Report
+        working-directory: src/Tests
+        path: TestResults/report.trx
+        reporter: dotnet-trx 
