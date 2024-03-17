@@ -108,4 +108,33 @@ public class ControlListExtensionsTests : TestsBase
 
         await actual.Expect().ToHaveTextAsync("TODO 3").ConfigureAwait(false);
     }
+
+    [Test]
+    public async Task GetSingle()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
+        var list = new ControlList<Radio>(
+            Page.GetByTestId("RadioGroupId"),
+            "[data-tid='Radio__root']",
+            x => new Radio(x));
+
+        var actual = await list.GetSingleAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 1")
+            .ConfigureAwait(false);
+
+        await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task GetSingle_By_Predicate()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("controllist--single-element")).ConfigureAwait(false);
+        var list = new ControlList<Radio>(
+            Page.GetByTestId("RadioGroupId"),
+            "[data-tid='Radio__root']",
+            x => new Radio(x));
+
+        var actual = await list.GetSingleAsync().ConfigureAwait(false);
+
+        await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
+    }
 }

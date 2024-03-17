@@ -11,18 +11,15 @@ public class DatePickerAssertions : ILocatorAssertions
     private readonly ILocator context;
     private readonly ILocatorAssertions contextAssertions;
     private readonly ILocatorAssertions inputLocator;
-    private readonly ILocatorAssertions nativeInputLocator;
 
     public DatePickerAssertions(
         ILocator context,
         ILocatorAssertions contextAssertions,
-        ILocatorAssertions inputLocator,
-        ILocatorAssertions nativeInputLocator)
+        ILocatorAssertions inputLocator)
     {
         this.context = context;
         this.contextAssertions = contextAssertions;
         this.inputLocator = inputLocator;
-        this.nativeInputLocator = nativeInputLocator;
     }
 
     public async Task ToBeAttachedAsync(LocatorAssertionsToBeAttachedOptions? options = default)
@@ -32,16 +29,16 @@ public class DatePickerAssertions : ILocatorAssertions
         => await inputLocator.ToBeCheckedAsync(options).ConfigureAwait(false);
 
     public async Task ToBeDisabledAsync(LocatorAssertionsToBeDisabledOptions? options = default)
-        => await nativeInputLocator.ToBeDisabledAsync(options).ConfigureAwait(false);
+        => await inputLocator.ToBeDisabledAsync(options).ConfigureAwait(false);
 
     public async Task ToBeEditableAsync(LocatorAssertionsToBeEditableOptions? options = default)
-        => await nativeInputLocator.ToBeEditableAsync(options).ConfigureAwait(false);
+        => await inputLocator.ToBeEditableAsync(options).ConfigureAwait(false);
 
     public async Task ToBeEmptyAsync(LocatorAssertionsToBeEmptyOptions? options = default)
-        => await nativeInputLocator.ToBeEmptyAsync(options).ConfigureAwait(false);
+        => await inputLocator.ToBeEmptyAsync(options).ConfigureAwait(false);
 
     public async Task ToBeEnabledAsync(LocatorAssertionsToBeEnabledOptions? options = default)
-        => await nativeInputLocator.ToBeEnabledAsync(options).ConfigureAwait(false);
+        => await inputLocator.ToBeEnabledAsync(options).ConfigureAwait(false);
 
     public async Task ToBeFocusedAsync(LocatorAssertionsToBeFocusedOptions? options = default)
         => await Task.FromException(new NotSupportedException("Not working in DatePicker")).ConfigureAwait(false);
@@ -147,6 +144,5 @@ public class DatePickerAssertions : ILocatorAssertions
     public ILocatorAssertions Not => new DatePickerAssertions(
         context,
         contextAssertions.Not,
-        inputLocator.Not,
-        nativeInputLocator.Not);
+        inputLocator.Not);
 }

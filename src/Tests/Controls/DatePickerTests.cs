@@ -164,7 +164,7 @@ public class DatePickerTests : TestsBase
 
         await datePicker.ClearAsync().ConfigureAwait(false);
 
-        await datePicker.Expect().ToHaveTextAsync("  .  .    ").ConfigureAwait(false);
+        await datePicker.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
     }
 
     [Test]

@@ -25,3 +25,21 @@ export const Default = () => {
     </Gapped>
   );
 };
+
+export const SingleElement = () => {
+  const [chosen, setChosen] = useState(0);
+
+  return (
+    <Gapped>
+      <RadioGroup
+        data-tid="RadioGroupId"
+        value={chosen}
+        onValueChange={(value) => setChosen(value)}
+      >
+        <Gapped gap={3} vertical>
+          <Radio value={1}>TODO 1</Radio>
+        </Gapped>
+      </RadioGroup>
+    </Gapped>
+  );
+};

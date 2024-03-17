@@ -84,6 +84,6 @@ public class TestsBase
     {
         typeof(Microsoft.Playwright.Playwright).Assembly.GetType("Microsoft.Playwright.Core.AssertionsBase")!
             .GetMethod("SetDefaultTimeout", BindingFlags.Static | BindingFlags.Public)!
-            .Invoke(null, new object[] { 20 * 1000 });
+            .Invoke(null, new object[] { 10 * 1000 });
     }
 }

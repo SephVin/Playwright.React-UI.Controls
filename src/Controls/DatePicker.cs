@@ -8,30 +8,23 @@ namespace Playwright.ReactUI.Controls;
 public class DatePicker : ControlBase
 {
     private readonly ILocator inputLocator;
-    private readonly ILocator nativeInputLocator;
 
     public DatePicker(ILocator context)
         : base(context)
     {
-        inputLocator = context.Locator("[data-tid='InputLikeText__input']");
-        nativeInputLocator = context.Locator("[data-tid='InputLikeText__nativeInput']");
+        inputLocator = context.Locator("input");
     }
 
     public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
-        => await nativeInputLocator.IsDisabledAsync(options).ConfigureAwait(false);
+        => await inputLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
-    public async Task<string> GetValueAsync(LocatorInnerTextOptions? options = default)
-        => await Context.InnerTextAsync(options).ConfigureAwait(false);
+    public async Task<string> GetValueAsync(LocatorInputValueOptions? options = default)
+        => await inputLocator.InputValueAsync(options).ConfigureAwait(false);
 
-    public async Task FillAsync(string date, LocatorPressOptions? options = default)
+    public async Task FillAsync(string date, LocatorPressSequentiallyOptions? options = default)
     {
         await ClearAsync().ConfigureAwait(false);
-
-        // note: PressSequentiallyAsync is not working
-        foreach (var @char in date)
-        {
-            await inputLocator.PressAsync(@char.ToString(), options).ConfigureAwait(false);
-        }
+        await inputLocator.PressSequentiallyAsync(date, options).ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorPressOptions? options = default)
@@ -49,15 +42,17 @@ public class DatePicker : ControlBase
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
-        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await inputLocator.Locator("span[data-fragment]").First
-            .ClickAsync(new LocatorClickOptions { Force = true })
-            .ConfigureAwait(false);
+        await inputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await Context.Locator("span[data-fragment]").First.ClickAsync(
+            options ?? new LocatorClickOptions
+            {
+                Force = true
+            }
+        ).ConfigureAwait(false);
     }
 
     public override ILocatorAssertions Expect() => new DatePickerAssertions(
         Context,
         Context.Expect(),
-        inputLocator.Expect(),
-        nativeInputLocator.Expect());
+        inputLocator.Expect());
 }

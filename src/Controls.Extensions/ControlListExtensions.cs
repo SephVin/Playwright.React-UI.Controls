@@ -52,6 +52,13 @@ public static class ControlListExtensions
         return await controlList.GetFirstAsync().ConfigureAwait(false);
     }
 
+    public static async Task<T> GetSingleAsync<T>(this ControlList<T> controlList, Func<T, ValueTask<bool>> predicate)
+        where T : ControlBase
+    {
+        var list = await controlList.GetItemsAsync().ConfigureAwait(false);
+        return await list.ToAsyncEnumerable().SingleAwaitAsync(predicate).ConfigureAwait(false);
+    }
+
     public static async Task<IReadOnlyList<TResult>> SelectAsync<TSource, TResult>(
         this ControlList<TSource> controlList,
         Func<TSource, ValueTask<TResult>> selector) where TSource : ControlBase

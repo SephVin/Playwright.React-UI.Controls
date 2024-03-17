@@ -209,6 +209,19 @@ public sealed class InputTests : TestsBase
     }
 
     [Test]
+    public async Task Fill_Input_With_Mask()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("input--time-mask")).ConfigureAwait(false);
+        var input = new Input(Page.GetByTestId("InputId"));
+
+        await input.FillAsync("1234").ConfigureAwait(false);
+        await input.FillAsync("1356").ConfigureAwait(false);
+        await input.FillAsync("2105").ConfigureAwait(false);
+
+        await input.Expect().ToHaveValueAsync("21:05").ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task Press_Add_Char_When_Input_Is_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("input--default")).ConfigureAwait(false);
