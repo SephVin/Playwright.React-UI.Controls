@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 
@@ -18,12 +17,12 @@ public class Autocomplete : Input
     public async Task SelectSuggestionAsync(Index index, LocatorClickOptions? options = default)
     {
         var suggestions = await GetSuggestionsAsync().ConfigureAwait(false);
-        await suggestions[index].ClickAsync(options).ConfigureAwait(false);
+        await suggestions.Nth(index.Value).ClickAsync(options).ConfigureAwait(false);
     }
 
-    private async Task<IReadOnlyList<ILocator>> GetSuggestionsAsync()
+    private async Task<ILocator> GetSuggestionsAsync()
     {
         var container = await portal.GetContainerAsync().ConfigureAwait(false);
-        return await container.Locator("[data-tid='MenuItem__root']").AllAsync().ConfigureAwait(false);
+        return container.Locator("[data-tid='MenuItem__root']");
     }
 }
