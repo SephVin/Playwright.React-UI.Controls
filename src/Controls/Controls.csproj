@@ -24,15 +24,13 @@
         <Title>Playwright.ReactUI.Controls</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>0.1.0</Version>
+        <Version>0.1.0-alpha</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls</Product>
-        <Description>Playwright controls library for react-ui components</Description>
-        <Summary>Playwright controls library for react-ui components</Summary>
-        <PackageTags>playwright react-ui page-elements</PackageTags>
-<!--        <PackageIcon>logo128x128.png</PackageIcon>-->
-<!--        <PackageIconFullPath>$(MSBuildThisFileDirectory)\..\..\logo128x128.png</PackageIconFullPath>-->
-<!--        <PackageProjectUrl>https://github.com/pepelev/PullStream</PackageProjectUrl>-->
+        <Description>Playwright.NET controls library for @skbkontur/react-ui components</Description>
+        <Summary>Playwright.NET controls library for @skbkontur/react-ui components</Summary>
+        <PackageTags>playwright .net @skbkontur/react-ui</PackageTags>
+        <PackageProjectUrl>https://github.com/SephVin/Playwright.React-UI.Controls</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <MinClientVersion>2.12</MinClientVersion>

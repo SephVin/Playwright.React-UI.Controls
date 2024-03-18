@@ -23,15 +23,13 @@
         <Title>Playwright.ReactUI.Controls.Extensions</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>0.1.0</Version>
+        <Version>0.1.0-alpha</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls.Extensions</Product>
         <Description>Extensions for Playwright.ReactUI.Controls</Description>
         <Summary>Extensions for Playwright.ReactUI.Controls</Summary>
-        <PackageTags>playwright react-ui page-elements extensions</PackageTags>
-        <!--        <PackageIcon>logo128x128.png</PackageIcon>-->
-        <!--        <PackageIconFullPath>$(MSBuildThisFileDirectory)\..\..\logo128x128.png</PackageIconFullPath>-->
-        <!--        <PackageProjectUrl>https://github.com/pepelev/PullStream</PackageProjectUrl>-->
+        <PackageTags>playwright .net @skbkontur/react-ui extensions</PackageTags>
+        <PackageProjectUrl>https://github.com/SephVin/Playwright.React-UI.Controls</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <MinClientVersion>2.12</MinClientVersion>
