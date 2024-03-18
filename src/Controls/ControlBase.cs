@@ -18,13 +18,19 @@ public class ControlBase
 
     public async Task<bool> HasErrorAsync()
     {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await Context.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
+        ).ConfigureAwait(false);
+
         return await Context.Locator("_react=[error]").First.IsVisibleAsync().ConfigureAwait(false);
     }
 
     public async Task<bool> HasWarningAsync()
     {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await Context.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
+        ).ConfigureAwait(false);
+
         return await Context.Locator("_react=[warning]").First.IsVisibleAsync().ConfigureAwait(false);
     }
 

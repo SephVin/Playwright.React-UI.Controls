@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
@@ -34,7 +33,7 @@ public class Kebab : ControlBase
     public async Task SelectByIndexAsync(Index index, LocatorClickOptions? options = default)
     {
         var items = await GetItemsAsync().ConfigureAwait(false);
-        await items[index].ClickAsync(options).ConfigureAwait(false);
+        await items.Nth(index.Value).ClickAsync(options).ConfigureAwait(false);
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
@@ -45,10 +44,10 @@ public class Kebab : ControlBase
 
     public override ILocatorAssertions Expect() => new KebabAssertions(Context.Expect(), captionLocator.Expect());
 
-    private async Task<IReadOnlyList<ILocator>> GetItemsAsync()
+    private async Task<ILocator> GetItemsAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        return await container.Locator("[data-tid='MenuItem__root']").AllAsync().ConfigureAwait(false);
+        return container.Locator("[data-tid='MenuItem__root']");
     }
 
     private async Task<ILocator> GetItemAsync(string text)

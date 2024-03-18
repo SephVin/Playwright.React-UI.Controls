@@ -57,13 +57,19 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
 
     public async Task<int> CountAsync()
     {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await Context.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
+        ).ConfigureAwait(false);
+
         return await items.CountAsync().ConfigureAwait(false);
     }
 
     private async Task<IReadOnlyList<ILocator>> GetItemLocatorsAsync()
     {
-        await Context.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await Context.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
+        ).ConfigureAwait(false);
+
         return await items.AllAsync().ConfigureAwait(false);
     }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Extensions;
@@ -48,7 +47,7 @@ public class Dropdown : ControlBase
         LocatorClickOptions? options = default)
     {
         var items = await GetItemsAsync().ConfigureAwait(false);
-        await items[index].ClickAsync(options).ConfigureAwait(false);
+        await items.Nth(index.Value).ClickAsync(options).ConfigureAwait(false);
 
         if (isMenuClosedAfterSelect)
         {
@@ -72,10 +71,10 @@ public class Dropdown : ControlBase
 
     public override ILocatorAssertions Expect() => buttonLocator.Expect();
 
-    protected async Task<IReadOnlyList<ILocator>> GetItemsAsync()
+    protected async Task<ILocator> GetItemsAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        return await container.Locator("[data-tid='MenuItem__root']").AllAsync().ConfigureAwait(false);
+        return container.Locator("[data-tid='MenuItem__root']");
     }
 
     protected async Task<ILocator> GetItemAsync(string text)
