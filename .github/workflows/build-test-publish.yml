@@ -3,7 +3,7 @@ name: Build, Test and Publish
 on:
   workflow_dispatch:
   push:
-    branches: [ "master", "fix-workflow" ]
+    branches: [ "master" ]
 
 permissions:
   contents: write
