@@ -3,7 +3,7 @@ using Microsoft.Playwright;
 
 namespace Playwright.ReactUI.Controls.Extensions;
 
-public static class LocatorExtensions
+internal static class LocatorExtensions
 {
     public static ILocatorAssertions Expect(this ILocator locator)
         => Microsoft.Playwright.Assertions.Expect(locator);

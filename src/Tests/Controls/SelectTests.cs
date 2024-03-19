@@ -2,7 +2,6 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
-using Playwright.ReactUI.Controls.Extensions;
 using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Controls;
