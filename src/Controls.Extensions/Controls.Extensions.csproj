@@ -23,9 +23,10 @@
         <Title>Playwright.ReactUI.Controls.Extensions</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>0.1.1-alpha</Version>
+        <Version>0.1.2-alpha</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls.Extensions</Product>
+        <PackageReadmeFile>README-Controls.Extensions.md</PackageReadmeFile>
         <Description>Extensions for Playwright.ReactUI.Controls</Description>
         <Summary>Extensions for Playwright.ReactUI.Controls</Summary>
         <PackageTags>playwright pageobjects @skbkontur/react-ui extensions</PackageTags>
@@ -41,4 +42,8 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)../../readme/README-Controls.Extensions.md" Pack="true" PackagePath="/" />
+    </ItemGroup>
+    
 </Project>

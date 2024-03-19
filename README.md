@@ -49,14 +49,14 @@ public class Header : ControlBase
 
 # Запуск Storybook
 
-Если хочется запустить тесты проекта, то наобходим Storybook. Его можно запустить локально или в docker-контейнере 
+Для запуска тестов в проектах Controls и Controls.Extensions необходим Storybook. Его можно запустить локально или в docker-контейнере 
 
 #### Локальный запуск
 
-+ Должна стоять Node.js (проверялось на версии 18.19.0)
++ Установить Node.js (проверялось на версии 18.19.0)
 + Запустить скрипт `scripts/RunLocalStorybook.ps1`
 
 #### Запуск в Docker
 
-+ Должен стоять Docker
++ Установить Docker
 + Запустить скрипт `scripts/RunStorybookInDocker.ps1`
