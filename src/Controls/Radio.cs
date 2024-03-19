@@ -25,6 +25,6 @@ public class Radio : ControlBase
     public async Task<string> GetValueAsync(LocatorInputValueOptions? options = default)
         => await inputLocator.InputValueAsync(options).ConfigureAwait(false);
 
-    public async Task CheckAsync()
-        => await Context.CheckAsync().ConfigureAwait(false);
+    public async Task CheckAsync(LocatorCheckOptions? options = default)
+        => await Context.CheckAsync(options).ConfigureAwait(false);
 }

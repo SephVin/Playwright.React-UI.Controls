@@ -107,7 +107,7 @@ public sealed class CheckboxExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
         var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
 
-        await checkbox.CheckAsync().ConfigureAwait(false);
+        await checkbox.CheckAsync(throwIfAlreadyChecked: true).ConfigureAwait(false);
 
         await checkbox.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
@@ -118,26 +118,44 @@ public sealed class CheckboxExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
         var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
 
-        await checkbox.UncheckAsync().ConfigureAwait(false);
+        await checkbox.UncheckAsync(throwIfAlreadyUnchecked: true).ConfigureAwait(false);
 
         await checkbox.Expect().Not.ToBeCheckedAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task Check_Throws_When_Checkbox_State_Is_Checked()
+    public async Task Check_Throws_When_Checkbox_State_Is_Checked_And_Flag_Is_True()
     {
         await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
         var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => checkbox.CheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => checkbox.CheckAsync(throwIfAlreadyChecked: true));
     }
 
     [Test]
-    public async Task Uncheck_Throws_When_Checkbox_State_Is_Unchecked()
+    public async Task Check_Not_Throws_When_Checkbox_State_Is_Checked_And_Flag_Is_False()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
+        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+
+        Assert.DoesNotThrowAsync(() => checkbox.CheckAsync(throwIfAlreadyChecked: false));
+    }
+
+    [Test]
+    public async Task Uncheck_Throws_When_Checkbox_State_Is_Unchecked_And_Flag_Is_True()
     {
         await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
         var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => checkbox.UncheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => checkbox.UncheckAsync(throwIfAlreadyUnchecked: true));
+    }
+
+    [Test]
+    public async Task Uncheck_Not_Throws_When_Checkbox_State_Is_Unchecked_And_Flag_Is_False()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
+        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+
+        Assert.DoesNotThrowAsync(() => checkbox.UncheckAsync(throwIfAlreadyUnchecked: false));
     }
 }

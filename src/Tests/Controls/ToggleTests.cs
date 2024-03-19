@@ -155,6 +155,50 @@ public class ToggleTests : TestsBase
     }
 
     [Test]
+    public async Task Check_Should_Set_Checked_State_When_Toggle_Is_Unchecked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);
+        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
+
+        await toggle.CheckAsync().ConfigureAwait(false);
+
+        await toggle.Expect().ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Check_Should_Do_Nothing_When_Toggle_Is_Already_Checked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("toggle--checked")).ConfigureAwait(false);
+        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
+
+        await toggle.CheckAsync().ConfigureAwait(false);
+
+        await toggle.Expect().ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Uncheck_Should_Set_Unchecked_State_When_Toggle_Is_Checked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("toggle--checked")).ConfigureAwait(false);
+        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
+
+        await toggle.UncheckAsync().ConfigureAwait(false);
+
+        await toggle.Expect().Not.ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Uncheck_Should_Do_Nothing_When_Toggle_Is_Already_Unchecked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);
+        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
+
+        await toggle.UncheckAsync().ConfigureAwait(false);
+
+        await toggle.Expect().Not.ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task GetText_Returns_Toggle_Label()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);

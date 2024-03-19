@@ -26,23 +26,29 @@ public static class CheckboxExtensions
         LocatorAssertionsToBeDisabledOptions? options = default)
         => await checkbox.Expect().ToBeDisabledAsync(options).ConfigureAwait(false);
 
-    public static async Task CheckAsync(this Checkbox checkbox)
+    public static async Task CheckAsync(
+        this Checkbox checkbox,
+        bool throwIfAlreadyChecked,
+        LocatorCheckOptions? options = default)
     {
-        if (await checkbox.IsCheckedAsync().ConfigureAwait(false))
+        if (await checkbox.IsCheckedAsync().ConfigureAwait(false) && throwIfAlreadyChecked)
         {
             throw new InvalidOperationException("Checkbox already checked");
         }
 
-        await checkbox.ClickAsync().ConfigureAwait(false);
+        await checkbox.CheckAsync(options).ConfigureAwait(false);
     }
 
-    public static async Task UncheckAsync(this Checkbox checkbox)
+    public static async Task UncheckAsync(
+        this Checkbox checkbox,
+        bool throwIfAlreadyUnchecked,
+        LocatorUncheckOptions? options = default)
     {
-        if (!await checkbox.IsCheckedAsync().ConfigureAwait(false))
+        if (!await checkbox.IsCheckedAsync().ConfigureAwait(false) && throwIfAlreadyUnchecked)
         {
             throw new InvalidOperationException("Checkbox already unchecked");
         }
 
-        await checkbox.ClickAsync().ConfigureAwait(false);
+        await checkbox.UncheckAsync(options).ConfigureAwait(false);
     }
 }

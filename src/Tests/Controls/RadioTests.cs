@@ -156,9 +156,20 @@ public class RadioTests : TestsBase
     }
 
     [Test]
-    public async Task Check_Radio()
+    public async Task Check_Should_Set_Checked_State_When_Radio_Is_Unchecked()
     {
         await Page.GotoAsync(StorybookUrl.Get("radio--default")).ConfigureAwait(false);
+        var radio = new Radio(Page.GetByTestId("RadioId"));
+
+        await radio.CheckAsync().ConfigureAwait(false);
+
+        await radio.Expect().ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Check_Should_Do_Nothing_When_Radio_Is_Already_Checked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("radio--checked")).ConfigureAwait(false);
         var radio = new Radio(Page.GetByTestId("RadioId"));
 
         await radio.CheckAsync().ConfigureAwait(false);

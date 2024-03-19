@@ -102,42 +102,60 @@ public class ToggleExtensionsTests : TestsBase
     }
 
     [Test]
-    public async Task Check_When_Checkbox_State_Is_Unchecked()
+    public async Task Check_When_Toggle_State_Is_Unchecked()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);
         var toggle = new Toggle(Page.GetByTestId("ToggleId"));
 
-        await toggle.CheckAsync().ConfigureAwait(false);
+        await toggle.CheckAsync(throwIfAlreadyChecked: true).ConfigureAwait(false);
 
         await toggle.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task Uncheck_When_Checkbox_State_Is_Checked()
+    public async Task Uncheck_When_Toggle_State_Is_Checked()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--checked")).ConfigureAwait(false);
         var toggle = new Toggle(Page.GetByTestId("ToggleId"));
 
-        await toggle.UncheckAsync().ConfigureAwait(false);
+        await toggle.UncheckAsync(throwIfAlreadyUnchecked: true).ConfigureAwait(false);
 
         await toggle.Expect().Not.ToBeCheckedAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task Check_Throws_When_Checkbox_State_Is_Checked()
+    public async Task Check_Throws_When_Toggle_State_Is_Checked_And_Flag_Is_True()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--checked")).ConfigureAwait(false);
         var toggle = new Toggle(Page.GetByTestId("ToggleId"));
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => toggle.CheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => toggle.CheckAsync(throwIfAlreadyChecked: true));
     }
 
     [Test]
-    public async Task Uncheck_Throws_When_Checkbox_State_Is_Unchecked()
+    public async Task Check_Not_Throws_When_Toggle_State_Is_Checked_And_Flag_Is_False()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("toggle--checked")).ConfigureAwait(false);
+        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
+
+        Assert.DoesNotThrowAsync(() => toggle.CheckAsync(throwIfAlreadyChecked: false));
+    }
+
+    [Test]
+    public async Task Uncheck_Throws_When_Toggle_State_Is_Unchecked_And_Flag_Is_True()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);
         var toggle = new Toggle(Page.GetByTestId("ToggleId"));
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => toggle.UncheckAsync());
+        Assert.ThrowsAsync<InvalidOperationException>(() => toggle.UncheckAsync(throwIfAlreadyUnchecked: true));
+    }
+
+    [Test]
+    public async Task Uncheck_Not_Throws_When_Toggle_State_Is_Unchecked_And_Flag_Is_False()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);
+        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
+
+        Assert.DoesNotThrowAsync(() => toggle.UncheckAsync(throwIfAlreadyUnchecked: false));
     }
 }
