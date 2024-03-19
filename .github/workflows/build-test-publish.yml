@@ -6,7 +6,7 @@ on:
     branches: [ "master" ]
 
 permissions:
-  contents: read
+  contents: write
   actions: read
   checks: write
 
@@ -70,13 +70,12 @@ jobs:
           git fetch --tags
           if test -n "$(git tag --list "$ProjectName-$Version" | tr -d '[:space:]')"; then
             echo "Version $Version already exists for $ProjectName"
-            exit 0
+          else
+            dotnet pack "$ProjectName" --configuration Release --no-build --include-symbols --nologo --output nuget &&\
+            dotnet nuget push nuget/*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key "$NUGETKEY" --skip-duplicate &&\
+            git tag "$ProjectName-$Version" && git push origin "$ProjectName-$Version" || { echo "Error occurred"; exit 1; }
           fi
-          dotnet pack "$ProjectName" --configuration Release --no-build --include-symbols --nologo --output nuget &&\
-          dotnet nuget push nuget/*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key "$NUGETKEY" --skip-duplicate &&\
-          git tag "$ProjectName-$Version" && git push origin "$ProjectName-$Version"
-          exit $?
         }
         
-        publish_project "Playwright.ReactUI.Controls"
-        publish_project "Playwright.ReactUI.Controls.Extensions" 
+        publish_project "Controls"
+        publish_project "Controls.Extensions"

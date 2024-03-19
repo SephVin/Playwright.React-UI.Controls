@@ -24,12 +24,12 @@
         <Title>Playwright.ReactUI.Controls</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>0.1.0-alpha</Version>
+        <Version>0.1.1-alpha</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls</Product>
         <Description>Playwright.NET controls library for @skbkontur/react-ui components</Description>
         <Summary>Playwright.NET controls library for @skbkontur/react-ui components</Summary>
-        <PackageTags>playwright .net @skbkontur/react-ui</PackageTags>
+        <PackageTags>playwright pageobjects @skbkontur/react-ui</PackageTags>
         <PackageProjectUrl>https://github.com/SephVin/Playwright.React-UI.Controls</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
