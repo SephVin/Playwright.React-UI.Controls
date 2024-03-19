@@ -2,17 +2,21 @@
 
 Библиотека предназначена для взаимодействия с компонентами [@skbkontur/react-ui](https://github.com/skbkontur/retail-ui) при тестировании с помощью [Playwright.NET](https://github.com/microsoft/playwright-dotnet)
 
-### Как использовать
-В качестве примера взят компонент [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input):
+### Как использовать  
+
+В качестве примера взят компонент [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input):  
 `<Input data-tid="InputId" />`
 
-**Инициализация**
-`var input = new Input(page.GetByTestId("InputId"));`
-**Взаимодействие**
-`await input.FillAsync("newValue").ConfigureAwait(false);`
-**Проверка**
-`await input.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);`
-**Создание своего компонента**
+**Инициализация**  
+`var input = new Input(page.GetByTestId("InputId"));`  
+
+**Взаимодействие**  
+`await input.FillAsync("newValue").ConfigureAwait(false);`  
+
+**Проверка**  
+`await input.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);`  
+
+**Создание своего компонента**  
 ```
 public class Header : ControlBase
 {
@@ -30,11 +34,13 @@ public class Header : ControlBase
 
 Библиотека предоставляет набор расширений к библиотеке **Playwright.React-UI.Controls**
 
-### Как использовать
-**Примеры для компонента [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input)**
-`await input.AppendTextAsync("newValue").ConfigureAwait(false);` - добавление значения `newValue` в Input
-`await input.WaitPresenceAsync().ConfigureAwait(false);` - ожидание видимости компонента на странице
-`await input.WaitValueAsync("TODO").ConfigureAwait(false);` - ожидание значения `TODO` в Input'e
+### Как использовать  
+
+**Примеры для компонента [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input):**  
+
++ `await input.AppendTextAsync("newValue").ConfigureAwait(false);` - добавление значения `newValue` в Input  
++ `await input.WaitPresenceAsync().ConfigureAwait(false);` - ожидание видимости компонента на странице  
++ `await input.WaitValueAsync("TODO").ConfigureAwait(false);` - ожидание значения `TODO` в Input'e  
 
 # Минимальные требования
 
