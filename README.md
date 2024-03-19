@@ -1,4 +1,4 @@
-# Playwright.React-UI.Controls
+# Playwright.ReactUI.Controls
 
 Библиотека предназначена для взаимодействия с компонентами [@skbkontur/react-ui](https://github.com/skbkontur/retail-ui) при тестировании с помощью [Playwright.NET](https://github.com/microsoft/playwright-dotnet)
 
@@ -30,9 +30,9 @@ public class Header : ControlBase
 }
 ```
 
-# Playwright.React-UI.Controls.Extensions
+# Playwright.ReactUI.Controls.Extensions
 
-Библиотека предоставляет набор расширений к библиотеке **Playwright.React-UI.Controls**
+Библиотека предоставляет набор расширений к библиотеке **Playwright.ReactUI.Controls**
 
 ### Как использовать  
 
@@ -45,6 +45,7 @@ public class Header : ControlBase
 # Минимальные требования
 
 + netstandard2.1 / NET6
++ Playwright 1.41.2
 + @skbkontur/react-ui 4.15.0 (рекомендуется использовать последние версии)
 
 # Запуск Storybook
