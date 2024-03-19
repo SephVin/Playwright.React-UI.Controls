@@ -32,7 +32,7 @@ public class Dropdown : ControlBase
         bool isMenuClosedAfterSelect = true,
         LocatorClickOptions? options = default)
     {
-        var item = await GetItemAsync(text).ConfigureAwait(false);
+        var item = await GetItemLocatorAsync(text).ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);
 
         if (isMenuClosedAfterSelect)
@@ -46,7 +46,7 @@ public class Dropdown : ControlBase
         bool isMenuClosedAfterSelect = true,
         LocatorClickOptions? options = default)
     {
-        var items = await GetItemsAsync().ConfigureAwait(false);
+        var items = await GetItemsLocatorAsync().ConfigureAwait(false);
         await items.Nth(index.Value).ClickAsync(options).ConfigureAwait(false);
 
         if (isMenuClosedAfterSelect)
@@ -57,7 +57,7 @@ public class Dropdown : ControlBase
 
     public async Task WaitItemWithTextAsync(string text)
     {
-        var item = await GetItemAsync(text).ConfigureAwait(false);
+        var item = await GetItemLocatorAsync(text).ConfigureAwait(false);
         await item.Expect().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
@@ -71,13 +71,13 @@ public class Dropdown : ControlBase
 
     public override ILocatorAssertions Expect() => buttonLocator.Expect();
 
-    protected async Task<ILocator> GetItemsAsync()
+    protected async Task<ILocator> GetItemsLocatorAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
         return container.Locator("[data-tid='MenuItem__root']");
     }
 
-    protected async Task<ILocator> GetItemAsync(string text)
+    protected async Task<ILocator> GetItemLocatorAsync(string text)
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
         return container.Locator("[data-tid='MenuItem__root']").GetByText(text);
