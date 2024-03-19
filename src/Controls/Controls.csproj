@@ -24,11 +24,12 @@
         <Title>Playwright.ReactUI.Controls</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>0.1.1-alpha</Version>
+        <Version>0.1.2-alpha</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls</Product>
-        <Description>Playwright.NET controls library for @skbkontur/react-ui components</Description>
-        <Summary>Playwright.NET controls library for @skbkontur/react-ui components</Summary>
+        <PackageReadmeFile>README-Controls.md</PackageReadmeFile>
+        <Description>The library is designed to interact with @skbkontur/react-ui components using Playwright.NET</Description>
+        <Summary>The library is designed to interact with @skbkontur/react-ui components using Playwright.NET</Summary>
         <PackageTags>playwright pageobjects @skbkontur/react-ui</PackageTags>
         <PackageProjectUrl>https://github.com/SephVin/Playwright.React-UI.Controls</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -41,5 +42,9 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)../../readme/README-Controls.md" Pack="true" PackagePath="/" />
+    </ItemGroup>    
 
 </Project>
