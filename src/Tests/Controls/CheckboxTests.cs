@@ -155,6 +155,50 @@ public sealed class CheckboxTests : TestsBase
     }
 
     [Test]
+    public async Task Check_Should_Set_Checked_State_When_Checkbox_Is_Unchecked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
+        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+
+        await checkbox.CheckAsync().ConfigureAwait(false);
+
+        await checkbox.Expect().ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Check_Should_Do_Nothing_When_Checkbox_Is_Already_Checked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
+        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+
+        await checkbox.CheckAsync().ConfigureAwait(false);
+
+        await checkbox.Expect().ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Uncheck_Should_Set_Unchecked_State_When_Checkbox_Is_Checked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
+        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+
+        await checkbox.UncheckAsync().ConfigureAwait(false);
+
+        await checkbox.Expect().Not.ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Uncheck_Should_Do_Nothing_When_Checkbox_Is_Already_Unchecked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
+        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+
+        await checkbox.UncheckAsync().ConfigureAwait(false);
+
+        await checkbox.Expect().Not.ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task GetText_Returns_Checkbox_Label()
     {
         await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);

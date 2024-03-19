@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Controls.Extensions;
@@ -116,5 +117,34 @@ public class RadioExtensionsTests : TestsBase
         var radio = new Radio(Page.GetByTestId("RadioId"));
 
         await radio.WaitValueAsync("1").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Check_When_Radio_State_Is_Unchecked()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("radio--default")).ConfigureAwait(false);
+        var radio = new Radio(Page.GetByTestId("RadioId"));
+
+        await radio.CheckAsync(throwIfAlreadyChecked: true).ConfigureAwait(false);
+
+        await radio.Expect().ToBeCheckedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Check_Throws_When_Radio_State_Is_Checked_And_Flag_Is_True()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("radio--checked")).ConfigureAwait(false);
+        var radio = new Radio(Page.GetByTestId("RadioId"));
+
+        Assert.ThrowsAsync<InvalidOperationException>(() => radio.CheckAsync(throwIfAlreadyChecked: true));
+    }
+
+    [Test]
+    public async Task Check_Not_Throws_When_Radio_State_Is_Checked_And_Flag_Is_False()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("radio--checked")).ConfigureAwait(false);
+        var radio = new Radio(Page.GetByTestId("RadioId"));
+
+        Assert.DoesNotThrowAsync(() => radio.CheckAsync(throwIfAlreadyChecked: false));
     }
 }

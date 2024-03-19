@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 
 namespace Playwright.ReactUI.Controls.Extensions;
@@ -36,4 +37,17 @@ public static class RadioExtensions
         string value,
         LocatorAssertionsToHaveValueOptions? options = default)
         => await radio.Expect().ToHaveValueAsync(value, options).ConfigureAwait(false);
+
+    public static async Task CheckAsync(
+        this Radio radio,
+        bool throwIfAlreadyChecked,
+        LocatorCheckOptions? options = default)
+    {
+        if (await radio.IsCheckedAsync().ConfigureAwait(false) && throwIfAlreadyChecked)
+        {
+            throw new InvalidOperationException("Radio already checked");
+        }
+
+        await radio.CheckAsync(options).ConfigureAwait(false);
+    }
 }
