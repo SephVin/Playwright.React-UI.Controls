@@ -1,4 +1,4 @@
-# Playwright.React-UI.Controls
+# Playwright.ReactUI.Controls
 
 Библиотека предназначена для взаимодействия с компонентами [@skbkontur/react-ui](https://github.com/skbkontur/retail-ui) при тестировании с помощью [Playwright.NET](https://github.com/microsoft/playwright-dotnet)
 

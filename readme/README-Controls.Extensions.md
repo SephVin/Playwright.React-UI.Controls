@@ -1,6 +1,6 @@
-# Playwright.React-UI.Controls.Extensions
+# Playwright.ReactUI.Controls.Extensions
 
-Библиотека предоставляет набор расширений к библиотеке **Playwright.React-UI.Controls**
+Библиотека предоставляет набор расширений к библиотеке **Playwright.ReactUI.Controls**
 
 ### Как использовать  
 
