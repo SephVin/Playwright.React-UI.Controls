@@ -22,7 +22,7 @@ public class ControlBase
             new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
         ).ConfigureAwait(false);
 
-        return await Context.Locator("_react=[error]").First.IsVisibleAsync().ConfigureAwait(false);
+        return await GetAttributeValueAsync("data-visual-state-error").ConfigureAwait(false) == "true";
     }
 
     public async Task<bool> HasWarningAsync()
@@ -31,7 +31,7 @@ public class ControlBase
             new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
         ).ConfigureAwait(false);
 
-        return await Context.Locator("_react=[warning]").First.IsVisibleAsync().ConfigureAwait(false);
+        return await GetAttributeValueAsync("data-visual-state-warning").ConfigureAwait(false) == "true";
     }
 
     public virtual async Task ClickAsync(LocatorClickOptions? options = default)
@@ -45,17 +45,21 @@ public class ControlBase
     public async Task HoverAsync(LocatorHoverOptions? options = default)
         => await Context.HoverAsync(options).ConfigureAwait(false);
 
-    public async Task WaitErrorAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await Context.Locator("_react=[error]").First.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
+    public async Task WaitErrorAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
+        => await Context.Expect().ToHaveAttributeAsync("data-visual-state-error", "true", options)
+            .ConfigureAwait(false);
 
-    public async Task WaitErrorAbsenceAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await Context.Locator("_react=[error]").First.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
+    public async Task WaitErrorAbsenceAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
+        => await Context.Expect().ToHaveAttributeAsync("data-visual-state-error", "false", options)
+            .ConfigureAwait(false);
 
-    public async Task WaitWarningAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await Context.Locator("_react=[warning]").First.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
+    public async Task WaitWarningAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
+        => await Context.Expect().ToHaveAttributeAsync("data-visual-state-warning", "true", options)
+            .ConfigureAwait(false);
 
-    public async Task WaitWarningAbsenceAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await Context.Locator("_react=[warning]").First.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
+    public async Task WaitWarningAbsenceAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
+        => await Context.Expect().ToHaveAttributeAsync("data-visual-state-warning", "false", options)
+            .ConfigureAwait(false);
 
     public virtual ILocatorAssertions Expect() => Context.Expect();
 }

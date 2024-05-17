@@ -12,10 +12,10 @@ export const Default = () => {
   return (
     <Gapped>
       <Tabs value={active} onValueChange={setActive}>
-        <Tabs.Tab data-tid="TabId1" id="fuji" data-active={active == "fuji"}>
+        <Tabs.Tab data-tid="TabId1" id="fuji">
           Fuji
         </Tabs.Tab>
-        <Tabs.Tab data-tid="TabId2" id="tahat" data-active={active == "tahat"}>
+        <Tabs.Tab data-tid="TabId2" id="tahat">
           Tahat
         </Tabs.Tab>
       </Tabs>
@@ -32,7 +32,6 @@ export const Disabled = () => {
         <Tabs.Tab
           data-tid="TabId"
           id="fuji"
-          data-active={active == "fuji"}
           disabled
         >
           Fuji
@@ -51,7 +50,6 @@ export const Error = () => {
         <Tabs.Tab
           data-tid="TabId"
           id="fuji"
-          data-active={active == "fuji"}
           error
         >
           Fuji
@@ -70,7 +68,6 @@ export const Warning = () => {
         <Tabs.Tab
           data-tid="TabId"
           id="fuji"
-          data-active={active == "fuji"}
           warning
         >
           Fuji

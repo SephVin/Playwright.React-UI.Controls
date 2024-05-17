@@ -34,7 +34,7 @@ public class Combobox : ControlBase
         await items.First.ClickAsync().ConfigureAwait(false);
     }
 
-    public async Task SelectSingleAsync(string value, LocatorFillOptions? options = default)
+    public async Task SelectAsync(string value, LocatorFillOptions? options = default)
     {
         await FillAsync(value, options).ConfigureAwait(false);
         var items = await GetItemsAsync().ConfigureAwait(false);

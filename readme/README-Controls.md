@@ -34,4 +34,4 @@ public class Header : ControlBase
 
 + netstandard2.1 / NET6
 + Playwright 1.41.2
-+ @skbkontur/react-ui 4.15.0 (рекомендуется использовать последние версии)
++ @skbkontur/react-ui 4.21.4 (рекомендуется использовать последние версии)
