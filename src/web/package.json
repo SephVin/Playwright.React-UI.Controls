@@ -27,6 +27,6 @@
     "prettier": "3.2.4"
   },
   "dependencies": {
-    "@skbkontur/react-ui": "4.21.0"
+    "@skbkontur/react-ui": "4.21.4"
   }
 }
