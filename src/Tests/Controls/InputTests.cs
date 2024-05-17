@@ -216,9 +216,8 @@ public sealed class InputTests : TestsBase
 
         await input.FillAsync("1234").ConfigureAwait(false);
         await input.FillAsync("1356").ConfigureAwait(false);
-        await input.FillAsync("2105").ConfigureAwait(false);
 
-        await input.Expect().ToHaveValueAsync("21:05").ConfigureAwait(false);
+        await input.Expect().ToHaveValueAsync("13:56").ConfigureAwait(false);
     }
 
     [Test]

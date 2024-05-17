@@ -13,18 +13,18 @@ public class Textarea : ControlBase
     public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
         => await Context.IsDisabledAsync(options).ConfigureAwait(false);
 
-    public async Task<string> GetValueAsync()
-        => await Context.InputValueAsync().ConfigureAwait(false);
+    public async Task<string> GetValueAsync(LocatorInputValueOptions? options = default)
+        => await Context.InputValueAsync(options).ConfigureAwait(false);
 
-    public async Task FillAsync(string value)
-        => await Context.FillAsync(value).ConfigureAwait(false);
+    public async Task FillAsync(string value, LocatorFillOptions? options = default)
+        => await Context.FillAsync(value, options).ConfigureAwait(false);
 
-    public async Task ClearAsync()
-        => await Context.ClearAsync().ConfigureAwait(false);
+    public async Task ClearAsync(LocatorClearOptions? options = default)
+        => await Context.ClearAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
-        => await Context.FocusAsync().ConfigureAwait(false);
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
+        => await Context.FocusAsync(options).ConfigureAwait(false);
 
-    public async Task BlurAsync()
-        => await Context.PressAsync("Tab").ConfigureAwait(false);
+    public async Task BlurAsync(LocatorPressOptions? options = default)
+        => await Context.PressAsync("Tab", options).ConfigureAwait(false);
 }
