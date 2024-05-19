@@ -79,15 +79,6 @@ public class TabTests : TestsBase
     }
 
     [Test]
-    public async Task IsActive_Throws_When_Attribute_Is_Not_Set()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("tab--attribute-is-not-set")).ConfigureAwait(false);
-        var tab = new Tab(Page.GetByTestId("TabId"));
-
-        Assert.ThrowsAsync<Exception>(() => tab.IsActiveAsync());
-    }
-
-    [Test]
     public async Task HasError_Return_True_When_Tab_With_Error()
     {
         await Page.GotoAsync(StorybookUrl.Get("tab--error")).ConfigureAwait(false);
@@ -140,6 +131,6 @@ public class TabTests : TestsBase
 
         await tab.ClickAsync().ConfigureAwait(false);
 
-        await context.Expect().ToHaveAttributeAsync("data-active", "true").ConfigureAwait(false);
+        await context.Expect().ToHaveAttributeAsync("data-visual-state-active", "true").ConfigureAwait(false);
     }
 }

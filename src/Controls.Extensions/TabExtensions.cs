@@ -16,8 +16,8 @@ public static class TabExtensions
         => await tab.Expect().ToBeDisabledAsync(options).ConfigureAwait(false);
 
     public static async Task WaitActiveAsync(this Tab tab, LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.Expect().ToHaveAttributeAsync("data-active", "true", options).ConfigureAwait(false);
+        => await tab.Expect().ToHaveAttributeAsync("data-visual-state-active", "true", options).ConfigureAwait(false);
 
     public static async Task WaitInactiveAsync(this Tab tab, LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.Expect().Not.ToHaveAttributeAsync("data-active", "true", options).ConfigureAwait(false);
+        => await tab.Expect().Not.ToHaveAttributeAsync("data-visual-state-active", "true", options).ConfigureAwait(false);
 }
