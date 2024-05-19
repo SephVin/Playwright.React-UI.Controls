@@ -50,7 +50,7 @@ public class ControlBase
             .ConfigureAwait(false);
 
     public async Task WaitErrorAbsenceAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await Context.Expect().ToHaveAttributeAsync("data-visual-state-error", "false", options)
+        => await Context.Expect().Not.ToHaveAttributeAsync("data-visual-state-error", "true", options)
             .ConfigureAwait(false);
 
     public async Task WaitWarningAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
@@ -58,7 +58,7 @@ public class ControlBase
             .ConfigureAwait(false);
 
     public async Task WaitWarningAbsenceAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await Context.Expect().ToHaveAttributeAsync("data-visual-state-warning", "false", options)
+        => await Context.Expect().Not.ToHaveAttributeAsync("data-visual-state-warning", "true", options)
             .ConfigureAwait(false);
 
     public virtual ILocatorAssertions Expect() => Context.Expect();

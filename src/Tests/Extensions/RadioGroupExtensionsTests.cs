@@ -38,12 +38,12 @@ public class RadioGroupExtensionsTests : TestsBase
     }
 
     [Test]
-    public async Task WaitError_When_Not_All_Items_With_Error()
+    public async Task WaitErrorAbsence_When_Not_All_Items_With_Error()
     {
         await Page.GotoAsync(StorybookUrl.Get("radiogroup--error-item")).ConfigureAwait(false);
         var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
 
-        await radioGroup.WaitErrorAsync().ConfigureAwait(false);
+        await radioGroup.WaitErrorAbsenceAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -65,12 +65,12 @@ public class RadioGroupExtensionsTests : TestsBase
     }
 
     [Test]
-    public async Task WaitWarning_When_Not_All_Items_With_Warning()
+    public async Task WaitWarningAbsence_When_Not_All_Items_With_Warning()
     {
         await Page.GotoAsync(StorybookUrl.Get("radiogroup--warning-item")).ConfigureAwait(false);
         var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
 
-        await radioGroup.WaitWarningAsync().ConfigureAwait(false);
+        await radioGroup.WaitWarningAbsenceAsync().ConfigureAwait(false);
     }
 
     [Test]

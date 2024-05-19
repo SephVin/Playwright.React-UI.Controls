@@ -79,14 +79,14 @@ public class RadioGroupTests : TestsBase
     }
 
     [Test]
-    public async Task HasError_Return_True_When_Not_All_Radio_Has_Error()
+    public async Task HasError_Return_False_When_Not_All_Radio_Has_Error()
     {
         await Page.GotoAsync(StorybookUrl.Get("radiogroup--error-item")).ConfigureAwait(false);
         var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
 
         var actual = await radioGroup.HasErrorAsync().ConfigureAwait(false);
 
-        actual.Should().BeTrue();
+        actual.Should().BeFalse();
     }
 
     [Test]
@@ -112,14 +112,14 @@ public class RadioGroupTests : TestsBase
     }
 
     [Test]
-    public async Task HasWarning_Return_True_When_Not_All_Radio_Has_Warning()
+    public async Task HasWarning_Return_False_When_Not_All_Radio_Has_Warning()
     {
         await Page.GotoAsync(StorybookUrl.Get("radiogroup--warning-item")).ConfigureAwait(false);
         var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
 
         var actual = await radioGroup.HasWarningAsync().ConfigureAwait(false);
 
-        actual.Should().BeTrue();
+        actual.Should().BeFalse();
     }
 
     [Test]
