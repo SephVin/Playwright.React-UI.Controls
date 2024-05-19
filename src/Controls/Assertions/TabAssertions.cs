@@ -22,8 +22,8 @@ public class TabAssertions : ILocatorAssertions
 
     public async Task ToBeDisabledAsync(LocatorAssertionsToBeDisabledOptions? options = null)
         => await contextAssertions.ToHaveAttributeAsync(
-            "tabindex",
-            "-1",
+            "data-visual-state-disabled",
+            "true",
             new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout }
         ).ConfigureAwait(false);
 
@@ -35,8 +35,8 @@ public class TabAssertions : ILocatorAssertions
 
     public async Task ToBeEnabledAsync(LocatorAssertionsToBeEnabledOptions? options = null)
         => await contextAssertions.Not.ToHaveAttributeAsync(
-            "tabindex",
-            "-1",
+            "data-visual-state-disabled",
+            "true",
             new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout }
         ).ConfigureAwait(false);
 

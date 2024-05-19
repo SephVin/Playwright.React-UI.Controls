@@ -169,46 +169,46 @@ public sealed class ComboboxTests : TestsBase
     }
 
     [Test]
-    public async Task SelectSingle_Set_Single_Value_From_Combobox()
+    public async Task Select_Set_Single_Value_From_Combobox()
     {
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
-        await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
+        await combobox.SelectAsync("Third").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task SelectSingle_With_Loading()
+    public async Task Select_With_Loading()
     {
         await Page.GotoAsync(StorybookUrl.Get("combobox--loading")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
-        await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
+        await combobox.SelectAsync("Third").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task SelectSingle_Multiple_Selects()
+    public async Task Select_Multiple_Selects()
     {
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
-        await combobox.SelectSingleAsync("Third").ConfigureAwait(false);
-        await combobox.SelectSingleAsync("Second").ConfigureAwait(false);
+        await combobox.SelectAsync("Third").ConfigureAwait(false);
+        await combobox.SelectAsync("Second").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Second").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task SelectSingle_Throws_When_Menu_Have_More_Than_One_Values()
+    public async Task Select_Throws_When_Menu_Have_More_Than_One_Values()
     {
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
-        Assert.ThrowsAsync<PlaywrightException>(() => combobox.SelectSingleAsync("Th"));
+        Assert.ThrowsAsync<PlaywrightException>(() => combobox.SelectAsync("Th"));
     }
 
     [Test]
