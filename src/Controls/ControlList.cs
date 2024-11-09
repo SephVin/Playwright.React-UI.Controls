@@ -11,22 +11,36 @@ namespace Playwright.ReactUI.Controls;
 public class ControlList<TItem> : ControlBase where TItem : ControlBase
 {
     private readonly Func<ILocator, TItem> itemFactory;
-    private readonly ILocator items;
+    private readonly ILocator itemsLocator;
 
-    public ControlList(ILocator context, string itemSelector, Func<ILocator, TItem> itemFactory)
-        : base(context)
+    [Obsolete("Используй конструктор ControlList(ILocator rootLocator, Func<ILocator, ILocator> itemSelector, Func<ILocator, TItem> itemFactory)")]
+    public ControlList(ILocator rootLocator, string itemSelector, Func<ILocator, TItem> itemFactory)
+        : base(rootLocator)
     {
         this.itemFactory = itemFactory;
-        items = context.Locator(itemSelector);
+        itemsLocator = rootLocator.Locator(itemSelector);
+    }
+
+    public ControlList(ILocator rootLocator, Func<ILocator, ILocator> itemSelector, Func<ILocator, TItem> itemFactory)
+        : base(rootLocator)
+    {
+        itemsLocator = itemSelector(rootLocator);
+        this.itemFactory = itemFactory;
     }
 
     public override async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
-        => await items.First.IsVisibleAsync(options).ConfigureAwait(false);
+        => await itemsLocator.First.IsVisibleAsync(options).ConfigureAwait(false);
 
     public async Task<IReadOnlyList<TItem>> GetItemsAsync()
     {
         var itemLocators = await GetItemLocatorsAsync().ConfigureAwait(false);
         return itemLocators.Select(x => itemFactory(x)).ToList();
+    }
+
+    public async Task<IReadOnlyList<TItem>> GetItemsAsync(Func<TItem, ValueTask<bool>> predicate)
+    {
+        var list = await GetItemsAsync().ConfigureAwait(false);
+        return await list.ToAsyncEnumerable().WhereAwait(predicate).ToArrayAsync().ConfigureAwait(false);
     }
 
     public async Task<TItem> GetItemAsync(Index index)
@@ -39,6 +53,12 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
     {
         var list = await GetItemsAsync().ConfigureAwait(false);
         return await list.ToAsyncEnumerable().SingleAwaitAsync(predicate).ConfigureAwait(false);
+    }
+
+    public async Task<TItem> GetFirstItemAsync(Func<TItem, ValueTask<bool>> predicate)
+    {
+        var list = await GetItemsAsync().ConfigureAwait(false);
+        return await list.ToAsyncEnumerable().FirstAwaitAsync(predicate).ConfigureAwait(false);
     }
 
     public async Task ClickItemAsync(Index index, LocatorClickOptions? options = default)
@@ -57,24 +77,24 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
 
     public async Task<int> CountAsync()
     {
-        await Context.WaitForAsync(
-            new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
+        await RootLocator.WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Attached }
         ).ConfigureAwait(false);
 
-        return await items.CountAsync().ConfigureAwait(false);
+        return await itemsLocator.CountAsync().ConfigureAwait(false);
     }
 
     private async Task<IReadOnlyList<ILocator>> GetItemLocatorsAsync()
     {
-        await Context.WaitForAsync(
-            new LocatorWaitForOptions { State = WaitForSelectorState.Visible }
+        await WaitForAsync(
+            new LocatorWaitForOptions { State = WaitForSelectorState.Attached }
         ).ConfigureAwait(false);
 
-        return await items.AllAsync().ConfigureAwait(false);
+        return await itemsLocator.AllAsync().ConfigureAwait(false);
     }
 
     public override ILocatorAssertions Expect() => new ControlListAssertions(
-        Context.Expect(),
-        items.Expect(),
-        items.First.Expect());
+        RootLocator.Expect(),
+        itemsLocator.Expect(),
+        itemsLocator.First.Expect());
 }

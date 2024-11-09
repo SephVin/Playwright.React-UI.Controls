@@ -1,30 +1,60 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Constants;
+using Playwright.ReactUI.Controls.Extensions;
+using Playwright.ReactUI.Controls.Helpers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class Textarea : ControlBase
+public class Textarea : ControlBase, IFocusable
 {
-    public Textarea(ILocator context)
-        : base(context)
+    public Textarea(ILocator rootLocator)
+        : base(rootLocator)
     {
+        TextareaLocator = rootLocator.Locator("textarea").First;
     }
 
+    public ILocator TextareaLocator { get; }
+
     public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
-        => await Context.IsDisabledAsync(options).ConfigureAwait(false);
+        => await TextareaLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
     public async Task<string> GetValueAsync(LocatorInputValueOptions? options = default)
-        => await Context.InputValueAsync(options).ConfigureAwait(false);
+        => await TextareaLocator.InputValueAsync(options).ConfigureAwait(false);
 
     public async Task FillAsync(string value, LocatorFillOptions? options = default)
-        => await Context.FillAsync(value, options).ConfigureAwait(false);
+        => await TextareaLocator.FillAsync(value, options).ConfigureAwait(false);
+
+    public async Task PressAsync(string value, LocatorPressOptions? options = default)
+    {
+        await FocusAsync().ConfigureAwait(false);
+        await TextareaLocator.PressAsync(value, options).ConfigureAwait(false);
+    }
+
+    public async Task PressSequentiallyAsync(string value, LocatorPressSequentiallyOptions? options = default)
+    {
+        await FocusAsync().ConfigureAwait(false);
+        await TextareaLocator.PressSequentiallyAsync(value, options).ConfigureAwait(false);
+    }
 
     public async Task ClearAsync(LocatorClearOptions? options = default)
-        => await Context.ClearAsync(options).ConfigureAwait(false);
+        => await TextareaLocator.ClearAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync(LocatorFocusOptions? options = default)
-        => await Context.FocusAsync(options).ConfigureAwait(false);
+    public async Task FocusAsync()
+    {
+        await TextareaLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await TextareaLocator.FocusAsync().ConfigureAwait(false);
+    }
 
-    public async Task BlurAsync(LocatorPressOptions? options = default)
-        => await Context.PressAsync("Tab", options).ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await TextareaLocator.BlurAsync().ConfigureAwait(false);
+
+    public override async Task ClickAsync(LocatorClickOptions? options = default)
+        => await TextareaLocator.ClickAsync(options).ConfigureAwait(false);
+
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
+
+    public override ILocatorAssertions Expect() => new TextareaAssertions(RootLocator.Expect(), TextareaLocator.Expect());
 }

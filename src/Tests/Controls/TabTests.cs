@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Controls;
@@ -131,6 +131,6 @@ public class TabTests : TestsBase
 
         await tab.ClickAsync().ConfigureAwait(false);
 
-        await context.Expect().ToHaveAttributeAsync("data-visual-state-active", "true").ConfigureAwait(false);
+        await context.Expect().ToHaveAttributeAsync(DataVisualState.Active, "").ConfigureAwait(false);
     }
 }

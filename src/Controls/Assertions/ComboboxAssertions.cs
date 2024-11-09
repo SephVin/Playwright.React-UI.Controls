@@ -7,131 +7,222 @@ namespace Playwright.ReactUI.Controls.Assertions;
 
 public class ComboboxAssertions : ILocatorAssertions
 {
-    private readonly ILocatorAssertions contextAssertions;
-    private readonly ILocatorAssertions inputAssertions;
+    private readonly Combobox combobox;
+    private readonly ILocatorAssertions inputLikeTextAssertions;
+    private readonly ILocatorAssertions nativeInputLocatorAssertions;
+    private readonly ILocatorAssertions rootLocatorAssertions;
 
-    public ComboboxAssertions(ILocatorAssertions contextAssertions, ILocatorAssertions inputAssertions)
+    public ComboboxAssertions(
+        Combobox combobox,
+        ILocatorAssertions rootLocatorAssertions,
+        ILocatorAssertions nativeInputLocatorAssertions,
+        ILocatorAssertions inputLikeTextAssertions)
     {
-        this.contextAssertions = contextAssertions;
-        this.inputAssertions = inputAssertions;
+        this.combobox = combobox;
+        this.rootLocatorAssertions = rootLocatorAssertions;
+        this.nativeInputLocatorAssertions = nativeInputLocatorAssertions;
+        this.inputLikeTextAssertions = inputLikeTextAssertions;
     }
 
     public async Task ToBeAttachedAsync(LocatorAssertionsToBeAttachedOptions? options = default)
-        => await contextAssertions.ToBeAttachedAsync().ConfigureAwait(false);
+        => await rootLocatorAssertions.ToBeAttachedAsync().ConfigureAwait(false);
 
     public async Task ToBeCheckedAsync(LocatorAssertionsToBeCheckedOptions? options = default)
-        => await inputAssertions.ToBeAttachedAsync().ConfigureAwait(false);
+        => await nativeInputLocatorAssertions.ToBeCheckedAsync().ConfigureAwait(false);
 
     public async Task ToBeDisabledAsync(LocatorAssertionsToBeDisabledOptions? options = default)
-        => await inputAssertions.ToBeDisabledAsync(options).ConfigureAwait(false);
+        => await nativeInputLocatorAssertions.ToBeDisabledAsync(options).ConfigureAwait(false);
 
     public async Task ToBeEditableAsync(LocatorAssertionsToBeEditableOptions? options = default)
-        => await inputAssertions.ToBeAttachedAsync().ConfigureAwait(false);
+        => await nativeInputLocatorAssertions.ToBeEditableAsync().ConfigureAwait(false);
 
     public async Task ToBeEmptyAsync(LocatorAssertionsToBeEmptyOptions? options = default)
-        => await inputAssertions.ToBeEmptyAsync(options).ConfigureAwait(false);
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToBeEmptyAsync(options).ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToBeEmptyAsync(options).ConfigureAwait(false);
+        }
+    }
 
     public async Task ToBeEnabledAsync(LocatorAssertionsToBeEnabledOptions? options = default)
-        => await inputAssertions.ToBeEnabledAsync(options).ConfigureAwait(false);
+        => await nativeInputLocatorAssertions.ToBeEnabledAsync(options).ConfigureAwait(false);
 
     public async Task ToBeFocusedAsync(LocatorAssertionsToBeFocusedOptions? options = default)
-        => await inputAssertions.ToBeFocusedAsync(options).ConfigureAwait(false);
+        => await nativeInputLocatorAssertions.ToBeFocusedAsync(options).ConfigureAwait(false);
 
     public async Task ToBeHiddenAsync(LocatorAssertionsToBeHiddenOptions? options = default)
-        => await contextAssertions.ToBeHiddenAsync(options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToBeHiddenAsync(options).ConfigureAwait(false);
 
     public async Task ToBeInViewportAsync(LocatorAssertionsToBeInViewportOptions? options = default)
-        => await contextAssertions.ToBeAttachedAsync().ConfigureAwait(false);
+        => await rootLocatorAssertions.ToBeInViewportAsync().ConfigureAwait(false);
 
     public async Task ToBeVisibleAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await contextAssertions.ToBeVisibleAsync(options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToBeVisibleAsync(options).ConfigureAwait(false);
 
     public async Task ToContainTextAsync(string expected, LocatorAssertionsToContainTextOptions? options = default)
-        => await contextAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToContainTextAsync(Regex expected, LocatorAssertionsToContainTextOptions? options = default)
-        => await contextAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToContainTextAsync(
         IEnumerable<string> expected,
         LocatorAssertionsToContainTextOptions? options = default)
-        => await contextAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToContainTextAsync(
         IEnumerable<Regex> expected,
         LocatorAssertionsToContainTextOptions? options = default)
-        => await contextAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleDescriptionAsync(
+        string description,
+        LocatorAssertionsToHaveAccessibleDescriptionOptions? options = default
+    ) => await rootLocatorAssertions.ToHaveAccessibleDescriptionAsync(description, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleDescriptionAsync(
+        Regex description,
+        LocatorAssertionsToHaveAccessibleDescriptionOptions? options = default
+    ) => await rootLocatorAssertions.ToHaveAccessibleDescriptionAsync(description, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleNameAsync(
+        string name,
+        LocatorAssertionsToHaveAccessibleNameOptions? options = default
+    ) => await rootLocatorAssertions.ToHaveAccessibleNameAsync(name, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleNameAsync(
+        Regex name,
+        LocatorAssertionsToHaveAccessibleNameOptions? options = default
+    ) => await rootLocatorAssertions.ToHaveAccessibleNameAsync(name, options).ConfigureAwait(false);
 
     public async Task ToHaveAttributeAsync(
         string name,
         string value,
         LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await contextAssertions.ToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
 
     public async Task ToHaveAttributeAsync(
         string name,
         Regex value,
         LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await contextAssertions.ToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
 
     public async Task ToHaveClassAsync(string expected, LocatorAssertionsToHaveClassOptions? options = default)
-        => await contextAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveClassAsync(Regex expected, LocatorAssertionsToHaveClassOptions? options = default)
-        => await contextAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveClassAsync(IEnumerable<string> expected, LocatorAssertionsToHaveClassOptions? options = default)
-        => await contextAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
+    public async Task ToHaveClassAsync(
+        IEnumerable<string> expected,
+        LocatorAssertionsToHaveClassOptions? options = default)
+        => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveClassAsync(IEnumerable<Regex> expected, LocatorAssertionsToHaveClassOptions? options = default)
-        => await contextAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
+    public async Task ToHaveClassAsync(
+        IEnumerable<Regex> expected,
+        LocatorAssertionsToHaveClassOptions? options = default)
+        => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveCountAsync(int count, LocatorAssertionsToHaveCountOptions? options = default)
-        => await contextAssertions.ToHaveCountAsync(count, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveCountAsync(count, options).ConfigureAwait(false);
 
     public async Task ToHaveCSSAsync(string name, string value, LocatorAssertionsToHaveCSSOptions? options = default)
-        => await contextAssertions.ToHaveCSSAsync(name, value, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveCSSAsync(name, value, options).ConfigureAwait(false);
 
     public async Task ToHaveCSSAsync(string name, Regex value, LocatorAssertionsToHaveCSSOptions? options = default)
-        => await contextAssertions.ToHaveCSSAsync(name, value, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveCSSAsync(name, value, options).ConfigureAwait(false);
 
     public async Task ToHaveIdAsync(string id, LocatorAssertionsToHaveIdOptions? options = default)
-        => await contextAssertions.ToHaveIdAsync(id, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveIdAsync(id, options).ConfigureAwait(false);
 
     public async Task ToHaveIdAsync(Regex id, LocatorAssertionsToHaveIdOptions? options = default)
-        => await contextAssertions.ToHaveIdAsync(id, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveIdAsync(id, options).ConfigureAwait(false);
 
     public async Task ToHaveJSPropertyAsync(
         string name,
         object value,
         LocatorAssertionsToHaveJSPropertyOptions? options = default)
-        => await contextAssertions.ToHaveJSPropertyAsync(name, value, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveJSPropertyAsync(name, value, options).ConfigureAwait(false);
+
+    public async Task ToHaveRoleAsync(AriaRole role, LocatorAssertionsToHaveRoleOptions? options = null)
+        => await rootLocatorAssertions.ToHaveRoleAsync(role, options).ConfigureAwait(false);
 
     public async Task ToHaveTextAsync(string expected, LocatorAssertionsToHaveTextOptions? options = default)
-        => await contextAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveTextAsync(Regex expected, LocatorAssertionsToHaveTextOptions? options = default)
-        => await contextAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveTextAsync(IEnumerable<string> expected, LocatorAssertionsToHaveTextOptions? options = default)
-        => await contextAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
+    public async Task ToHaveTextAsync(
+        IEnumerable<string> expected,
+        LocatorAssertionsToHaveTextOptions? options = default)
+        => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveTextAsync(IEnumerable<Regex> expected, LocatorAssertionsToHaveTextOptions? options = default)
-        => await contextAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
+    public async Task ToHaveTextAsync(
+        IEnumerable<Regex> expected,
+        LocatorAssertionsToHaveTextOptions? options = default)
+        => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveValueAsync(string value, LocatorAssertionsToHaveValueOptions? options = default)
-        => await inputAssertions.ToHaveValueAsync(value, options).ConfigureAwait(false);
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToHaveValueAsync(value, options).ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToHaveTextAsync(value).ConfigureAwait(false);
+        }
+    }
 
     public async Task ToHaveValueAsync(Regex value, LocatorAssertionsToHaveValueOptions? options = default)
-        => await inputAssertions.ToHaveValueAsync(value, options).ConfigureAwait(false);
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToHaveValueAsync(value, options).ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToHaveTextAsync(value).ConfigureAwait(false);
+        }
+    }
 
     public async Task ToHaveValuesAsync(
         IEnumerable<string> values,
         LocatorAssertionsToHaveValuesOptions? options = default)
-        => await inputAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToHaveTextAsync(values).ConfigureAwait(false);
+        }
+    }
 
-    public async Task ToHaveValuesAsync(IEnumerable<Regex> values, LocatorAssertionsToHaveValuesOptions? options = default)
-        => await inputAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+    public async Task ToHaveValuesAsync(
+        IEnumerable<Regex> values,
+        LocatorAssertionsToHaveValuesOptions? options = default)
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToHaveTextAsync(values).ConfigureAwait(false);
+        }
+    }
 
-    public ILocatorAssertions Not => new ComboboxAssertions(contextAssertions.Not, inputAssertions.Not);
+    public ILocatorAssertions Not
+        => new ComboboxAssertions(
+            combobox,
+            rootLocatorAssertions.Not,
+            nativeInputLocatorAssertions.Not,
+            inputLikeTextAssertions.Not);
 }

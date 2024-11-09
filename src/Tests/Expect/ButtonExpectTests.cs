@@ -109,7 +109,7 @@ public class ButtonExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
         var button = new Button(Page.GetByTestId("ButtonId"));
 
-        await button.Expect().ToHaveAttributeAsync("type", "button").ConfigureAwait(false);
+        await button.Expect().ToHaveAttributeAsync("data-tid", "ButtonId").ConfigureAwait(false);
     }
 
     [Test]
@@ -118,7 +118,7 @@ public class ButtonExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
         var button = new Button(Page.GetByTestId("ButtonId"));
 
-        await button.Expect().Not.ToHaveAttributeAsync("type", "not-button").ConfigureAwait(false);
+        await button.Expect().Not.ToHaveAttributeAsync("data-tid", "ButtonId2").ConfigureAwait(false);
     }
 
     [Test]

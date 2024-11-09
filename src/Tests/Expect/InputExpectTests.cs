@@ -164,7 +164,7 @@ public class InputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("input--default")).ConfigureAwait(false);
         var input = new Input(Page.GetByTestId("InputId"));
 
-        await input.Expect().ToHaveAttributeAsync("type", "text").ConfigureAwait(false);
+        await input.Expect().ToHaveAttributeAsync("data-tid", "InputId").ConfigureAwait(false);
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class InputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("input--default")).ConfigureAwait(false);
         var input = new Input(Page.GetByTestId("InputId"));
 
-        await input.Expect().Not.ToHaveAttributeAsync("type", "not-text").ConfigureAwait(false);
+        await input.Expect().Not.ToHaveAttributeAsync("data-tid", "InputId2").ConfigureAwait(false);
     }
 
     [Test]

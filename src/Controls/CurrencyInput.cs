@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Constants;
+using Playwright.ReactUI.Controls.Helpers;
 
 namespace Playwright.ReactUI.Controls;
 
 public class CurrencyInput : Input
 {
-    public CurrencyInput(ILocator context)
-        : base(context)
+    public CurrencyInput(ILocator rootLocator)
+        : base(rootLocator)
     {
     }
 
@@ -28,4 +30,7 @@ public class CurrencyInput : Input
         await FocusAsync().ConfigureAwait(false);
         await base.ClearAsync(options).ConfigureAwait(false);
     }
+
+    public override async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 }

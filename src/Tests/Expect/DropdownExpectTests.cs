@@ -109,7 +109,7 @@ public class DropdownExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
         var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
 
-        await dropdown.Expect().ToHaveAttributeAsync("type", "button").ConfigureAwait(false);
+        await dropdown.Expect().ToHaveAttributeAsync("data-tid", "DropdownId").ConfigureAwait(false);
     }
 
     [Test]
@@ -118,7 +118,7 @@ public class DropdownExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
         var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
 
-        await dropdown.Expect().Not.ToHaveAttributeAsync("type", "not-button").ConfigureAwait(false);
+        await dropdown.Expect().Not.ToHaveAttributeAsync("data-tid", "DropdownId2").ConfigureAwait(false);
     }
 
     [Test]

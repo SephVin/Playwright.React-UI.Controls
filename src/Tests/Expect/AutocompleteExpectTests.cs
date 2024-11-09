@@ -164,7 +164,7 @@ public class AutocompleteExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
         var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
 
-        await autocomplete.Expect().ToHaveAttributeAsync("type", "text").ConfigureAwait(false);
+        await autocomplete.Expect().ToHaveAttributeAsync("data-tid", "AutocompleteId").ConfigureAwait(false);
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class AutocompleteExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
         var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
 
-        await autocomplete.Expect().Not.ToHaveAttributeAsync("type", "not-text").ConfigureAwait(false);
+        await autocomplete.Expect().Not.ToHaveAttributeAsync("data-tid", "AutocompleteId2").ConfigureAwait(false);
     }
 
     [Test]

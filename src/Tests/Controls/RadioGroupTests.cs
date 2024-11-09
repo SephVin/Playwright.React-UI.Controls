@@ -194,26 +194,4 @@ public class RadioGroupTests : TestsBase
         var text = await actual.GetTextAsync().ConfigureAwait(false);
         text.Should().Be("TODO 2");
     }
-
-    [Test]
-    public async Task GetRadioIndexByText()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--default")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        var actual = await radioGroup.GetRadioIndexByTextAsync("TODO 2").ConfigureAwait(false);
-
-        actual.Should().Be(1);
-    }
-
-    [Test]
-    public async Task GetRadioIndexByValue()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--default")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        var actual = await radioGroup.GetRadioIndexByValueAsync("2").ConfigureAwait(false);
-
-        actual.Should().Be(1);
-    }
 }

@@ -5,17 +5,17 @@ namespace Playwright.ReactUI.Controls;
 
 public class FxInput : Input
 {
-    private readonly ILocator buttonLocator;
-
-    public FxInput(ILocator context)
-        : base(context)
+    public FxInput(ILocator rootLocator)
+        : base(rootLocator)
     {
-        buttonLocator = context.Locator("button");
+        ButtonLocator = rootLocator.Locator("button");
     }
 
+    public ILocator ButtonLocator { get; }
+
     public async Task<bool> IsAutoAsync(LocatorIsVisibleOptions? options = default)
-        => !await buttonLocator.IsVisibleAsync(options).ConfigureAwait(false);
+        => !await ButtonLocator.IsVisibleAsync(options).ConfigureAwait(false);
 
     public async Task SetAutoAsync(LocatorClickOptions? options = default)
-        => await buttonLocator.ClickAsync(options).ConfigureAwait(false);
+        => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
 }

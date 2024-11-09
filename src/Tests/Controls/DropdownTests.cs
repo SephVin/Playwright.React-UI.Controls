@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Playwright;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Tests.Helpers;
@@ -113,38 +112,17 @@ public class DropdownTests : TestsBase
     }
 
     [Test]
-    public async Task SelectByText()
+    public async Task SelectFirstByText()
     {
         await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
         var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
 
-        await dropdown.SelectByTextAsync("TODO 2").ConfigureAwait(false);
+        await dropdown.SelectFirstByTextAsync("TODO 2").ConfigureAwait(false);
 
         await Page.GetByTestId("StaticToast").GetByTestId("ToastView__root")
             .Expect()
             .ToHaveTextAsync("Clicked TODO 2")
             .ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task SelectByText_When_Menu_Is_Not_Closed_After_Select()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--not-closed")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
-        await dropdown.SelectByTextAsync("TODO", isMenuClosedAfterSelect: false).ConfigureAwait(false);
-        var actual = await dropdown.IsMenuOpenedAsync().ConfigureAwait(false);
-
-        actual.Should().BeTrue();
-    }
-
-    [Test]
-    public async Task SelectByText_Throws_When_IsMenuClosedAfterSelect_Is_True_But_Menu_Is_Not_Closed()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--not-closed")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
-        Assert.ThrowsAsync<PlaywrightException>(() => dropdown.SelectByTextAsync("TODO"));
     }
 
     [Test]
@@ -159,27 +137,6 @@ public class DropdownTests : TestsBase
             .Expect()
             .ToHaveTextAsync("Clicked TODO 2")
             .ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task SelectByIndex_When_Menu_Is_Not_Closed_After_Select()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--not-closed")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
-        await dropdown.SelectByIndexAsync(0, isMenuClosedAfterSelect: false).ConfigureAwait(false);
-        var actual = await dropdown.IsMenuOpenedAsync().ConfigureAwait(false);
-
-        actual.Should().BeTrue();
-    }
-
-    [Test]
-    public async Task SelectByIndex_Throws_When_IsMenuClosedAfterSelect_Is_True_But_Menu_Is_Not_Closed()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--not-closed")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
-        Assert.ThrowsAsync<PlaywrightException>(() => dropdown.SelectByIndexAsync(0));
     }
 
     [Test]
@@ -200,32 +157,5 @@ public class DropdownTests : TestsBase
         var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
 
         await dropdown.WaitItemWithTextAsync("TODO 2").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task OpenDropdownIfNeeded_Should_Open_Dropdown_When_It_Closed()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
-        await dropdown.OpenDropdownIfNeededAsync().ConfigureAwait(false);
-        var actual = await dropdown.IsMenuOpenedAsync().ConfigureAwait(false);
-
-        actual.Should().BeTrue();
-    }
-
-    [Test]
-    public async Task OpenDropdownIfNeeded_Should_Not_Closed_Dropdown_When_It_Opened()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
-        await dropdown.ClickAsync().ConfigureAwait(false);
-        var actual = await dropdown.IsMenuOpenedAsync().ConfigureAwait(false);
-        actual.Should().BeTrue();
-        await dropdown.OpenDropdownIfNeededAsync().ConfigureAwait(false);
-        actual = await dropdown.IsMenuOpenedAsync().ConfigureAwait(false);
-
-        actual.Should().BeTrue();
     }
 }

@@ -8,10 +8,10 @@ public class Autocomplete : Input
 {
     private readonly Portal portal;
 
-    public Autocomplete(ILocator context)
-        : base(context)
+    public Autocomplete(ILocator rootLocator)
+        : base(rootLocator)
     {
-        portal = new Portal(context.Locator("noscript"));
+        portal = new Portal(rootLocator.Locator("noscript"));
     }
 
     public async Task SelectSuggestionAsync(Index index, LocatorClickOptions? options = default)

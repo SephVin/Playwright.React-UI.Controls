@@ -6,19 +6,18 @@ namespace Playwright.ReactUI.Controls;
 
 public class Portal : ControlBase
 {
-    public Portal(ILocator context)
-        : base(context)
+    public Portal(ILocator rootLocator)
+        : base(rootLocator)
     {
     }
 
-    public async Task<bool> IsExistsInDomAsync()
-        => await Context.CountAsync().ConfigureAwait(false) == 1;
+    public async Task<bool> IsVisibleAsync()
+        => await RootLocator.CountAsync().ConfigureAwait(false) == 1;
 
     public async Task<ILocator> GetContainerAsync()
     {
-        await Expect().ToHaveCountAsync(1).ConfigureAwait(false);
         var containerId = await GetContainerIdAsync().ConfigureAwait(false);
-        return Context.Page.Locator($"[data-rendered-container-id='{containerId}']");
+        return Page.Locator($"[data-rendered-container-id='{containerId}']");
     }
 
     private async Task<string> GetContainerIdAsync()
