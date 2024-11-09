@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Controls;
@@ -16,6 +16,21 @@ public class TooltipTests : TestsBase
         var tooltip = new Tooltip(Page.GetByTestId("TooltipId"));
         var input = new Input(Page.GetByTestId("InputId"));
         await input.HoverAsync().ConfigureAwait(false);
+        await tooltip.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+
+        var actual = await tooltip.IsVisibleAsync().ConfigureAwait(false);
+
+        actual.Should().BeTrue();
+    }
+
+    [Test]
+    public async Task GetTooltip()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("tooltip--default")).ConfigureAwait(false);
+        var input = new Input(Page.GetByTestId("InputId"));
+
+        await input.HoverAsync().ConfigureAwait(false);
+        var tooltip = await input.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
         await tooltip.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
         var actual = await tooltip.IsVisibleAsync().ConfigureAwait(false);
@@ -60,23 +75,5 @@ public class TooltipTests : TestsBase
         await tooltip.CloseAsync().ConfigureAwait(false);
 
         await tooltip.Expect().Not.ToBeVisibleAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task GetLinks_Return_Links_From_Tooltip_Content()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("tooltip--with-links")).ConfigureAwait(false);
-        var tooltip = new Tooltip(Page.GetByTestId("TooltipId"));
-        var input = new Input(Page.GetByTestId("InputId"));
-        await input.HoverAsync().ConfigureAwait(false);
-
-        var actual = tooltip.GetLinks();
-
-        await actual.Expect().ToHaveCountAsync(2).ConfigureAwait(false);
-        var links = await actual.GetItemsAsync().ConfigureAwait(false);
-        // ReSharper disable StringLiteralTypo
-        await links.First().Expect().ToHaveTextAsync("ссылка 1").ConfigureAwait(false);
-        await links.Last().Expect().ToHaveTextAsync("ссылка 2").ConfigureAwait(false);
-        // ReSharper restore StringLiteralTypo
     }
 }

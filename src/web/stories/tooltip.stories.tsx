@@ -25,7 +25,6 @@ export const Default = () => {
         data-tid="TooltipId"
         render={render}
         pos="right top"
-        useWrapper
         closeButton
       >
         <Input data-tid="InputId" />
@@ -49,7 +48,7 @@ export const WithSingleLink = () => {
 
   return (
     <Gapped>
-      <Tooltip data-tid="TooltipId" render={render} pos="right top" useWrapper>
+      <Tooltip data-tid="TooltipId" render={render} pos="right top">
         <Input data-tid="InputId" />
       </Tooltip>
     </Gapped>
@@ -72,7 +71,7 @@ export const WithLinks = () => {
 
   return (
     <Gapped>
-      <Tooltip data-tid="TooltipId" render={render} pos="right top" useWrapper>
+      <Tooltip data-tid="TooltipId" render={render} pos="right top">
         <Input data-tid="InputId" />
       </Tooltip>
     </Gapped>

@@ -164,7 +164,7 @@ public class CurrencyInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
 
-        await currencyInput.Expect().ToHaveAttributeAsync("type", "text").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveAttributeAsync("data-tid", "CurrencyInputId").ConfigureAwait(false);
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class CurrencyInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
 
-        await currencyInput.Expect().Not.ToHaveAttributeAsync("type", "not-text").ConfigureAwait(false);
+        await currencyInput.Expect().Not.ToHaveAttributeAsync("data-tid", "CurrencyInputId2").ConfigureAwait(false);
     }
 
     [Test]

@@ -1,27 +1,42 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
+using Playwright.ReactUI.Controls.Helpers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class Button : ControlBase
+public class Button : ControlBase, IFocusable
 {
-    private readonly ILocator buttonLocator;
-
-    public Button(ILocator context)
-        : base(context)
+    public Button(ILocator rootLocator)
+        : base(rootLocator)
     {
-        buttonLocator = context.Locator("button");
+        ButtonLocator = rootLocator.Locator("button");
     }
 
+    public ILocator ButtonLocator { get; }
+
     public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
-        => await buttonLocator.IsDisabledAsync(options).ConfigureAwait(false);
+        => await ButtonLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
     public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
-        => await buttonLocator.InnerTextAsync(options).ConfigureAwait(false);
+        => await ButtonLocator.InnerTextAsync(options).ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
-        => await buttonLocator.ClickAsync(options).ConfigureAwait(false);
+        => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
 
-    public override ILocatorAssertions Expect() => buttonLocator.Expect();
+    public async Task FocusAsync()
+    {
+        await ButtonLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await ButtonLocator.FocusAsync().ConfigureAwait(false);
+    }
+
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await ButtonLocator.BlurAsync(options).ConfigureAwait(false);
+
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
+
+    public override ILocatorAssertions Expect() => new ButtonAssertions(RootLocator.Expect(), ButtonLocator.Expect());
 }

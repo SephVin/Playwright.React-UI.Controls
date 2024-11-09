@@ -140,6 +140,7 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
+        await combobox.FillAsync("th").ConfigureAwait(false);
         await combobox.SelectFirstAsync("th").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
@@ -151,6 +152,7 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--loading")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
+        await combobox.FillAsync("th").ConfigureAwait(false);
         await combobox.SelectFirstAsync("th").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
@@ -162,7 +164,9 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
+        await combobox.FillAsync("th").ConfigureAwait(false);
         await combobox.SelectFirstAsync("th").ConfigureAwait(false);
+        await combobox.FillAsync("Second").ConfigureAwait(false);
         await combobox.SelectFirstAsync("Second").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Second").ConfigureAwait(false);
@@ -174,6 +178,7 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
+        await combobox.FillAsync("Third").ConfigureAwait(false);
         await combobox.SelectAsync("Third").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
@@ -185,6 +190,7 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--loading")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
+        await combobox.FillAsync("Third").ConfigureAwait(false);
         await combobox.SelectAsync("Third").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Third").ConfigureAwait(false);
@@ -196,7 +202,9 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
+        await combobox.FillAsync("Third").ConfigureAwait(false);
         await combobox.SelectAsync("Third").ConfigureAwait(false);
+        await combobox.FillAsync("Second").ConfigureAwait(false);
         await combobox.SelectAsync("Second").ConfigureAwait(false);
 
         await combobox.Expect().ToHaveValueAsync("Second").ConfigureAwait(false);
@@ -208,7 +216,13 @@ public sealed class ComboboxTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
         var combobox = new Combobox(Page.GetByTestId("ComboboxId"));
 
-        Assert.ThrowsAsync<PlaywrightException>(() => combobox.SelectAsync("Th"));
+        Assert.ThrowsAsync<PlaywrightException>(
+            async () =>
+            {
+                await combobox.FillAsync("Th").ConfigureAwait(false);
+                await combobox.SelectAsync("Th").ConfigureAwait(false);
+            }
+        );
     }
 
     [Test]

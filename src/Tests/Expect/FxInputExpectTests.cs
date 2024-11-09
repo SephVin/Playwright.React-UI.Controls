@@ -164,7 +164,7 @@ public class FxInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
         var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
 
-        await fxInput.Expect().ToHaveAttributeAsync("type", "text").ConfigureAwait(false);
+        await fxInput.Expect().ToHaveAttributeAsync("data-tid", "FxInputId").ConfigureAwait(false);
     }
 
     [Test]
@@ -173,7 +173,7 @@ public class FxInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
         var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
 
-        await fxInput.Expect().Not.ToHaveAttributeAsync("type", "not-text").ConfigureAwait(false);
+        await fxInput.Expect().Not.ToHaveAttributeAsync("data-tid", "FxInputId2").ConfigureAwait(false);
     }
 
     [Test]

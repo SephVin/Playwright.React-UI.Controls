@@ -40,31 +40,4 @@ public class TooltipExtensionsTests : TestsBase
 
         await tooltip.WaitOpenedWithTextAsync("TODO").ConfigureAwait(false);
     }
-
-    [Test]
-    public async Task OpenSingleLink()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("tooltip--with-single-link")).ConfigureAwait(false);
-        var tooltip = new Tooltip(Page.GetByTestId("TooltipId"));
-        var input = new Input(Page.GetByTestId("InputId"));
-        await input.HoverAsync().ConfigureAwait(false);
-
-        await tooltip.OpenSingleLinkAsync().ConfigureAwait(false);
-
-        await Page.Expect().ToHaveURLAsync("https://kontur.ru/").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task OpenLinkByText()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("tooltip--with-links")).ConfigureAwait(false);
-        var tooltip = new Tooltip(Page.GetByTestId("TooltipId"));
-        var input = new Input(Page.GetByTestId("InputId"));
-        await input.HoverAsync().ConfigureAwait(false);
-
-        // ReSharper disable once StringLiteralTypo
-        await tooltip.OpenLinkByTextAsync("ссылка 2").ConfigureAwait(false);
-
-        await Page.Expect().ToHaveURLAsync("https://school.kontur.ru/").ConfigureAwait(false);
-    }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Constants;
+using Playwright.ReactUI.Controls.Helpers;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -10,84 +11,72 @@ public class RadioGroup : ControlBase
 {
     private readonly ControlList<Radio> list;
 
-    public RadioGroup(ILocator context)
-        : base(context)
+    public RadioGroup(ILocator rootLocator)
+        : base(rootLocator)
     {
-        list = new ControlList<Radio>(context, "[data-tid='Radio__root']", x => new Radio(x));
-    }
-
-    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
-    {
-        var radioList = await list.GetItemsAsync().ConfigureAwait(false);
-        var isDisabled = true;
-
-        foreach (var radio in radioList)
-        {
-            if (await radio.IsDisabledAsync(options).ConfigureAwait(false) == false)
-            {
-                isDisabled = false;
-                break;
-            }
-        }
-
-        return isDisabled;
+        list = new ControlList<Radio>(
+            rootLocator,
+            locator => locator.Locator("[data-tid='Radio__root']"),
+            x => new Radio(x));
     }
 
     public async Task<IReadOnlyList<Radio>> GetItemsAsync()
         => await list.GetItemsAsync().ConfigureAwait(false);
 
-    public async Task CheckByValueAsync(string value, LocatorClickOptions? options = default)
+    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
     {
-        var index = await GetRadioIndexByValueAsync(value).ConfigureAwait(false);
-        await list.ClickItemAsync(index, options).ConfigureAwait(false);
+        var radioList = await list.GetItemsAsync().ConfigureAwait(false);
+
+        foreach (var radio in radioList)
+        {
+            if (await radio.IsDisabledAsync(options).ConfigureAwait(false) == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    public async Task CheckByIndexAsync(int index, LocatorClickOptions? options = default)
-        => await list.ClickItemAsync(index, options).ConfigureAwait(false);
-
-    public async Task CheckByTextAsync(string text, LocatorClickOptions? options = default)
+    public async Task CheckByValueAsync(string value)
     {
-        var index = await GetRadioIndexByTextAsync(text).ConfigureAwait(false);
-        await list.ClickItemAsync(index, options).ConfigureAwait(false);
+        var radio = await GetByValueAsync(value).ConfigureAwait(false);
+        await radio.CheckAsync().ConfigureAwait(false);
+    }
+
+    public async Task CheckByIndexAsync(int index)
+    {
+        var radio = await GetByIndexAsync(index).ConfigureAwait(false);
+        await radio.CheckAsync().ConfigureAwait(false);
+    }
+
+    public async Task CheckByTextAsync(string text)
+    {
+        var radio = await GetByTextAsync(text).ConfigureAwait(false);
+        await radio.CheckAsync().ConfigureAwait(false);
     }
 
     public async Task<Radio> GetCheckedRadioAsync()
-    {
-        var radioList = await list.GetItemsAsync().ConfigureAwait(false);
-        var checkedList = await radioList.ToAsyncEnumerable()
-            .SelectAwait(async x => await x.IsCheckedAsync().ConfigureAwait(false))
-            .ToListAsync()
-            .ConfigureAwait(false);
-        var index = checkedList.FindIndex(x => x);
-
-        return radioList[index];
-    }
-
-    public async Task<int> GetRadioIndexByTextAsync(string text)
-    {
-        var radioList = await list.GetItemsAsync().ConfigureAwait(false);
-        var radioText = await radioList.ToAsyncEnumerable()
-            .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
-            .ToListAsync()
+        => await list.GetFirstItemAsync(async x => await x.IsCheckedAsync().ConfigureAwait(false))
             .ConfigureAwait(false);
 
-        return radioText.FindIndex(x => x.Contains(text));
-    }
+    public async Task<Radio> GetByValueAsync(string value)
+        => await list.GetFirstItemAsync(
+            async x => (await x.GetValueAsync().ConfigureAwait(false)).Equals(
+                value,
+                StringComparison.OrdinalIgnoreCase)
+        ).ConfigureAwait(false);
 
-    public async Task<int> GetRadioIndexByValueAsync(string value)
-    {
-        var values = await GetValuesAsync().ConfigureAwait(false);
-        return values.FindIndex(x => x.Equals(value, StringComparison.OrdinalIgnoreCase));
-    }
+    public async Task<Radio> GetByIndexAsync(Index index)
+        => await list.GetItemAsync(index).ConfigureAwait(false);
 
-    private async Task<List<string>> GetValuesAsync()
-    {
-        var radioList = await list.GetItemsAsync().ConfigureAwait(false);
-        var values = await radioList.ToAsyncEnumerable()
-            .SelectAwait(async x => await x.GetValueAsync().ConfigureAwait(false))
-            .ToListAsync()
-            .ConfigureAwait(false);
+    public async Task<Radio> GetByTextAsync(string text)
+        => await list.GetFirstItemAsync(
+            async x => (await x.GetTextAsync().ConfigureAwait(false)).Equals(
+                text,
+                StringComparison.OrdinalIgnoreCase)
+        ).ConfigureAwait(false);
 
-        return values;
-    }
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 }

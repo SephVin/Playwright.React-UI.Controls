@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Playwright" Version="1.41.2" />
+        <PackageReference Include="Microsoft.Playwright" Version="1.48.0" />
         <PackageReference Include="System.Linq.Async" Version="6.0.1" />
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     </ItemGroup>
@@ -24,7 +24,7 @@
         <Title>Playwright.ReactUI.Controls</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>1.2.0</Version>
+        <Version>2.0.0</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls</Product>
         <PackageReadmeFile>README-Controls.md</PackageReadmeFile>
@@ -45,6 +45,6 @@
 
     <ItemGroup>
         <None Include="$(MSBuildThisFileDirectory)../../readme/README-Controls.md" Pack="true" PackagePath="/" />
-    </ItemGroup>    
+    </ItemGroup>
 
 </Project>

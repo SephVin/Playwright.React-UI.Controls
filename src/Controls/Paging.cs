@@ -9,14 +9,18 @@ namespace Playwright.ReactUI.Controls;
 public class Paging : ControlBase
 {
     private readonly Label nextPage;
-    private readonly ControlList<Label> pages;
 
     public Paging(ILocator context)
         : base(context)
     {
-        pages = new ControlList<Label>(context, "[data-tid='Paging__pageLink']", x => new Label(x));
+        Pages = new ControlList<Label>(
+            context,
+            locator => locator.Locator("[data-tid='Paging__pageLink']"),
+            x => new Label(x));
         nextPage = new Label(context.Locator("[data-tid='Paging__forwardLink']"));
     }
+
+    public ControlList<Label> Pages { get; }
 
     public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
         => await GetAttributeValueAsync("tabindex", options).ConfigureAwait(false) is "-1";
@@ -40,7 +44,7 @@ public class Paging : ControlBase
 
         try
         {
-            var page = await pages
+            var page = await Pages
                 .GetItemAsync(async x => (await x.GetTextAsync().ConfigureAwait(false)).Equals(pageNumber.ToString()))
                 .ConfigureAwait(false);
             await page.ClickAsync(options).ConfigureAwait(false);
@@ -55,7 +59,7 @@ public class Paging : ControlBase
     {
         var pagesCount = await GetPagesCountAsync().ConfigureAwait(false);
         await CheckPageConstraintAsync(pagesCount).ConfigureAwait(false);
-        var page = await pages.GetItemAsync(^1).ConfigureAwait(false);
+        var page = await Pages.GetItemAsync(^1).ConfigureAwait(false);
         await page.ClickAsync(options).ConfigureAwait(false);
     }
 
@@ -87,7 +91,7 @@ public class Paging : ControlBase
         }
     }
 
-    public override ILocatorAssertions Expect() => new PagingAssertions(Context.Expect(), pages.Expect());
+    public override ILocatorAssertions Expect() => new PagingAssertions(RootLocator.Expect(), Pages.Expect());
 
     private async Task CheckPageConstraintAsync(int pageNumber)
     {

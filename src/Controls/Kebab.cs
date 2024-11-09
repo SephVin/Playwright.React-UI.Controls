@@ -2,27 +2,29 @@
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
 
 public class Kebab : ControlBase
 {
-    private readonly ILocator captionLocator;
     private readonly Portal portal;
 
-    public Kebab(ILocator context)
-        : base(context)
+    public Kebab(ILocator rootLocator)
+        : base(rootLocator)
     {
-        captionLocator = context.Locator("[data-tid='Kebab__caption']");
-        portal = new Portal(context.Locator("noscript"));
+        CaptionLocator = rootLocator.Locator("[data-tid='Kebab__caption']");
+        portal = new Portal(rootLocator.Locator("noscript"));
     }
 
+    public ILocator CaptionLocator { get; }
+
     public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
-        => await captionLocator.GetAttributeValueAsync("tabindex", options).ConfigureAwait(false) is "-1";
+        => await RootLocator.GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) == string.Empty;
 
     public async Task<bool> IsMenuOpenedAsync()
-        => await portal.IsExistsInDomAsync().ConfigureAwait(false);
+        => await portal.IsVisibleAsync().ConfigureAwait(false);
 
     public async Task SelectByTextAsync(string text, LocatorClickOptions? options = default)
     {
@@ -39,10 +41,10 @@ public class Kebab : ControlBase
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
         await Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await captionLocator.ClickAsync().ConfigureAwait(false);
+        await CaptionLocator.ClickAsync().ConfigureAwait(false);
     }
 
-    public override ILocatorAssertions Expect() => new KebabAssertions(Context.Expect(), captionLocator.Expect());
+    public override ILocatorAssertions Expect() => new KebabAssertions(RootLocator.Expect(), CaptionLocator.Expect());
 
     private async Task<ILocator> GetItemsAsync()
     {

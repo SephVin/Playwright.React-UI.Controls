@@ -195,37 +195,37 @@ public class SelectTests : TestsBase
     }
 
     [Test]
-    public async Task SelectValue_In_SelectButton()
+    public async Task SelectAsync_In_SelectButton()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
         var context = Page.GetByTestId("SelectId");
         var select = new Select(context);
 
-        await select.SelectValueAsync("Three").ConfigureAwait(false);
+        await select.SelectAsync("Three").ConfigureAwait(false);
 
         await context.Expect().ToHaveTextAsync("Three").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task SelectValue_In_SelectLink()
+    public async Task SelectAsync_In_SelectLink()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
         var context = Page.GetByTestId("SelectId");
         var select = new Select(context);
 
-        await select.SelectValueAsync("Three").ConfigureAwait(false);
+        await select.SelectAsync("Three").ConfigureAwait(false);
 
         await context.Expect().ToHaveTextAsync("Three").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task SelectFirstValueBySearch()
+    public async Task SelectFirst()
     {
         await Page.GotoAsync(StorybookUrl.Get("select--search")).ConfigureAwait(false);
         var context = Page.GetByTestId("SelectId");
         var select = new Select(context);
 
-        await select.SelectFirstValueBySearchAsync("T").ConfigureAwait(false);
+        await select.SelectFirstAsync("T").ConfigureAwait(false);
 
         await context.Expect().ToHaveTextAsync("Two").ConfigureAwait(false);
     }

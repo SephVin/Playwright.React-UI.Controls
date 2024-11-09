@@ -15,7 +15,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         await list.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
@@ -30,11 +30,11 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var visibleList = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         var notExistingList = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId2"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         await visibleList.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
@@ -49,7 +49,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         var actual = await list.GetItemsAsync().ConfigureAwait(false);
@@ -67,7 +67,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         var actual = await list.GetItemAsync(1).ConfigureAwait(false);
@@ -81,7 +81,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         var actual = await list
@@ -97,7 +97,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.ClickItemAsync(1).ConfigureAwait(false);
@@ -112,7 +112,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.ClickItemAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 2")
@@ -128,7 +128,7 @@ public class ControlListTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         var actual = await list.CountAsync().ConfigureAwait(false);

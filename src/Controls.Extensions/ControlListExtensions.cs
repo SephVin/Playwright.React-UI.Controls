@@ -8,21 +8,45 @@ namespace Playwright.ReactUI.Controls.Extensions;
 
 public static class ControlListExtensions
 {
+    [Obsolete("Use WaitToBeVisibleAsync")]
     public static async Task WaitPresenceAsync<T>(
         this ControlList<T> controlList,
         LocatorAssertionsToBeVisibleOptions? options = default) where T : ControlBase
-        => await controlList.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
+        => await controlList.WaitToBeVisibleAsync(options).ConfigureAwait(false);
 
+    [Obsolete("Use WaitToBeHiddenAsync")]
     public static async Task WaitAbsenceAsync<T>(
         this ControlList<T> controlList,
         LocatorAssertionsToBeVisibleOptions? options = default) where T : ControlBase
         => await controlList.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
 
+    public static async Task WaitToBeVisibleAsync<T>(
+        this ControlList<T> controlList,
+        LocatorAssertionsToBeVisibleOptions? options = default) where T : ControlBase
+        => await controlList.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
+
+    public static async Task WaitToBeHiddenAsync<T>(
+        this ControlList<T> controlList,
+        LocatorAssertionsToBeHiddenOptions? options = default) where T : ControlBase
+        => await controlList.Expect().ToBeHiddenAsync(options).ConfigureAwait(false);
+
+    [Obsolete("Use WaitToHaveCountAsync")]
     public static async Task WaitCountAsync<T>(
         this ControlList<T> controlList,
         int count,
         LocatorAssertionsToHaveCountOptions? options = default) where T : ControlBase
+        => await controlList.WaitToHaveCountAsync(count, options).ConfigureAwait(false);
+
+    public static async Task WaitToHaveCountAsync<T>(
+        this ControlList<T> controlList,
+        int count,
+        LocatorAssertionsToHaveCountOptions? options = default) where T : ControlBase
         => await controlList.Expect().ToHaveCountAsync(count, options).ConfigureAwait(false);
+
+    public static async Task WaitToToBeEmptyAsync<T>(
+        this ControlList<T> controlList,
+        LocatorAssertionsToHaveCountOptions? options = default) where T : ControlBase
+        => await controlList.Expect().ToHaveCountAsync(0, options).ConfigureAwait(false);
 
     public static async Task ClickFirstItemAsync<T>(
         this ControlList<T> controlList,
