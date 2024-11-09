@@ -59,21 +59,5 @@ public class ControlBase
         LocatorGetAttributeOptions? options = default)
         => await RootLocator.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
 
-    public async Task WaitErrorAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await RootLocator.Expect().ToHaveAttributeAsync(DataVisualState.Error, "", options)
-            .ConfigureAwait(false);
-
-    public async Task WaitErrorAbsenceAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await RootLocator.Expect().Not.ToHaveAttributeAsync(DataVisualState.Error, "", options)
-            .ConfigureAwait(false);
-
-    public async Task WaitWarningAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await RootLocator.Expect().ToHaveAttributeAsync(DataVisualState.Warning, "", options)
-            .ConfigureAwait(false);
-
-    public async Task WaitWarningAbsenceAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await RootLocator.Expect().Not.ToHaveAttributeAsync(DataVisualState.Warning, "", options)
-            .ConfigureAwait(false);
-
     public virtual ILocatorAssertions Expect() => RootLocator.Expect();
 }
