@@ -77,6 +77,16 @@ public class ControlListAssertions : ILocatorAssertions
         LocatorAssertionsToHaveAccessibleDescriptionOptions? options = default
     ) => await rootLocatorAssertions.ToHaveAccessibleDescriptionAsync(description, options).ConfigureAwait(false);
 
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        string errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await rootLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        Regex errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await rootLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
     public async Task ToHaveAccessibleNameAsync(
         string name,
         LocatorAssertionsToHaveAccessibleNameOptions? options = default
@@ -110,7 +120,9 @@ public class ControlListAssertions : ILocatorAssertions
         LocatorAssertionsToHaveClassOptions? options = default)
         => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveClassAsync(IEnumerable<Regex> expected, LocatorAssertionsToHaveClassOptions? options = default)
+    public async Task ToHaveClassAsync(
+        IEnumerable<Regex> expected,
+        LocatorAssertionsToHaveClassOptions? options = default)
         => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveCountAsync(int count, LocatorAssertionsToHaveCountOptions? options = default)
@@ -143,10 +155,14 @@ public class ControlListAssertions : ILocatorAssertions
     public async Task ToHaveTextAsync(Regex expected, LocatorAssertionsToHaveTextOptions? options = default)
         => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveTextAsync(IEnumerable<string> expected, LocatorAssertionsToHaveTextOptions? options = default)
+    public async Task ToHaveTextAsync(
+        IEnumerable<string> expected,
+        LocatorAssertionsToHaveTextOptions? options = default)
         => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
-    public async Task ToHaveTextAsync(IEnumerable<Regex> expected, LocatorAssertionsToHaveTextOptions? options = default)
+    public async Task ToHaveTextAsync(
+        IEnumerable<Regex> expected,
+        LocatorAssertionsToHaveTextOptions? options = default)
         => await rootLocatorAssertions.ToHaveTextAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveValueAsync(string value, LocatorAssertionsToHaveValueOptions? options = default)
@@ -160,8 +176,15 @@ public class ControlListAssertions : ILocatorAssertions
         LocatorAssertionsToHaveValuesOptions? options = default)
         => await rootLocatorAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
 
-    public async Task ToHaveValuesAsync(IEnumerable<Regex> values, LocatorAssertionsToHaveValuesOptions? options = default)
+    public async Task ToHaveValuesAsync(
+        IEnumerable<Regex> values,
+        LocatorAssertionsToHaveValuesOptions? options = default)
         => await rootLocatorAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+
+    public async Task ToMatchAriaSnapshotAsync(
+        string expected,
+        LocatorAssertionsToMatchAriaSnapshotOptions? options = null)
+        => await rootLocatorAssertions.ToMatchAriaSnapshotAsync(expected, options).ConfigureAwait(false);
 
     public ILocatorAssertions Not => new ControlListAssertions(
         rootLocatorAssertions.Not,

@@ -72,6 +72,16 @@ public class CheckboxAssertions : ILocatorAssertions
         LocatorAssertionsToHaveAccessibleDescriptionOptions? options = default
     ) => await inputLocatorAssertions.ToHaveAccessibleDescriptionAsync(description, options).ConfigureAwait(false);
 
+    public Task ToHaveAccessibleErrorMessageAsync(
+        string errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => inputLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options);
+
+    public Task ToHaveAccessibleErrorMessageAsync(
+        Regex errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => inputLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options);
+
     public async Task ToHaveAccessibleNameAsync(
         string name,
         LocatorAssertionsToHaveAccessibleNameOptions? options = default
@@ -165,6 +175,11 @@ public class CheckboxAssertions : ILocatorAssertions
         IEnumerable<Regex> values,
         LocatorAssertionsToHaveValuesOptions? options = default)
         => await inputLocatorAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+
+    public async Task ToMatchAriaSnapshotAsync(
+        string expected,
+        LocatorAssertionsToMatchAriaSnapshotOptions? options = null)
+        => await inputLocatorAssertions.ToMatchAriaSnapshotAsync(expected, options).ConfigureAwait(false);
 
     public ILocatorAssertions Not => new CheckboxAssertions(rootLocatorAssertions.Not, inputLocatorAssertions.Not);
 }
