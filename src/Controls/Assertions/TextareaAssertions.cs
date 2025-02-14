@@ -84,6 +84,16 @@ public class TextareaAssertions : ILocatorAssertions
         LocatorAssertionsToHaveAccessibleNameOptions? options = default
     ) => await rootLocatorAssertions.ToHaveAccessibleNameAsync(name, options).ConfigureAwait(false);
 
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        string errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await rootLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        Regex errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await rootLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
     public async Task ToHaveAttributeAsync(
         string name,
         string value,
@@ -167,6 +177,11 @@ public class TextareaAssertions : ILocatorAssertions
         IEnumerable<Regex> values,
         LocatorAssertionsToHaveValuesOptions? options = default)
         => await textareaLocator.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+
+    public async Task ToMatchAriaSnapshotAsync(
+        string expected,
+        LocatorAssertionsToMatchAriaSnapshotOptions? options = null)
+        => await textareaLocator.ToMatchAriaSnapshotAsync(expected, options).ConfigureAwait(false);
 
     public ILocatorAssertions Not => new DateInputAssertions(
         rootLocatorAssertions.Not,

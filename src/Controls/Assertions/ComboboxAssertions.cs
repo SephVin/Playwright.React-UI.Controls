@@ -219,6 +219,54 @@ public class ComboboxAssertions : ILocatorAssertions
         }
     }
 
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        string errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options)
+                .ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options)
+                .ConfigureAwait(false);
+        }
+    }
+
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        Regex errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options)
+                .ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options)
+                .ConfigureAwait(false);
+        }
+    }
+
+    public async Task ToMatchAriaSnapshotAsync(
+        string expected,
+        LocatorAssertionsToMatchAriaSnapshotOptions? options = null)
+    {
+        if (await combobox.IsFocusedAsync().ConfigureAwait(false))
+        {
+            await nativeInputLocatorAssertions.ToMatchAriaSnapshotAsync(expected, options)
+                .ConfigureAwait(false);
+        }
+        else
+        {
+            await inputLikeTextAssertions.ToMatchAriaSnapshotAsync(expected, options)
+                .ConfigureAwait(false);
+        }
+    }
+
     public ILocatorAssertions Not
         => new ComboboxAssertions(
             combobox,

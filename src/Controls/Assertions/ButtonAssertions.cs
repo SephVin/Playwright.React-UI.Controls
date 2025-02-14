@@ -168,6 +168,22 @@ public class ButtonAssertions : ILocatorAssertions
         LocatorAssertionsToHaveValuesOptions? options = default)
         => await buttonLocator.ToHaveValuesAsync(values, options).ConfigureAwait(false);
 
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        string errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await buttonLocator.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        Regex errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await buttonLocator.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
+    public async Task ToMatchAriaSnapshotAsync(
+        string expected,
+        LocatorAssertionsToMatchAriaSnapshotOptions? options = null) => await buttonLocator
+        .ToMatchAriaSnapshotAsync(expected, options)
+        .ConfigureAwait(false);
+
     public ILocatorAssertions Not => new DateInputAssertions(
         rootLocatorAssertions.Not,
         buttonLocator.Not);

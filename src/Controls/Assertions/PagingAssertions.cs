@@ -82,6 +82,16 @@ public class PagingAssertions : ILocatorAssertions
         LocatorAssertionsToHaveAccessibleDescriptionOptions? options = default
     ) => await rootLocatorAssertions.ToHaveAccessibleDescriptionAsync(description, options).ConfigureAwait(false);
 
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        string errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await rootLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
+    public async Task ToHaveAccessibleErrorMessageAsync(
+        Regex errorMessage,
+        LocatorAssertionsToHaveAccessibleErrorMessageOptions? options = null)
+        => await rootLocatorAssertions.ToHaveAccessibleErrorMessageAsync(errorMessage, options).ConfigureAwait(false);
+
     public async Task ToHaveAccessibleNameAsync(
         string name,
         LocatorAssertionsToHaveAccessibleNameOptions? options = default
@@ -167,6 +177,11 @@ public class PagingAssertions : ILocatorAssertions
 
     public async Task ToHaveValuesAsync(IEnumerable<Regex> values, LocatorAssertionsToHaveValuesOptions? options = null)
         => await rootLocatorAssertions.ToHaveValuesAsync(values, options).ConfigureAwait(false);
+
+    public async Task ToMatchAriaSnapshotAsync(
+        string expected,
+        LocatorAssertionsToMatchAriaSnapshotOptions? options = null)
+        => await rootLocatorAssertions.ToMatchAriaSnapshotAsync(expected, options).ConfigureAwait(false);
 
     public ILocatorAssertions Not => new PagingAssertions(rootLocatorAssertions.Not, itemsLocatorAssertions.Not);
 }
