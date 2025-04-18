@@ -39,10 +39,10 @@ public class Dropdown : ControlBase, IFocusable
         await item.First.ClickAsync().ConfigureAwait(false);
     }
 
-    public async Task SelectByIndexAsync(Index index)
+    public async Task SelectByIndexAsync(int index)
     {
         var items = await GetMenuItemsLocatorAsync(null).ConfigureAwait(false);
-        await items.Nth(index.Value).ClickAsync().ConfigureAwait(false);
+        await items.Nth(index).ClickAsync().ConfigureAwait(false);
     }
 
     public async Task SelectByDataTidAsync(string dataTid)

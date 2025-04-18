@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
 
 namespace Playwright.ReactUI.Controls.Extensions;
@@ -23,7 +22,7 @@ public static class AutocompleteExtensions
     public static async Task FillAndSelectSuggestionByIndexAsync(
         this Autocomplete autocomplete,
         string value,
-        Index index,
+        int index,
         LocatorFillOptions? options = default)
     {
         await autocomplete.FillAsync(value, options).ConfigureAwait(false);

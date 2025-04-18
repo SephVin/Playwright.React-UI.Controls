@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
 
 namespace Playwright.ReactUI.Controls;
@@ -14,10 +13,10 @@ public class Autocomplete : Input
         portal = new Portal(rootLocator.Locator("noscript"));
     }
 
-    public async Task SelectSuggestionAsync(Index index, LocatorClickOptions? options = default)
+    public async Task SelectSuggestionAsync(int index, LocatorClickOptions? options = default)
     {
         var suggestions = await GetSuggestionsAsync().ConfigureAwait(false);
-        await suggestions.Nth(index.Value).ClickAsync(options).ConfigureAwait(false);
+        await suggestions.Nth(index).ClickAsync(options).ConfigureAwait(false);
     }
 
     private async Task<ILocator> GetSuggestionsAsync()

@@ -56,13 +56,15 @@ public static class ControlListExtensions
     public static async Task ClickLastItemAsync<T>(
         this ControlList<T> controlList,
         LocatorClickOptions? options = default) where T : ControlBase
-        => await controlList.ClickItemAsync(^1, options).ConfigureAwait(false);
+        => await controlList.ClickItemAsync(await controlList.CountAsync().ConfigureAwait(false) - 1, options)
+            .ConfigureAwait(false);
 
     public static async Task<T> GetFirstItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
         => await controlList.GetItemAsync(0).ConfigureAwait(false);
 
     public static async Task<T> GetLastItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
-        => await controlList.GetItemAsync(^1).ConfigureAwait(false);
+        => await controlList.GetItemAsync(await controlList.CountAsync().ConfigureAwait(false) - 1)
+            .ConfigureAwait(false);
 
     public static async Task<T> GetSingleItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
     {

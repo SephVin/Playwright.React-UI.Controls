@@ -59,7 +59,7 @@ public class Paging : ControlBase
     {
         var pagesCount = await GetPagesCountAsync().ConfigureAwait(false);
         await CheckPageConstraintAsync(pagesCount).ConfigureAwait(false);
-        var page = await Pages.GetItemAsync(^1).ConfigureAwait(false);
+        var page = await Pages.GetItemAsync(await Pages.CountAsync().ConfigureAwait(false) - 1).ConfigureAwait(false);
         await page.ClickAsync(options).ConfigureAwait(false);
     }
 

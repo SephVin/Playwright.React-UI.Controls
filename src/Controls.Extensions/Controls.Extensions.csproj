@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <LangVersion>10</LangVersion>
-        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
         <AssemblyName>Playwright.ReactUI.Controls.Extensions</AssemblyName>
         <RootNamespace>Playwright.ReactUI.Controls.Extensions</RootNamespace>
         <OutputPath>..\..\bin</OutputPath>
@@ -23,7 +23,7 @@
         <Title>Playwright.ReactUI.Controls.Extensions</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>2.0.2</Version>
+        <Version>2.0.3</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls.Extensions</Product>
         <PackageReadmeFile>README-Controls.Extensions.md</PackageReadmeFile>

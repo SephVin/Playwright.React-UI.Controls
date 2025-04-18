@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
@@ -32,10 +31,10 @@ public class Kebab : ControlBase
         await item.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task SelectByIndexAsync(Index index, LocatorClickOptions? options = default)
+    public async Task SelectByIndexAsync(int index, LocatorClickOptions? options = default)
     {
         var items = await GetItemsAsync().ConfigureAwait(false);
-        await items.Nth(index.Value).ClickAsync(options).ConfigureAwait(false);
+        await items.Nth(index).ClickAsync(options).ConfigureAwait(false);
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
