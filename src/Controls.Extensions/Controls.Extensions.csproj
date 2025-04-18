@@ -23,7 +23,7 @@
         <Title>Playwright.ReactUI.Controls.Extensions</Title>
         <AssemblyVersion>1.0.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
-        <Version>2.0.2</Version>
+        <Version>2.0.3</Version>
         <Authors>Evgeniy Ivanov</Authors>
         <Product>Playwright.ReactUI.Controls.Extensions</Product>
         <PackageReadmeFile>README-Controls.Extensions.md</PackageReadmeFile>
