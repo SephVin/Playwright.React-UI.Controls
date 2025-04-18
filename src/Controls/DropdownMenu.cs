@@ -41,10 +41,10 @@ public class DropdownMenu : ControlBase, IFocusable
         }
     }
 
-    public async Task SelectByIndexAsync(Index index, bool isMenuClosedAfterSelect = true)
+    public async Task SelectByIndexAsync(int index, bool isMenuClosedAfterSelect = true)
     {
         var items = await GetMenuItemsLocatorAsync(null).ConfigureAwait(false);
-        await items.Nth(index.Value).ClickAsync().ConfigureAwait(false);
+        await items.Nth(index).ClickAsync().ConfigureAwait(false);
 
         if (isMenuClosedAfterSelect)
         {

@@ -43,7 +43,7 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         return await list.ToAsyncEnumerable().WhereAwait(predicate).ToArrayAsync().ConfigureAwait(false);
     }
 
-    public async Task<TItem> GetItemAsync(Index index)
+    public async Task<TItem> GetItemAsync(int index)
     {
         var itemLocators = await GetItemLocatorsAsync().ConfigureAwait(false);
         return itemFactory(itemLocators[index]);
@@ -61,7 +61,7 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         return await list.ToAsyncEnumerable().FirstAwaitAsync(predicate).ConfigureAwait(false);
     }
 
-    public async Task ClickItemAsync(Index index, LocatorClickOptions? options = default)
+    public async Task ClickItemAsync(int index, LocatorClickOptions? options = default)
     {
         var item = await GetItemAsync(index).ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);

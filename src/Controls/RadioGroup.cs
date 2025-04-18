@@ -67,7 +67,7 @@ public class RadioGroup : ControlBase
                 StringComparison.OrdinalIgnoreCase)
         ).ConfigureAwait(false);
 
-    public async Task<Radio> GetByIndexAsync(Index index)
+    public async Task<Radio> GetByIndexAsync(int index)
         => await list.GetItemAsync(index).ConfigureAwait(false);
 
     public async Task<Radio> GetByTextAsync(string text)
