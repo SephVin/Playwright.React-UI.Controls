@@ -21,12 +21,12 @@ public static class DatePickerExtensions
     public static async Task WaitToBeEnabledAsync(
         this DatePicker datePicker,
         LocatorAssertionsToBeEnabledOptions? options = default)
-        => await datePicker.Expect().ToBeEnabledAsync(options).ConfigureAwait(false);
+        => await datePicker.ExpectV2().ToBeEnabledAsync(options).ConfigureAwait(false);
 
     public static async Task WaitToBeDisabledAsync(
         this DatePicker datePicker,
         LocatorAssertionsToBeDisabledOptions? options = default)
-        => await datePicker.Expect().ToBeDisabledAsync(options).ConfigureAwait(false);
+        => await datePicker.ExpectV2().ToBeDisabledAsync(options).ConfigureAwait(false);
 
     [Obsolete("Use WaitToHaveValueAsync")]
     public static async Task WaitValueAsync(
@@ -54,7 +54,7 @@ public static class DatePickerExtensions
         this DatePicker datePicker,
         string value,
         LocatorAssertionsToHaveValueOptions? options = default)
-        => await datePicker.Expect().ToHaveValueAsync(value, options).ConfigureAwait(false);
+        => await datePicker.ExpectV2().ToHaveValueAsync(value, options).ConfigureAwait(false);
 
     [Obsolete("Use WaitToBeEmptyAsync")]
     public static async Task WaitValueAbsenceAsync(
@@ -65,7 +65,7 @@ public static class DatePickerExtensions
     public static async Task WaitToBeEmptyAsync(
         this DatePicker datePicker,
         LocatorAssertionsToBeEmptyOptions? options = default)
-        => await datePicker.Expect().ToBeEmptyAsync(options).ConfigureAwait(false);
+        => await datePicker.ExpectV2().ToBeEmptyAsync(options).ConfigureAwait(false);
 
     public static async Task FocusAndBlurAsync(this DatePicker datePicker)
     {
@@ -76,10 +76,10 @@ public static class DatePickerExtensions
     public static async Task WaitToBeFocusedAsync(
         this DatePicker datePicker,
         LocatorAssertionsToBeFocusedOptions? options = default)
-        => await datePicker.Expect().ToBeFocusedAsync(options).ConfigureAwait(false);
+        => await datePicker.ExpectV2().ToBeFocusedAsync(options).ConfigureAwait(false);
 
     public static async Task WaitNotToBeFocusedAsync(
         this DatePicker datePicker,
         LocatorAssertionsToBeFocusedOptions? options = default)
-        => await datePicker.Expect().Not.ToBeFocusedAsync(options).ConfigureAwait(false);
+        => await datePicker.ExpectV2().NotToBeFocusedAsync(options).ConfigureAwait(false);
 }

@@ -13,7 +13,7 @@ public class DatePickerTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-        await datePicker.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await datePicker.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
 
         var actual = await datePicker.IsVisibleAsync().ConfigureAwait(false);
 
@@ -26,7 +26,7 @@ public class DatePickerTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var visibleDatePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
         var notExistingDatePicker = new DatePicker(Page.GetByTestId("UnknownDatePickerId"));
-        await visibleDatePicker.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await visibleDatePicker.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
 
         var actual = await notExistingDatePicker.IsVisibleAsync().ConfigureAwait(false);
 
@@ -129,7 +129,7 @@ public class DatePickerTests : TestsBase
 
         await datePicker.FillAsync("01.01.2024").ConfigureAwait(false);
 
-        await datePicker.Expect().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
+        await datePicker.ExpectV2().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
     }
 
     [Test]
@@ -137,11 +137,11 @@ public class DatePickerTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-        await datePicker.Expect().ToHaveValueAsync("24.08.2022").ConfigureAwait(false);
+        await datePicker.ExpectV2().ToHaveValueAsync("24.08.2022").ConfigureAwait(false);
 
         await datePicker.FillAsync("01.01.2024").ConfigureAwait(false);
 
-        await datePicker.Expect().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
+        await datePicker.ExpectV2().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
     }
 
     [Test]
@@ -152,6 +152,6 @@ public class DatePickerTests : TestsBase
 
         await datePicker.ClearAsync().ConfigureAwait(false);
 
-        await datePicker.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        await datePicker.ExpectV2().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
     }
 }

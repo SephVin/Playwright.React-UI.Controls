@@ -15,7 +15,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitPresenceAsync().ConfigureAwait(false);
+        await datePicker.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -24,9 +24,9 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var visibleDatePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
         var notExistingDatePicker = new DatePicker(Page.GetByTestId("UnknownDatePickerId"));
-        await visibleDatePicker.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await visibleDatePicker.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
 
-        await notExistingDatePicker.WaitAbsenceAsync().ConfigureAwait(false);
+        await notExistingDatePicker.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--error")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitErrorAsync().ConfigureAwait(false);
+        await datePicker.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -44,7 +44,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        await datePicker.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--warning")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitWarningAsync().ConfigureAwait(false);
+        await datePicker.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -62,7 +62,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        await datePicker.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -84,7 +84,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitValueAsync("24.08.2022").ConfigureAwait(false);
+        await datePicker.WaitToHaveValueAsync("24.08.2022").ConfigureAwait(false);
     }
 
     [Test]
@@ -93,7 +93,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitValueAsync(24.August(2022)).ConfigureAwait(false);
+        await datePicker.WaitToHaveValueAsync(24.August(2022)).ConfigureAwait(false);
     }
 
     [Test]
@@ -102,7 +102,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitValueAbsenceAsync().ConfigureAwait(false);
+        await datePicker.WaitToBeEmptyAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -111,7 +111,7 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitEnabledAsync().ConfigureAwait(false);
+        await datePicker.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -120,6 +120,6 @@ public class DatePickerExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--disabled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.WaitDisabledAsync().ConfigureAwait(false);
+        await datePicker.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 }
