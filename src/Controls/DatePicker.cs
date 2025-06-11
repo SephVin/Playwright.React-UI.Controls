@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
@@ -11,7 +12,7 @@ public class DatePicker : ControlBase, IFocusable
         : base(rootLocator)
     {
         NativeInputLocator = rootLocator.Locator("input");
-        DatePickerInputLocator = rootLocator.Locator("[data-tid='DatePicker__input']");
+        DatePickerInputLocator = rootLocator.Locator("[data-tid='DatePicker__input']").Or(rootLocator).Last;
     }
 
     public ILocator NativeInputLocator { get; }
@@ -27,6 +28,7 @@ public class DatePicker : ControlBase, IFocusable
     {
         await ClearAsync().ConfigureAwait(false);
         await NativeInputLocator.PressSequentiallyAsync(date, options).ConfigureAwait(false);
+        await BlurAsync().ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorPressOptions? options = default)
@@ -57,8 +59,11 @@ public class DatePicker : ControlBase, IFocusable
         ).ConfigureAwait(false);
     }
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new DatePickerAssertions(
         RootLocator.Expect(),
         NativeInputLocator.Expect(),
         DatePickerInputLocator.Expect());
+
+    public new DatePickerAssertionsV2 ExpectV2() => new(this);
 }

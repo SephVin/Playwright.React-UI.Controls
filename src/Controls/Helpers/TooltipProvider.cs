@@ -43,6 +43,7 @@ public static class TooltipProvider
         }
 
         var container = await portal.GetContainerAsync().ConfigureAwait(false);
+
         return new Tooltip(container.Locator("[data-tid='PopupContent']"));
     }
 

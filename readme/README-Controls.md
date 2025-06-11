@@ -32,6 +32,6 @@ public class Header : ControlBase
 
 # Минимальные требования
 
-+ netstandard2.1 / NET6
-+ Playwright 1.48.0
++ netstandard2.0 / NET6
++ Playwright 1.51.0
 + @skbkontur/react-ui 4.22.5 (рекомендуется использовать последние версии)
