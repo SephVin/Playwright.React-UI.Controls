@@ -17,7 +17,7 @@ public class Select : ControlBase, IFocusable
     {
         portal = new Portal(rootLocator.Locator("noscript"));
         ButtonOrLinkLocator = rootLocator
-            .Locator("[data-tid='Button__root']")
+            .Locator("button")
             .Or(rootLocator.Locator("[data-tid='Link__root']"));
         SelectLabelLocator = RootLocator.Locator("[data-tid='Select__label']");
     }
