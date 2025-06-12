@@ -34,7 +34,7 @@ public class LabelExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("label--default")).ConfigureAwait(false);
         var label = new Label(Page.GetByTestId("LabelId"));
 
-        await label.WaitTextAsync("TO DO").ConfigureAwait(false);
+        await label.WaitTextAsync("TODO").ConfigureAwait(false);
     }
 
     [Test]

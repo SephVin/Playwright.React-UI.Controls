@@ -1,7 +1,7 @@
 import React from "react";
 import { Gapped, Kebab, MenuItem, Toast } from "@skbkontur/react-ui";
 import { Meta } from "@storybook/react";
-import { style } from "./Helpers/kebabHelper";
+import { style } from "./utils/kebabHelper";
 
 export default {
   title: "Kebab",

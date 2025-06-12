@@ -4,7 +4,7 @@ using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
-public class DatePickerAssertionsV2 : ControlBaseAssertions
+public class DatePickerAssertionsV2 : ControlBaseAssertionsV2
 {
     private readonly DatePicker datePicker;
 

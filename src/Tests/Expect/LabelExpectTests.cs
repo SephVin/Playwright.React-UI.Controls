@@ -91,7 +91,7 @@ public class LabelExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("label--default")).ConfigureAwait(false);
         var label = new Label(Page.GetByTestId("LabelId"));
 
-        await label.Expect().ToHaveTextAsync("TO DO").ConfigureAwait(false);
+        await label.Expect().ToHaveTextAsync("TODO").ConfigureAwait(false);
     }
 
     [Test]

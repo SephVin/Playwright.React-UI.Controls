@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-import { Select, Gapped, Button, Link } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useState } from "react";
+import { Gapped, Link, Select, Tooltip } from "@skbkontur/react-ui";
+import type { Meta } from "@storybook/react";
+
+export enum SelectTestIds {
+  SelectId = "SelectId",
+}
 
 export default {
   title: "Select",
@@ -13,7 +18,8 @@ export const DefaultButton = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-attribute-without-value={""}
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -36,13 +42,17 @@ export const DefaultLink = () => {
       onKeyDown: params.onKeyDown,
     };
 
-    return <Link {...linkProps}>{params.label}</Link>;
+    return (
+      <Link data-attribute-without-value={""} {...linkProps}>
+        {params.label}
+      </Link>
+    );
   };
 
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -59,7 +69,7 @@ export const Error = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -76,7 +86,7 @@ export const Warning = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -93,7 +103,7 @@ export const DisabledButton = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -123,7 +133,7 @@ export const DisabledLink = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -140,7 +150,7 @@ export const Search = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -157,7 +167,7 @@ export const FilledButton = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
@@ -186,12 +196,57 @@ export const FilledLink = () => {
   return (
     <Gapped>
       <Select
-        data-tid="SelectId"
+        data-tid={SelectTestIds.SelectId}
         items={items}
         value={value}
         onValueChange={setValue}
         _renderButton={renderLinkButton}
       />
+    </Gapped>
+  );
+};
+
+export const Hidden = () => {
+  const [value, setValue] = useState();
+  const items = ["One", "Two", "Three", Select.SEP, "Four"];
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <Gapped>
+      {isVisible && (
+        <Select
+          data-tid={SelectTestIds.SelectId}
+          items={items}
+          value={value}
+          onValueChange={setValue}
+        />
+      )}
+    </Gapped>
+  );
+};
+
+export const WithTooltip = () => {
+  const [value, setValue] = useState();
+  const items = ["One", "Two", "Three", Select.SEP, "Four"];
+
+  return (
+    <Gapped>
+      <Tooltip render={() => <div>TooltipText</div>} closeButton>
+        <Select
+          data-tid={SelectTestIds.SelectId}
+          items={items}
+          value={value}
+          onValueChange={setValue}
+        />
+      </Tooltip>
     </Gapped>
   );
 };

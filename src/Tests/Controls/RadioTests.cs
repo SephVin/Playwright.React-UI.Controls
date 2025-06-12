@@ -145,14 +145,14 @@ public class RadioTests : TestsBase
     }
 
     [Test]
-    public async Task GetText_Return_Radio_Value()
+    public async Task GetValue_Return_Radio_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radio--default")).ConfigureAwait(false);
+        await Page.GotoAsync(StorybookUrl.Get("radio--with-value")).ConfigureAwait(false);
         var radio = new Radio(Page.GetByTestId("RadioId"));
 
         var text = await radio.GetValueAsync().ConfigureAwait(false);
 
-        text.Should().Be("1");
+        text.Should().Be("RadioValue");
     }
 
     [Test]

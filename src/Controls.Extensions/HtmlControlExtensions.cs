@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 
 namespace Playwright.ReactUI.Controls.Extensions;
@@ -15,14 +16,30 @@ public static class HtmlControlExtensions
         LocatorAssertionsToBeHiddenOptions? options = default)
         => await control.Expect().ToBeHiddenAsync(options).ConfigureAwait(false);
 
+    [Obsolete("Use WaitToHaveAttributeAsync")]
     public static async Task ToHaveAttributeAsync(
+        this HtmlControlBase control,
+        string name,
+        string value,
+        LocatorAssertionsToHaveAttributeOptions? options = default)
+        => await control.WaitToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
+
+    [Obsolete("Use WaitNotToHaveAttributeAsync")]
+    public static async Task NotToHaveAttributeAsync(
+        this HtmlControlBase control,
+        string name,
+        string value,
+        LocatorAssertionsToHaveAttributeOptions? options = default)
+        => await control.WaitNotToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
+
+    public static async Task WaitToHaveAttributeAsync(
         this HtmlControlBase control,
         string name,
         string value,
         LocatorAssertionsToHaveAttributeOptions? options = default)
         => await control.Expect().ToHaveAttributeAsync(name, value, options).ConfigureAwait(false);
 
-    public static async Task NotToHaveAttributeAsync(
+    public static async Task WaitNotToHaveAttributeAsync(
         this HtmlControlBase control,
         string name,
         string value,

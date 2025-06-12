@@ -1,38 +1,39 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import {
-  type TextareaProps,
-  Gapped,
-  Textarea,
-  Tooltip,
-} from "@skbkontur/react-ui";
+import type { CurrencyInputProps } from "@skbkontur/react-ui";
+import { Tooltip } from "@skbkontur/react-ui";
+import { CurrencyInput, Gapped } from "@skbkontur/react-ui";
+// eslint-disable-next-line
 import React, { useEffect, useState } from "react";
+import type { Nullable } from "@skbkontur/react-ui/typings/utility-types";
 
-export enum TextareaTestIds {
-  TextareaId = "TextareaId",
+export enum CurrencyInputTestIds {
+  CurrencyInputId = "CurrencyInputId",
 }
 
-const TextareaTemplate = (props: TextareaProps) => {
-  const [value, setValue] = useState(props.value);
+const CurrencyInputTemplate = (props: CurrencyInputProps) => {
+  const [value, setValue] = useState<Nullable<number>>(props.value);
 
   return (
     <Gapped>
-      <Textarea
+      <CurrencyInput
         {...props}
         data-attribute-without-value={""}
-        data-tid={TextareaTestIds.TextareaId}
+        data-tid={CurrencyInputTestIds.CurrencyInputId}
+        placeholder="PlaceholderText"
         value={value}
         onValueChange={setValue}
-        placeholder="PlaceholderText"
       />
     </Gapped>
   );
 };
 
-const meta: Meta<typeof TextareaTemplate> = {
-  title: "Textarea",
-  component: TextareaTemplate,
+const meta: Meta<typeof CurrencyInputTemplate> = {
+  title: "CurrencyInput",
+  component: CurrencyInputTemplate,
 };
+
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
@@ -61,14 +62,14 @@ export const Warning: Story = {
 export const Filled: Story = {
   args: {
     ...Default.args,
-    value: "TODO",
+    value: 9999.23,
   },
 };
 
 export const Hidden: Story = {
   render: () => {
-    const [value, setValue] = useState("");
     const [isVisible, setIsVisible] = useState(true);
+    const [value, setValue] = useState<Nullable<number>>();
 
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -81,10 +82,10 @@ export const Hidden: Story = {
     return (
       <Gapped>
         {isVisible && (
-          <Textarea
-            data-tid={TextareaTestIds.TextareaId}
-            value={value}
+          <CurrencyInput
+            data-tid={CurrencyInputTestIds.CurrencyInputId}
             onValueChange={setValue}
+            value={value}
           />
         )}
       </Gapped>
@@ -94,15 +95,15 @@ export const Hidden: Story = {
 
 export const WithTooltip: Story = {
   render: () => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState<Nullable<number>>();
 
     return (
       <Gapped>
         <Tooltip render={() => <div>TooltipText</div>}>
-          <Textarea
-            data-tid={TextareaTestIds.TextareaId}
-            value={value}
+          <CurrencyInput
+            data-tid={CurrencyInputTestIds.CurrencyInputId}
             onValueChange={setValue}
+            value={value}
           />
         </Tooltip>
       </Gapped>

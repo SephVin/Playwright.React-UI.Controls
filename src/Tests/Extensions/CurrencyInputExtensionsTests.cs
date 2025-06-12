@@ -70,7 +70,7 @@ public class CurrencyInputExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
 
-        await currencyInput.WaitValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.WaitValueAsync("9 999,23").ConfigureAwait(false);
     }
 
     [Test]

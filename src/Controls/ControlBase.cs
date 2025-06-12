@@ -66,5 +66,5 @@ public class ControlBase
     /*
      * Новая версия ассертов над контролами
      */
-    public ControlBaseAssertions ExpectV2() => new(RootLocator);
+    public ControlBaseAssertionsV2 ExpectV2() => new(RootLocator);
 }

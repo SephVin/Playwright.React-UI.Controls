@@ -41,6 +41,6 @@ public class LabelTests : TestsBase
 
         var text = await label.GetTextAsync().ConfigureAwait(false);
 
-        text.Should().Be("TO DO");
+        text.Should().Be("TODO");
     }
 }

@@ -118,7 +118,7 @@ public class DatePickerTests : TestsBase
 
         var actual = await datePicker.GetValueAsync().ConfigureAwait(false);
 
-        actual.Should().Be("24.08.2022");
+        actual.Should().Be("01.01.2024");
     }
 
     [Test]
@@ -137,11 +137,11 @@ public class DatePickerTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-        await datePicker.ExpectV2().ToHaveValueAsync("24.08.2022").ConfigureAwait(false);
-
-        await datePicker.FillAsync("01.01.2024").ConfigureAwait(false);
-
         await datePicker.ExpectV2().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
+
+        await datePicker.FillAsync("01.02.2024").ConfigureAwait(false);
+
+        await datePicker.ExpectV2().ToHaveValueAsync("01.02.2024").ConfigureAwait(false);
     }
 
     [Test]
