@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Playwright.ReactUI.Controls.Constants;
 
-namespace Playwright.ReactUI.Controls.Helpers;
+namespace Playwright.ReactUI.Controls.Providers;
 
 public static class TooltipProvider
 {

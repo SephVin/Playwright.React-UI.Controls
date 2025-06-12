@@ -20,6 +20,8 @@ public class HtmlButtonExtensionsTests : TestsBase
     public async Task WaitToBeHidden()
     {
         var htmlButton = await GetHtmlButtonAsync("hidden").ConfigureAwait(false);
+        await htmlButton.WaitForAsync().ConfigureAwait(false);
+
         await htmlButton.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 

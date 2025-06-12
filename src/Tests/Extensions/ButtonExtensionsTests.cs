@@ -20,6 +20,8 @@ public sealed class ButtonExtensionsTests : TestsBase
     public async Task WaitToBeHidden()
     {
         var button = await GetButtonAsync("hidden").ConfigureAwait(false);
+        await button.WaitForAsync().ConfigureAwait(false);
+
         await button.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
