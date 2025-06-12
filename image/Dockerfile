@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/dotnet:v1.41.2-jammy
+FROM mcr.microsoft.com/playwright/dotnet:v1.51.0-jammy
 
 COPY src ./tmp/src
 
