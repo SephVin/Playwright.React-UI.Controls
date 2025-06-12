@@ -1,97 +1,116 @@
-import React, { useState } from "react";
-import { Gapped, Toggle } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
+import type { ToggleProps } from "@skbkontur/react-ui";
+import { Tooltip, Gapped, Toggle } from "@skbkontur/react-ui";
+import React, { useEffect, useState } from "react";
 
-export default {
+export enum ToggleTestIds {
+  ToggleId = "ToggleId",
+  LabelId = "LabelId",
+}
+
+const ToggleTemplate = (props: ToggleProps) => {
+  const [checked, setChecked] = useState(props.checked);
+
+  return (
+    <Gapped>
+      <Toggle
+        {...props}
+        data-attribute-without-value={""}
+        data-tid={ToggleTestIds.ToggleId}
+        checked={checked}
+        onValueChange={setChecked}
+      >
+        TODO
+      </Toggle>
+    </Gapped>
+  );
+};
+
+const meta: Meta<typeof ToggleTemplate> = {
   title: "Toggle",
-} as Meta;
+  component: ToggleTemplate,
+};
+export default meta;
 
-export const Default = () => {
-  const [checked, setChecked] = useState(false);
+type Story = StoryObj<typeof meta>;
 
-  return (
-    <Gapped>
-      <Toggle data-tid="ToggleId" checked={checked} onValueChange={setChecked}>
-        TODO
-      </Toggle>
-    </Gapped>
-  );
+export const Default: Story = {};
+
+export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    disabled: true,
+  },
 };
 
-export const Disabled = () => {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <Gapped>
-      <Toggle
-        data-tid="ToggleId"
-        checked={checked}
-        onValueChange={setChecked}
-        disabled
-      >
-        TODO
-      </Toggle>
-    </Gapped>
-  );
+export const Error: Story = {
+  args: {
+    ...Default.args,
+    error: true,
+  },
 };
 
-export const Loading = () => {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <Gapped>
-      <Toggle
-        data-tid="ToggleId"
-        checked={checked}
-        onValueChange={setChecked}
-        loading
-      >
-        TODO
-      </Toggle>
-    </Gapped>
-  );
+export const Warning: Story = {
+  args: {
+    ...Default.args,
+    warning: true,
+  },
 };
 
-export const Error = () => {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <Gapped>
-      <Toggle
-        data-tid="ToggleId"
-        checked={checked}
-        onValueChange={setChecked}
-        error
-      >
-        TODO
-      </Toggle>
-    </Gapped>
-  );
+export const Checked: Story = {
+  args: {
+    ...Default.args,
+    checked: true,
+  },
 };
 
-export const Warning = () => {
-  const [checked, setChecked] = useState(false);
-
-  return (
+export const WithTooltip: Story = {
+  render: () => (
     <Gapped>
-      <Toggle
-        data-tid="ToggleId"
-        checked={checked}
-        onValueChange={setChecked}
-        warning
-      >
-        TODO
-      </Toggle>
+      <Tooltip render={() => <div>TooltipText</div>}>
+        <Toggle data-tid={ToggleTestIds.ToggleId}>TODO</Toggle>
+      </Tooltip>
     </Gapped>
-  );
+  ),
 };
 
-export const Checked = () => {
-  return (
-    <Gapped>
-      <Toggle data-tid="ToggleId" defaultChecked>
-        TODO
-      </Toggle>
-    </Gapped>
-  );
+export const Hidden: Story = {
+  render: () => {
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Gapped>
+        {isVisible && <Toggle data-tid={ToggleTestIds.ToggleId}>TODO</Toggle>}
+      </Gapped>
+    );
+  },
+};
+
+export const FocusAndBlur: Story = {
+  render: () => {
+    const [isShowLabel, setShowLabel] = useState(false);
+
+    return (
+      <Gapped>
+        <Toggle
+          data-tid={ToggleTestIds.ToggleId}
+          onFocus={() => setShowLabel(true)}
+          onBlur={() => setShowLabel(false)}
+        >
+          TODO
+        </Toggle>
+        {isShowLabel && (
+          <div data-tid={ToggleTestIds.LabelId}>Hello world!</div>
+        )}
+      </Gapped>
+    );
+  },
 };

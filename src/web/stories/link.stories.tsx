@@ -1,23 +1,76 @@
-import React from "react";
-import { Link, Gapped } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import type { LinkProps } from "@skbkontur/react-ui";
+import { Gapped, Link, Tooltip } from "@skbkontur/react-ui";
+import React, { useEffect, useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react";
 
-export default {
+export enum LinkTestIds {
+  LinkId = "LinkId",
+}
+
+const LinkTemplate = (props: LinkProps) => {
+  return (
+    <Gapped>
+      <Link
+        {...props}
+        data-attribute-without-value={""}
+        data-tid={LinkTestIds.LinkId}
+        href="https://google.com/"
+      >
+        TODO
+      </Link>
+    </Gapped>
+  );
+};
+
+const meta: Meta<typeof LinkTemplate> = {
   title: "Link",
-} as Meta;
+  component: LinkTemplate,
+};
+export default meta;
 
-export const Default = () => (
-  <Gapped>
-    <Link data-tid="LinkId" href="https://google.com/">
-      TODO
-    </Link>
-  </Gapped>
-);
+type Story = StoryObj<typeof meta>;
 
-export const Disabled = () => (
-  <Gapped>
-    <Link data-tid="LinkId" href="https://google.com/" disabled>
-      TODO
-    </Link>
-  </Gapped>
-);
+export const Default: Story = {};
+
+export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    disabled: true,
+  },
+};
+
+export const WithTooltip: Story = {
+  render: () => (
+    <Gapped>
+      <Tooltip render={() => <div>TooltipText</div>}>
+        <Link data-tid={LinkTestIds.LinkId} href="https://google.com/">
+          TODO
+        </Link>
+      </Tooltip>
+    </Gapped>
+  ),
+};
+
+export const Hidden: Story = {
+  render: () => {
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Gapped>
+        {isVisible && (
+          <Link data-tid={LinkTestIds.LinkId} href="https://google.com/">
+            TODO
+          </Link>
+        )}
+      </Gapped>
+    );
+  },
+};

@@ -1,106 +1,94 @@
-import React, { useState } from "react";
-import { Input, Gapped } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
+import { Gapped, Input, Tooltip } from "@skbkontur/react-ui";
+import React, { useEffect, useState } from "react";
 
-export default {
+export enum InputTestIds {
+  InputId = "InputId",
+}
+
+const meta: Meta<typeof Input> = {
   title: "Input",
-} as Meta;
+  component: Input,
+};
+export default meta;
 
-export const Default = () => {
-  const [value, setValue] = useState("");
+type Story = StoryObj<typeof meta>;
 
-  return (
-    <Gapped>
-      <Input data-tid="InputId" value={value} onValueChange={setValue} />
-    </Gapped>
-  );
+export const Default: Story = {
+  render(args) {
+    const [value, setValue] = useState(args.value);
+
+    return (
+      <Gapped>
+        <Input
+          {...args}
+          data-attribute-without-value={""}
+          data-tid={InputTestIds.InputId}
+          value={value}
+          onValueChange={setValue}
+          placeholder="PlaceholderText"
+        >
+          TODO
+        </Input>
+      </Gapped>
+    );
+  },
 };
 
-export const Disabled = () => (
-  <Gapped>
-    <Input data-tid="InputId" disabled />
-  </Gapped>
-);
-
-export const Error = () => (
-  <Gapped>
-    <Input data-tid="InputId" error />
-  </Gapped>
-);
-
-export const Warning = () => (
-  <Gapped>
-    <Input data-tid="InputId" warning />
-  </Gapped>
-);
-
-export const Filled = () => {
-  const [value, setValue] = useState("TODO");
-
-  return (
-    <Gapped>
-      <Input data-tid="InputId" value={value} onValueChange={setValue} />
-    </Gapped>
-  );
+export const Disabled: Story = {
+  ...Default,
+  args: {
+    disabled: true,
+  },
 };
 
-export const TimeMask = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <Input
-        data-tid="InputId"
-        value={value}
-        mask="99:99"
-        placeholder="00:00"
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+export const Error: Story = {
+  ...Default,
+  args: {
+    error: true,
+  },
 };
 
-export const TimeType = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <Input
-        data-tid="InputId"
-        value={value}
-        type="time"
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+export const Warning: Story = {
+  ...Default,
+  args: {
+    warning: true,
+  },
 };
 
-export const DateType = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <Input
-        data-tid="InputId"
-        value={value}
-        type="date"
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+export const Filled: Story = {
+  ...Default,
+  args: {
+    value: "TODO",
+  },
 };
 
-export const NumberType = () => {
-  const [value, setValue] = useState("");
+export const Hidden: Story = {
+  render: () => {
+    const [isVisible, setIsVisible] = useState(true);
 
-  return (
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Gapped>
+        {isVisible && <Input data-tid={InputTestIds.InputId}>TODO</Input>}
+      </Gapped>
+    );
+  },
+};
+
+export const WithTooltip: Story = {
+  render: () => (
     <Gapped>
-      <Input
-        data-tid="InputId"
-        value={value}
-        type="number"
-        onValueChange={setValue}
-      />
+      <Tooltip render={() => <div>TooltipText</div>}>
+        <Input data-tid={InputTestIds.InputId}>TODO</Input>
+      </Tooltip>
     </Gapped>
-  );
+  ),
 };
