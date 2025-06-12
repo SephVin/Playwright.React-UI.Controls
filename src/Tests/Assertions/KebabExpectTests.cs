@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Tests.Helpers;
 
-namespace Playwright.ReactUI.Tests.Expect;
+namespace Playwright.ReactUI.Tests.Assertions;
 
 public class KebabExpectTests : TestsBase
 {

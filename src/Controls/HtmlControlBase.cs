@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
@@ -42,6 +43,7 @@ public class HtmlControlBase
         LocatorGetAttributeOptions? options = default
     ) => await RootLocator.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public virtual ILocatorAssertions Expect() => RootLocator.Expect();
 
     public HtmlControlBaseAssertionsV2 ExpectV2() => new(this);
