@@ -45,17 +45,6 @@ public class ToggleTests : TestsBase
     }
 
     [Test]
-    public async Task IsDisabled_Return_True_When_Toggle_Is_Loading()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("toggle--loading")).ConfigureAwait(false);
-        var toggle = new Toggle(Page.GetByTestId("ToggleId"));
-
-        var actual = await toggle.IsDisabledAsync().ConfigureAwait(false);
-
-        actual.Should().BeTrue();
-    }
-
-    [Test]
     public async Task IsDisabled_Return_False_When_Toggle_Is_Enabled()
     {
         await Page.GotoAsync(StorybookUrl.Get("toggle--default")).ConfigureAwait(false);

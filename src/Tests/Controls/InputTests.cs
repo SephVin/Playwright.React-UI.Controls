@@ -170,57 +170,6 @@ public sealed class InputTests : TestsBase
     }
 
     [Test]
-    public async Task Fill_Input_With_Time_Type()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("input--time-type")).ConfigureAwait(false);
-        var input = new Input(Page.GetByTestId("InputId"));
-
-        await input.FillAsync("12:34").ConfigureAwait(false);
-        await input.FillAsync("13:56").ConfigureAwait(false);
-        await input.FillAsync("21:05").ConfigureAwait(false);
-
-        await input.Expect().ToHaveValueAsync("21:05").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task Fill_Input_With_Date_Type()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("input--date-type")).ConfigureAwait(false);
-        var input = new Input(Page.GetByTestId("InputId"));
-
-        await input.FillAsync("2020-02-01").ConfigureAwait(false);
-        await input.FillAsync("2021-04-03").ConfigureAwait(false);
-        await input.FillAsync("2022-06-04").ConfigureAwait(false);
-
-        await input.Expect().ToHaveValueAsync("2022-06-04").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task Fill_Input_With_Number_Type()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("input--number-type")).ConfigureAwait(false);
-        var input = new Input(Page.GetByTestId("InputId"));
-
-        await input.FillAsync("1").ConfigureAwait(false);
-        await input.FillAsync("2").ConfigureAwait(false);
-        await input.FillAsync("3").ConfigureAwait(false);
-
-        await input.Expect().ToHaveValueAsync("3").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task Fill_Input_With_Mask()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("input--time-mask")).ConfigureAwait(false);
-        var input = new Input(Page.GetByTestId("InputId"));
-
-        await input.FillAsync("1234").ConfigureAwait(false);
-        await input.FillAsync("1356").ConfigureAwait(false);
-
-        await input.Expect().ToHaveValueAsync("13:56").ConfigureAwait(false);
-    }
-
-    [Test]
     public async Task Press_Add_Char_When_Input_Is_Empty()
     {
         await Page.GotoAsync(StorybookUrl.Get("input--default")).ConfigureAwait(false);

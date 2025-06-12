@@ -182,7 +182,7 @@ public class CurrencyInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
 
-        await currencyInput.Expect().ToHaveValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("9 999,23").ConfigureAwait(false);
     }
 
     [Test]

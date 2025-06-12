@@ -112,9 +112,9 @@ public class RadioExtensionsTests : TestsBase
     [Test]
     public async Task WaitValue()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radio--default")).ConfigureAwait(false);
+        await Page.GotoAsync(StorybookUrl.Get("radio--with-value")).ConfigureAwait(false);
         var radio = new Radio(Page.GetByTestId("RadioId"));
 
-        await radio.WaitValueAsync("1").ConfigureAwait(false);
+        await radio.WaitValueAsync("RadioValue").ConfigureAwait(false);
     }
 }

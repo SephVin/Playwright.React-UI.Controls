@@ -2,11 +2,11 @@
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
-public class DateRangePickerAssertions : ControlBaseAssertions
+public class DateRangePickerAssertionsV2 : ControlBaseAssertionsV2
 {
     private readonly DateRangePicker dateRangePicker;
 
-    public DateRangePickerAssertions(DateRangePicker dateRangePicker)
+    public DateRangePickerAssertionsV2(DateRangePicker dateRangePicker)
         : base(dateRangePicker.RootLocator)
     {
         this.dateRangePicker = dateRangePicker;

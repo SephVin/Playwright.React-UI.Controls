@@ -87,7 +87,7 @@ public class DatePickerExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
         var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
 
-        await datePicker.ExpectV2().ToHaveValueAsync("24.08.2022").ConfigureAwait(false);
+        await datePicker.ExpectV2().ToHaveValueAsync("01.01.2024").ConfigureAwait(false);
     }
 
     [Test]

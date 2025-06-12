@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Playwright;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Tests.Helpers;
@@ -115,10 +116,14 @@ public sealed class ButtonTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
         var button = new Button(Page.GetByTestId("ButtonId"));
+        await button.WaitForAsync().ConfigureAwait(false);
+        var toast = new Toast(Page.GetByTestId("ToastView__root"));
+        await toast.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
+            .ConfigureAwait(false);
 
         await button.ClickAsync().ConfigureAwait(false);
 
-        await Page.GetByTestId("LabelId").Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        await toast.RootLocator.Expect().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

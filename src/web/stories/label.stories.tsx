@@ -3,7 +3,7 @@ import { Gapped, Tooltip } from "@skbkontur/react-ui";
 import React, { useEffect, useState } from "react";
 
 export enum LabelTestIds {
-  LabelId = "Label",
+  LabelId = "LabelId",
 }
 
 export default {

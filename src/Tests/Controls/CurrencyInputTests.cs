@@ -130,7 +130,7 @@ public class CurrencyInputTests : TestsBase
 
         var actual = await currencyInput.GetValueAsync().ConfigureAwait(false);
 
-        actual.Should().Be("123,456");
+        actual.Should().Be("9 999,23");
     }
 
     [Test]
@@ -138,11 +138,11 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        await currencyInput.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
-        await currencyInput.FillAsync("789,123").ConfigureAwait(false);
+        await currencyInput.FillAsync("789,12").ConfigureAwait(false);
 
-        await currencyInput.Expect().ToHaveValueAsync("789,123").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("789,12").ConfigureAwait(false);
     }
 
     [Test]
@@ -150,11 +150,11 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("9 999,23").ConfigureAwait(false);
 
-        await currencyInput.FillAsync("789,123").ConfigureAwait(false);
+        await currencyInput.FillAsync("789,12").ConfigureAwait(false);
 
-        await currencyInput.Expect().ToHaveValueAsync("789,123").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("789,12").ConfigureAwait(false);
     }
 
     [Test]
@@ -162,7 +162,7 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("9 999,23").ConfigureAwait(false);
 
         await currencyInput.FillAsync(string.Empty).ConfigureAwait(false);
 
@@ -174,7 +174,7 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        await currencyInput.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
         await currencyInput.PressAsync("1").ConfigureAwait(false);
 
@@ -186,7 +186,7 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("9 999,23").ConfigureAwait(false);
 
         await currencyInput.PressAsync("9").ConfigureAwait(false);
 
@@ -198,11 +198,11 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        await currencyInput.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
-        await currencyInput.PressSequentiallyAsync("123,987").ConfigureAwait(false);
+        await currencyInput.PressSequentiallyAsync("123,98").ConfigureAwait(false);
 
-        await currencyInput.Expect().ToHaveValueAsync("123,987").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("123,98").ConfigureAwait(false);
     }
 
     [Test]
@@ -210,7 +210,7 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("9 999,23").ConfigureAwait(false);
 
         await currencyInput.PressSequentiallyAsync("82").ConfigureAwait(false);
 
@@ -222,7 +222,7 @@ public class CurrencyInputTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
         var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().ToHaveValueAsync("123,456").ConfigureAwait(false);
+        await currencyInput.Expect().ToHaveValueAsync("9 999,23").ConfigureAwait(false);
 
         await currencyInput.ClearAsync().ConfigureAwait(false);
 

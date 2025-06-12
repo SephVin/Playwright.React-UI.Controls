@@ -178,10 +178,10 @@ public class RadioExpectTests : TestsBase
     [Test]
     public async Task ToHaveValue()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radio--default")).ConfigureAwait(false);
+        await Page.GotoAsync(StorybookUrl.Get("radio--with-value")).ConfigureAwait(false);
         var radio = new Radio(Page.GetByTestId("RadioId"));
 
-        await radio.Expect().ToHaveValueAsync("1").ConfigureAwait(false);
+        await radio.Expect().ToHaveValueAsync("RadioValue").ConfigureAwait(false);
     }
 
     [Test]

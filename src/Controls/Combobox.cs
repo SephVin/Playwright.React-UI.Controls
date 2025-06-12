@@ -36,7 +36,7 @@ public class Combobox : ControlBase, IFocusable
             return await NativeInputLocator.InputValueAsync().ConfigureAwait(false);
         }
 
-        return await RootLocator.InnerTextAsync().ConfigureAwait(false);
+        return await InputLikeTextLocator.InnerTextAsync().ConfigureAwait(false);
     }
 
     /// <summary>

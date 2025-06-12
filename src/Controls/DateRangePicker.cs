@@ -35,5 +35,5 @@ public class DateRangePicker : ControlBase
         await DatePickerEnd.ClearAsync().ConfigureAwait(false);
     }
 
-    public new DateRangePickerAssertions ExpectV2() => new(this);
+    public new DateRangePickerAssertionsV2 ExpectV2() => new(this);
 }
