@@ -2,16 +2,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
-using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
-public class ControlBaseAssertionsV2
+public class HtmlControlBaseAssertionsV2
 {
-    private readonly ControlBase control;
+    private readonly HtmlControlBase control;
 
-    public ControlBaseAssertionsV2(ControlBase control)
+    public HtmlControlBaseAssertionsV2(HtmlControlBase control)
     {
         this.control = control;
         RootLocator = control.RootLocator;
@@ -62,18 +61,6 @@ public class ControlBaseAssertionsV2
             ).ConfigureAwait(false);
         }
     }
-
-    public async Task ToHaveErrorAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await ToHaveAttributeAsync(DataVisualState.Error, options: options).ConfigureAwait(false);
-
-    public async Task NotToHaveErrorAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await NotToHaveAttributeAsync(DataVisualState.Error, options: options).ConfigureAwait(false);
-
-    public async Task ToHaveWarningAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await ToHaveAttributeAsync(DataVisualState.Warning, options: options).ConfigureAwait(false);
-
-    public async Task NotToHaveWarningAsync(LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await NotToHaveAttributeAsync(DataVisualState.Warning, options: options).ConfigureAwait(false);
 
     private async Task WaitForAttributeAsync(string name, bool expected, int timeout)
     {

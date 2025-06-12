@@ -11,13 +11,9 @@ public class ControlBase
 {
     protected ControlBase(ILocator rootLocator)
     {
-        Context = rootLocator;
         RootLocator = rootLocator;
         Page = rootLocator.Page;
     }
-
-    [Obsolete("Use RootLocator")]
-    protected ILocator Context { get; }
 
     public ILocator RootLocator { get; }
     public IPage Page { get; }
@@ -57,8 +53,8 @@ public class ControlBase
 
     public async Task<string?> GetAttributeValueAsync(
         string attributeName,
-        LocatorGetAttributeOptions? options = default)
-        => await RootLocator.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
+        LocatorGetAttributeOptions? options = default
+    ) => await RootLocator.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
 
     [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public virtual ILocatorAssertions Expect() => RootLocator.Expect();
@@ -66,5 +62,5 @@ public class ControlBase
     /*
      * Новая версия ассертов над контролами
      */
-    public ControlBaseAssertionsV2 ExpectV2() => new(RootLocator);
+    public ControlBaseAssertionsV2 ExpectV2() => new(this);
 }

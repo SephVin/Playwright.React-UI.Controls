@@ -9,7 +9,7 @@ public class DatePickerAssertionsV2 : ControlBaseAssertionsV2
     private readonly DatePicker datePicker;
 
     public DatePickerAssertionsV2(DatePicker datePicker)
-        : base(datePicker.RootLocator)
+        : base(datePicker)
     {
         this.datePicker = datePicker;
     }

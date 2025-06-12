@@ -10,7 +10,7 @@ public class TabsAssertionsV2 : ControlBaseAssertionsV2
     private readonly Tabs tabs;
 
     public TabsAssertionsV2(Tabs tabs)
-        : base(tabs.RootLocator)
+        : base(tabs)
     {
         this.tabs = tabs;
     }

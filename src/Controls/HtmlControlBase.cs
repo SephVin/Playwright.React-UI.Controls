@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
@@ -38,8 +39,10 @@ public class HtmlControlBase
 
     public async Task<string?> GetAttributeValueAsync(
         string attributeName,
-        LocatorGetAttributeOptions? options = default)
-        => await RootLocator.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
+        LocatorGetAttributeOptions? options = default
+    ) => await RootLocator.GetAttributeValueAsync(attributeName, options).ConfigureAwait(false);
 
     public virtual ILocatorAssertions Expect() => RootLocator.Expect();
+
+    public HtmlControlBaseAssertionsV2 ExpectV2() => new(this);
 }
