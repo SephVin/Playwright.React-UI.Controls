@@ -8,7 +8,7 @@ using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class HtmlButton : HtmlControlBase, IFocusable
+public class HtmlButton : ControlBase, IFocusable
 {
     public HtmlButton(ILocator rootLocator)
         : base(rootLocator)

@@ -5,7 +5,7 @@ using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
-public class HtmlButtonAssertionsV2 : HtmlControlBaseAssertionsV2
+public class HtmlButtonAssertionsV2 : ControlBaseAssertionsV2
 {
     private readonly HtmlButton button;
 

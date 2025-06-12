@@ -19,10 +19,10 @@ public class ControlBaseAssertionsV2
 
     protected ILocator RootLocator { get; }
 
-    public async Task ToBeVisibleAsync(LocatorAssertionsToBeVisibleOptions? options = default)
+    public virtual async Task ToBeVisibleAsync(LocatorAssertionsToBeVisibleOptions? options = default)
         => await RootLocator.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);
 
-    public async Task ToBeHiddenAsync(LocatorAssertionsToBeHiddenOptions? options = default)
+    public virtual async Task ToBeHiddenAsync(LocatorAssertionsToBeHiddenOptions? options = default)
         => await RootLocator.Expect().ToBeHiddenAsync(options).ConfigureAwait(false);
 
     public async Task ToHaveAttributeAsync(
@@ -82,8 +82,6 @@ public class ControlBaseAssertionsV2
 
         while (true)
         {
-            token.ThrowIfCancellationRequested();
-
             var hasAttribute = await control.HasAttributeAsync(name).ConfigureAwait(false);
 
             if (hasAttribute == expected)
@@ -104,6 +102,7 @@ public class ControlBaseAssertionsV2
         var expectation = expected
             ? "наличия"
             : "отсутствия";
+
         throw new TimeoutException($"Не дождались {expectation} атрибута {name} за {timeout}ms.");
     }
 }

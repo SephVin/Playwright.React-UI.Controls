@@ -12,8 +12,8 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.Expect().ToBeAttachedAsync().ConfigureAwait(false);
@@ -24,12 +24,12 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var visibleList = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         var notExistingList = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId2"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         await visibleList.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
@@ -41,12 +41,12 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var visibleList = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         var notExistingList = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId2"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         await visibleList.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
@@ -58,8 +58,8 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.Expect().Not.ToBeHiddenAsync().ConfigureAwait(false);
@@ -70,8 +70,8 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.Expect().ToBeVisibleAsync().ConfigureAwait(false);
@@ -82,12 +82,12 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var visibleList = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         var notExistingList = new ControlList<Radio>(
             Page.GetByTestId("RadioGroupId2"),
-            "[data-tid='Radio__root']",
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
         await visibleList.Expect().ToBeVisibleAsync().ConfigureAwait(false);
 
@@ -99,11 +99,11 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
-        await list.Expect().ToHaveAttributeAsync("data-tid", "RadioGroupId").ConfigureAwait(false);
+        await list.Expect().ToHaveAttributeAsync("data-tid", "RootId").ConfigureAwait(false);
     }
 
     [Test]
@@ -111,8 +111,8 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.Expect().Not.ToHaveAttributeAsync("data-tid", "not-RadioGroupId").ConfigureAwait(false);
@@ -123,8 +123,8 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.Expect().ToHaveCountAsync(3).ConfigureAwait(false);
@@ -135,8 +135,8 @@ public class ControlListExpectTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
         var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
             x => new Radio(x));
 
         await list.Expect().Not.ToHaveCountAsync(2).ConfigureAwait(false);

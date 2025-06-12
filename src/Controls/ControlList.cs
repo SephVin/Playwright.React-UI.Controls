@@ -1,35 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
+using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
 public class ControlList<TItem> : ControlBase where TItem : ControlBase
 {
     private readonly Func<ILocator, TItem> itemFactory;
-    private readonly ILocator itemsLocator;
 
-    [Obsolete("Используй конструктор ControlList(ILocator rootLocator, Func<ILocator, ILocator> itemSelector, Func<ILocator, TItem> itemFactory)")]
-    public ControlList(ILocator rootLocator, string itemSelector, Func<ILocator, TItem> itemFactory)
+    public ControlList(
+        ILocator rootLocator,
+        Func<ILocator, ILocator> itemSelector,
+        Func<ILocator, TItem> itemFactory
+    )
         : base(rootLocator)
     {
+        ItemsLocator = itemSelector(rootLocator);
         this.itemFactory = itemFactory;
-        itemsLocator = rootLocator.Locator(itemSelector);
     }
 
-    public ControlList(ILocator rootLocator, Func<ILocator, ILocator> itemSelector, Func<ILocator, TItem> itemFactory)
-        : base(rootLocator)
-    {
-        itemsLocator = itemSelector(rootLocator);
-        this.itemFactory = itemFactory;
-    }
+    public ILocator ItemsLocator { get; }
 
     public override async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
-        => await itemsLocator.First.IsVisibleAsync(options).ConfigureAwait(false);
+        => await ItemsLocator.First.IsVisibleAsync(options).ConfigureAwait(false);
 
     public async Task<IReadOnlyList<TItem>> GetItemsAsync()
     {
@@ -37,10 +37,13 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         return itemLocators.Select(x => itemFactory(x)).ToList();
     }
 
-    public async Task<IReadOnlyList<TItem>> GetItemsAsync(Func<TItem, ValueTask<bool>> predicate)
+    public async Task<TItem> GetFirstItemAsync()
+        => await GetItemAsync(0).ConfigureAwait(false);
+
+    public async Task<TItem> GetLastItemAsync()
     {
-        var list = await GetItemsAsync().ConfigureAwait(false);
-        return await list.ToAsyncEnumerable().WhereAwait(predicate).ToArrayAsync().ConfigureAwait(false);
+        var itemsCount = await CountAsync().ConfigureAwait(false);
+        return await GetItemAsync(itemsCount - 1).ConfigureAwait(false);
     }
 
     public async Task<TItem> GetItemAsync(int index)
@@ -49,30 +52,54 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         return itemFactory(itemLocators[index]);
     }
 
-    public async Task<TItem> GetItemAsync(Func<TItem, ValueTask<bool>> predicate)
+    public async Task<TItem> GetFirstItemAsync(
+        Func<TItem, Task<bool>> predicate,
+        int timeoutInMilliseconds = 10000)
     {
-        var list = await GetItemsAsync().ConfigureAwait(false);
-        return await list.ToAsyncEnumerable().SingleAwaitAsync(predicate).ConfigureAwait(false);
+        var list = await GetItemsAsync(predicate, timeoutInMilliseconds).ConfigureAwait(false);
+        return list.First();
     }
 
-    public async Task<TItem> GetFirstItemAsync(Func<TItem, ValueTask<bool>> predicate)
+    public async Task<IList<TItem>> GetItemsAsync(
+        Func<TItem, Task<bool>> predicate,
+        int timeoutInMilliseconds = 10000)
     {
-        var list = await GetItemsAsync().ConfigureAwait(false);
-        return await list.ToAsyncEnumerable().FirstAwaitAsync(predicate).ConfigureAwait(false);
-    }
+        using var cts = new CancellationTokenSource(timeoutInMilliseconds);
 
-    public async Task ClickItemAsync(int index, LocatorClickOptions? options = default)
-    {
-        var item = await GetItemAsync(index).ConfigureAwait(false);
-        await item.ClickAsync(options).ConfigureAwait(false);
-    }
+        while (true)
+        {
+            var list = await GetItemsAsync().ConfigureAwait(false);
 
-    public async Task ClickItemAsync(
-        Func<TItem, ValueTask<bool>> predicate,
-        LocatorClickOptions? options = default)
-    {
-        var item = await GetItemAsync(predicate).ConfigureAwait(false);
-        await item.ClickAsync(options).ConfigureAwait(false);
+            var predicateResults = await Task.WhenAll(
+                list.Select(
+                    async item => new
+                    {
+                        Item = item,
+                        Result = await predicate(item).ConfigureAwait(false)
+                    })
+            ).ConfigureAwait(false);
+
+            var items = predicateResults
+                .Where(x => x.Result)
+                .Select(x => x.Item)
+                .ToList();
+
+            if (items.Count > 0)
+            {
+                return items;
+            }
+
+            try
+            {
+                await Task.Delay(100, cts.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+        }
+
+        throw new TimeoutException($"Элементы списка не найдены по предикату за {timeoutInMilliseconds}ms.");
     }
 
     public async Task<int> CountAsync()
@@ -81,7 +108,37 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
             new LocatorWaitForOptions { State = WaitForSelectorState.Attached }
         ).ConfigureAwait(false);
 
-        return await itemsLocator.CountAsync().ConfigureAwait(false);
+        return await ItemsLocator.CountAsync().ConfigureAwait(false);
+    }
+
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
+
+    [Obsolete("Используй GetSingleItemAsync из Controls.Extensions. В будущем этот метод будет удален")]
+    public async Task<TItem> GetItemAsync(Func<TItem, Task<bool>> predicate, int timeoutInMilliseconds = 10000)
+    {
+        var list = await GetItemsAsync(predicate, timeoutInMilliseconds).ConfigureAwait(false);
+        return list.Single();
+    }
+
+    [Obsolete(
+        "В будущих версиях метод будет перемещен в Controls.Extensions. " +
+        "Если вы его используете, то убедитесь, что Controls.Extensions у вас добавлен")]
+    public async Task ClickItemAsync(int index, LocatorClickOptions? options = default)
+    {
+        var item = await GetItemAsync(index).ConfigureAwait(false);
+        await item.ClickAsync(options).ConfigureAwait(false);
+    }
+
+    [Obsolete(
+        "В будущих версиях метод будет перемещен в Controls.Extensions. " +
+        "Если вы его используете, то убедитесь, что Controls.Extensions у вас добавлен")]
+    public async Task ClickItemAsync(
+        Func<TItem, Task<bool>> predicate,
+        LocatorClickOptions? options = default)
+    {
+        var item = await GetItemAsync(predicate).ConfigureAwait(false);
+        await item.ClickAsync(options).ConfigureAwait(false);
     }
 
     private async Task<IReadOnlyList<ILocator>> GetItemLocatorsAsync()
@@ -90,11 +147,14 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
             new LocatorWaitForOptions { State = WaitForSelectorState.Attached }
         ).ConfigureAwait(false);
 
-        return await itemsLocator.AllAsync().ConfigureAwait(false);
+        return await ItemsLocator.AllAsync().ConfigureAwait(false);
     }
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new ControlListAssertions(
         RootLocator.Expect(),
-        itemsLocator.Expect(),
-        itemsLocator.First.Expect());
+        ItemsLocator.Expect(),
+        ItemsLocator.First.Expect());
+
+    public new ControlListAssertionsV2<TItem> ExpectV2() => new(this);
 }
