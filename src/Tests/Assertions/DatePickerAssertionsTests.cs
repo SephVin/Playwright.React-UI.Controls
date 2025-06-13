@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class DatePickerExpectTests : TestsBase
+public class DatePickerAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeDisabled()

@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class ComboBoxExpectTests : TestsBase
+public class ComboBoxAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeAttached()

@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class DateInputExpectTests : TestsBase
+public class DateInputAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeAttached()
@@ -164,7 +164,7 @@ public class DateInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("dateinput--filled")).ConfigureAwait(false);
         var dateInput = new DateInput(Page.GetByTestId("DateInputId"));
 
-        await dateInput.Expect().ToHaveTextAsync("24.08.2022").ConfigureAwait(false);
+        await dateInput.Expect().ToHaveTextAsync("01.01.2024").ConfigureAwait(false);
     }
 
     [Test]
@@ -173,6 +173,6 @@ public class DateInputExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("dateinput--default")).ConfigureAwait(false);
         var dateInput = new DateInput(Page.GetByTestId("DateInputId"));
 
-        await dateInput.Expect().Not.ToHaveTextAsync("24.08.2022").ConfigureAwait(false);
+        await dateInput.Expect().Not.ToHaveTextAsync("01.01.2024").ConfigureAwait(false);
     }
 }

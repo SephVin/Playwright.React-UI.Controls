@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
-using Playwright.ReactUI.Controls.Extensions;
 using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
@@ -149,17 +148,6 @@ public class CurrencyInputAssertionsV2Tests : TestsBase
 
         await currencyInput.InputLocator.FocusAsync().ConfigureAwait(false);
         await currencyInput.ExpectV2().ToBeFocusedAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task FocusAndBlur()
-    {
-        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
-        await currencyInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
-
-        await currencyInput.FocusAndBlurAsync().ConfigureAwait(false);
-
-        await currencyInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
     }
 
     private async Task<CurrencyInput> GetCurrencyInputAsync(string storyName)

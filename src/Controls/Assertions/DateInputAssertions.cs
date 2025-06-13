@@ -37,7 +37,7 @@ public class DateInputAssertions : ILocatorAssertions
         => await nativeInputLocator.ToBeEnabledAsync(options).ConfigureAwait(false);
 
     public async Task ToBeFocusedAsync(LocatorAssertionsToBeFocusedOptions? options = default)
-        => await nativeInputLocator.ToBeFocusedAsync(options).ConfigureAwait(false);
+        => await rootLocatorAssertions.ToBeFocusedAsync(options).ConfigureAwait(false);
 
     public async Task ToBeHiddenAsync(LocatorAssertionsToBeHiddenOptions? options = default)
         => await rootLocatorAssertions.ToBeHiddenAsync(options).ConfigureAwait(false);

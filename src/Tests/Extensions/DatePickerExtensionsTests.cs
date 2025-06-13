@@ -10,116 +10,158 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class DatePickerExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
         await datePicker.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var visibleDatePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-        var notExistingDatePicker = new DatePicker(Page.GetByTestId("UnknownDatePickerId"));
-        await visibleDatePicker.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
+        var datePicker = await GetDatePickerAsync("hidden").ConfigureAwait(false);
+        await datePicker.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingDatePicker.WaitToBeHiddenAsync().ConfigureAwait(false);
+        await datePicker.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--error")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.WaitToBeEnabledAsync().ConfigureAwait(false);
+    }
 
+    [Test]
+    public async Task WaitToBeDisabled()
+    {
+        var datePicker = await GetDatePickerAsync("disabled").ConfigureAwait(false);
+        await datePicker.WaitToBeDisabledAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveError()
+    {
+        var datePicker = await GetDatePickerAsync("error").ConfigureAwait(false);
         await datePicker.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
         await datePicker.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--warning")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
+        var datePicker = await GetDatePickerAsync("warning").ConfigureAwait(false);
         await datePicker.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitNotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
         await datePicker.WaitNotToHaveWarningAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
+    {
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.WaitToHaveAttributeAsync("data-tid", "DatePickerId").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    {
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue()
+    {
+        var datePicker = await GetDatePickerAsync("filled").ConfigureAwait(false);
+        await datePicker.WaitToHaveValueAsync("01.01.2024").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue_With_DateTime()
+    {
+        var datePicker = await GetDatePickerAsync("filled").ConfigureAwait(false);
+        await datePicker.WaitToHaveValueAsync(1.January(2024)).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveValue()
+    {
+        var datePicker = await GetDatePickerAsync("filled").ConfigureAwait(false);
+        await datePicker.WaitNotToHaveValueAsync("01.02.2024").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveValue_With_DateTime()
+    {
+        var datePicker = await GetDatePickerAsync("filled").ConfigureAwait(false);
+        await datePicker.WaitNotToHaveValueAsync(1.February(2024)).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeEmpty()
+    {
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.WaitToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToBeEmpty()
+    {
+        var datePicker = await GetDatePickerAsync("filled").ConfigureAwait(false);
+        await datePicker.WaitNotToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    {
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+
+        await datePicker.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await datePicker.DatePickerInputLocator.FocusAsync().ConfigureAwait(false);
+        await datePicker.WaitToBeFocusedAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task FocusAndBlur()
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var context = Page.GetByTestId("DatePickerId");
-        var datePicker = new DatePicker(context);
-        await context.Locator("noscript").Expect().ToHaveCountAsync(0).ConfigureAwait(false);
+        var datePicker = await GetDatePickerAsync("default").ConfigureAwait(false);
+        await datePicker.DatePickerInputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
 
         await datePicker.FocusAndBlurAsync().ConfigureAwait(false);
 
-        await context.Locator("noscript").Expect().ToHaveCountAsync(0).ConfigureAwait(false);
+        await datePicker.DatePickerInputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
     }
 
-    [Test]
-    public async Task WaitValue_With_String()
+    private async Task<DatePicker> GetDatePickerAsync(string storyName)
     {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
-        await datePicker.WaitToHaveValueAsync("01.01.2024").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitValue_With_DateTime()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--filled")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
-        await datePicker.WaitToHaveValueAsync(1.January(2024)).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitValueAbsence()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
-        await datePicker.WaitToBeEmptyAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitEnabled()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--default")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
-        await datePicker.WaitToBeEnabledAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitDisabled()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("datepicker--disabled")).ConfigureAwait(false);
-        var datePicker = new DatePicker(Page.GetByTestId("DatePickerId"));
-
-        await datePicker.WaitToBeDisabledAsync().ConfigureAwait(false);
+        await Page.GotoAsync(StorybookUrl.Get($"datepicker--{storyName}")).ConfigureAwait(false);
+        return new DatePicker(Page.GetByTestId("DatePickerId"));
     }
 }

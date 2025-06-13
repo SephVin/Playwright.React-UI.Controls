@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class AutocompleteExpectTests : TestsBase
+public class AutocompleteAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeAttached()

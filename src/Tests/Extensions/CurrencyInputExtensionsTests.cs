@@ -151,6 +151,17 @@ public class CurrencyInputExtensionsTests : TestsBase
         await currencyInput.WaitToBeFocusedAsync().ConfigureAwait(false);
     }
 
+    [Test]
+    public async Task FocusAndBlur()
+    {
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+
+        await currencyInput.FocusAndBlurAsync().ConfigureAwait(false);
+
+        await currencyInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+    }
+
     private async Task<CurrencyInput> GetCurrencyInputAsync(string storyName)
     {
         await Page.GotoAsync(StorybookUrl.Get($"currencyinput--{storyName}")).ConfigureAwait(false);
