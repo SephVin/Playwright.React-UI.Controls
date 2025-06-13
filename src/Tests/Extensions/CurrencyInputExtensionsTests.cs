@@ -9,106 +9,151 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class CurrencyInputExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitPresenceAsync().ConfigureAwait(false);
+        var button = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await button.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var visibleCurrencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        var notExistingCurrencyInput = new CurrencyInput(Page.GetByTestId("UnknownCurrencyInputId"));
-        await visibleCurrencyInput.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("hidden").ConfigureAwait(false);
+        await currencyInput.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingCurrencyInput.WaitAbsenceAsync().ConfigureAwait(false);
+        await currencyInput.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--error")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitErrorAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("disabled").ConfigureAwait(false);
+        await currencyInput.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--warning")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitWarningAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("error").ConfigureAwait(false);
+        await currencyInput.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--filled")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitValueAsync("9 999,23").ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("warning").ConfigureAwait(false);
+        await currencyInput.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValueAbsence()
+    public async Task NotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitValueAbsenceAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitEnabledAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitToHaveAttributeAsync("data-tid", "CurrencyInputId").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--disabled")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-
-        await currencyInput.WaitDisabledAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task FocusAndBlur()
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("currencyinput--default")).ConfigureAwait(false);
-        var currencyInput = new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
-        await currencyInput.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
 
-        await currencyInput.FocusAndBlurAsync().ConfigureAwait(false);
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
 
-        await currencyInput.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+    [Test]
+    public async Task WaitToHaveValue()
+    {
+        var currencyInput = await GetCurrencyInputAsync("filled").ConfigureAwait(false);
+        await currencyInput.WaitToHaveValueAsync("9 999,23").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue_After_Fill()
+    {
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.FillAsync("1").ConfigureAwait(false);
+
+        await currencyInput.WaitToHaveValueAsync("1,00").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNoToHaveValue()
+    {
+        var currencyInput = await GetCurrencyInputAsync("filled").ConfigureAwait(false);
+        await currencyInput.WaitNoToHaveValueAsync("12,23").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNoToHaveValue_After_Fill()
+    {
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.FillAsync("1").ConfigureAwait(false);
+
+        await currencyInput.WaitNoToHaveValueAsync("12,23").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeEmpty()
+    {
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNoToBeEmpty()
+    {
+        var currencyInput = await GetCurrencyInputAsync("filled").ConfigureAwait(false);
+        await currencyInput.WaitNoToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    {
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+
+        await currencyInput.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await currencyInput.InputLocator.FocusAsync().ConfigureAwait(false);
+        await currencyInput.WaitToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    private async Task<CurrencyInput> GetCurrencyInputAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"currencyinput--{storyName}")).ConfigureAwait(false);
+        return new CurrencyInput(Page.GetByTestId("CurrencyInputId"));
     }
 }
