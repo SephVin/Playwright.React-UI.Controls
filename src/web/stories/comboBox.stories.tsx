@@ -76,6 +76,7 @@ export const Loading: Story = {
           getItems={getNumbersWithDelay}
           onValueChange={selectNumber}
           value={selectedNumber}
+          renderAddButton={() => <MenuItem>MenuItem</MenuItem>}
         />
       </Gapped>
     );

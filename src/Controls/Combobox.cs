@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
@@ -87,25 +88,21 @@ public class Combobox : ControlBase, IFocusable
 
     public async Task FocusAsync()
     {
-        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
-
-        if (await IsFocusedAsync().ConfigureAwait(false))
-        {
-            await NativeInputLocator.FocusAsync().ConfigureAwait(false);
-        }
-        else
-        {
-            await RootLocator.Locator("[data-tid='InputLikeText__root']").FocusAsync().ConfigureAwait(false);
-        }
+        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await RootLocator
+            .Locator("input[type='text']")
+            .Or(RootLocator.Locator("[data-tid='InputLikeText__root']"))
+            .FocusAsync()
+            .ConfigureAwait(false);
     }
 
-    public async Task BlurAsync(LocatorBlurOptions? options = default)
-        => await NativeInputLocator.BlurAsync(options).ConfigureAwait(false);
+    public async Task BlurAsync()
+        => await NativeInputLocator.PressAsync("Tab").ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
         // NOTE: rootLocator всегда в состоянии enabled, даже если ComboBox disabled
-        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
         await base.ClickAsync(options).ConfigureAwait(false);
     }
 
@@ -123,7 +120,9 @@ public class Combobox : ControlBase, IFocusable
             container,
             locator =>
                 locator.Locator("[data-tid='MenuItem__root']")
+                    .Or(locator.Locator("[data-tid='MenuMessage__root']"))
                     .Or(locator.Locator("[data-tid='ComboBoxMenu__item']"))
+                    .Or(locator.Locator("[data-tid='ComboBoxMenu__notFound']"))
                     .Or(locator.Locator("[data-tid='MenuHeader__root']"))
                     .Or(locator.Locator("[data-tid='MenuFooter__root']")),
             locator => new MenuItem(locator)
@@ -148,6 +147,13 @@ public class Combobox : ControlBase, IFocusable
         return portalContainer.Locator("[data-tid='ComboBoxMenu__item']");
     }
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect()
-        => new ComboboxAssertions(this, RootLocator.Expect(), NativeInputLocator.Expect(), InputLikeTextLocator.Expect());
+        => new ComboboxAssertions(
+            this,
+            RootLocator.Expect(),
+            NativeInputLocator.Expect(),
+            InputLikeTextLocator.Expect());
+
+    public new ComboBoxAssertionsV2 ExpectV2() => new(this);
 }

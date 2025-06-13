@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -17,4 +18,6 @@ public class MenuItem : ControlBase
 
     public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
         => await RootLocator.InnerTextAsync(options).ConfigureAwait(false);
+
+    public new MenuItemAssertionsV2 ExpectV2() => new(this);
 }
