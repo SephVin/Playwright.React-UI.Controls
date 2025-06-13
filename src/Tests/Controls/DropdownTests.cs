@@ -300,9 +300,7 @@ public class DropdownTests : TestsBase
     [Test]
     public async Task WaitItemWithText()
     {
-        await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
-        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
-
+        var dropdown = await GetDropdownAsync("default").ConfigureAwait(false);
         await dropdown.WaitItemWithTextAsync("TODO 2").ConfigureAwait(false);
     }
 
