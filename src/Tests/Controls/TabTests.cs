@@ -221,7 +221,7 @@ public class TabTests : TestsBase
     [Test]
     public async Task GetAttributeValue_Return_Empty_When_Attribute_Exist_Without_Value()
     {
-        var tabs = await GetTabsAsync("default").ConfigureAwait(false);
+        var tabs = await GetTabsAsync("with-tooltip").ConfigureAwait(false);
         var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
 
         var actual = await tab.GetAttributeValueAsync("data-attribute-without-value").ConfigureAwait(false);

@@ -164,7 +164,7 @@ public class RadioTests : TestsBase
     }
 
     [Test]
-    public async Task Check_Set_Checked_State_When_Checkbox_Is_Unchecked()
+    public async Task Check_Set_Checked_State_When_Radio_Is_Unchecked()
     {
         var radio = await GetRadioAsync("default").ConfigureAwait(false);
 
@@ -174,7 +174,7 @@ public class RadioTests : TestsBase
     }
 
     [Test]
-    public async Task Check_Do_Nothing_When_Checkbox_Is_Already_Checked()
+    public async Task Check_Do_Nothing_When_Radio_Is_Already_Checked()
     {
         var radio = await GetRadioAsync("checked").ConfigureAwait(false);
 
