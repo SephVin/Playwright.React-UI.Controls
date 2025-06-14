@@ -23,6 +23,9 @@ public class ControlListAssertionsV2<TItem> : ControlBaseAssertionsV2 where TIte
     public async Task ToHaveCountAsync(int number, LocatorAssertionsToHaveCountOptions? options = default)
         => await controlList.ItemsLocator.Expect().ToHaveCountAsync(number, options).ConfigureAwait(false);
 
-    public async Task ToBeEmptyAsync(int number, LocatorAssertionsToHaveCountOptions? options = default)
+    public async Task ToBeEmptyAsync(LocatorAssertionsToHaveCountOptions? options = default)
         => await controlList.ItemsLocator.Expect().ToHaveCountAsync(0, options).ConfigureAwait(false);
+
+    public async Task NotToBeEmptyAsync(LocatorAssertionsToHaveCountOptions? options = default)
+        => await controlList.ItemsLocator.Expect().Not.ToHaveCountAsync(0, options).ConfigureAwait(false);
 }
