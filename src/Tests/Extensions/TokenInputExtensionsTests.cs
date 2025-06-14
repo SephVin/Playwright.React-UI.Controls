@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Controls.Extensions;
@@ -126,6 +128,36 @@ public class TokenInputExtensionsTests : TestsBase
 
         await tokenInput.WaitToContainTokensAsync(new[] { "Second" }).ConfigureAwait(false);
         await tokenInput.WaitToContainTokensAsync(new[] { "First", "Second" }).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task FillAndSelectFirst()
+    {
+        var tokenInput = await GetTokenInputAsync("default").ConfigureAwait(false);
+
+        await tokenInput.FillAndSelectFirstAsync("Fir").ConfigureAwait(false);
+
+        var tokenItems = await tokenInput.Tokens.GetItemsAsync().ConfigureAwait(false);
+        var tokenNames = await tokenItems.ToAsyncEnumerable()
+            .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+        tokenNames.Should().BeEquivalentTo("First");
+    }
+
+    [Test]
+    public async Task FillAndSelect()
+    {
+        var tokenInput = await GetTokenInputAsync("default").ConfigureAwait(false);
+
+        await tokenInput.FillAndSelectAsync("First").ConfigureAwait(false);
+
+        var tokenItems = await tokenInput.Tokens.GetItemsAsync().ConfigureAwait(false);
+        var tokenNames = await tokenItems.ToAsyncEnumerable()
+            .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
+            .ToArrayAsync()
+            .ConfigureAwait(false);
+        tokenNames.Should().BeEquivalentTo("First");
     }
 
     private async Task<TokenInput> GetTokenInputAsync(string storyName)

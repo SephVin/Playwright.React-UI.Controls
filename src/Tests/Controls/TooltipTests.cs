@@ -12,10 +12,7 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task IsVisible_Return_True_When_Tooltip_Is_Visible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
         await tooltip.WaitForAsync().ConfigureAwait(false);
 
         var actual = await tooltip.IsVisibleAsync().ConfigureAwait(false);
@@ -26,11 +23,8 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task IsVisible_Return_False_When_Tooltip_Is_Not_Exist()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
-        await tooltip.WaitForAsync().ConfigureAwait(false);
+        var visibleTooltip = await GetTooltipAsync().ConfigureAwait(false);
+        await visibleTooltip.WaitForAsync().ConfigureAwait(false);
         var notExistingTooltip = new Tooltip(Page.GetByTestId("HiddenTooltip"));
 
         var actual = await notExistingTooltip.IsVisibleAsync().ConfigureAwait(false);
@@ -39,12 +33,9 @@ public class TooltipTests : TestsBase
     }
 
     [Test]
-    public async Task GetText_Return_Tooltip_Text()
+    public async Task GetText()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
 
         var actual = await tooltip.GetTextAsync().ConfigureAwait(false);
 
@@ -54,10 +45,7 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task GetContent_And_Close()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
 
         var content = tooltip.GetContent();
         await content.Expect().ToHaveTextAsync("TooltipText ссылка").ConfigureAwait(false);
@@ -69,10 +57,7 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task HasAttribute_Return_True_When_Attribute_Exist()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
 
         var actual = await tooltip.HasAttributeAsync("data-tid").ConfigureAwait(false);
 
@@ -82,10 +67,7 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task HasAttribute_Return_False_When_Attribute_Not_Exist()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
 
         var actual = await tooltip.HasAttributeAsync("data-tid-2").ConfigureAwait(false);
 
@@ -95,10 +77,7 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task GetAttribute_Return_Attribute_Value_When_Attribute_Exist_With_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
 
         var actual = await tooltip.GetAttributeValueAsync("data-tid").ConfigureAwait(false);
 
@@ -108,13 +87,19 @@ public class TooltipTests : TestsBase
     [Test]
     public async Task GetAttribute_Return_Null_When_Attribute_Not_Exist()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-        await button.HoverAsync().ConfigureAwait(false);
-        var tooltip = await button.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+        var tooltip = await GetTooltipAsync().ConfigureAwait(false);
 
         var actual = await tooltip.GetAttributeValueAsync("data-tid-2").ConfigureAwait(false);
 
         actual.Should().BeNull();
+    }
+
+    private async Task<Tooltip> GetTooltipAsync()
+    {
+        await Page.GotoAsync(StorybookUrl.Get("button--with-tooltip")).ConfigureAwait(false);
+        var tooltip = new Button(Page.GetByTestId("ButtonId"));
+        await tooltip.HoverAsync().ConfigureAwait(false);
+
+        return await tooltip.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -25,4 +26,6 @@ public class Tooltip : ControlBase
         await closeLocator.ClickAsync(options).ConfigureAwait(false);
         await WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden }).ConfigureAwait(false);
     }
+
+    public new TooltipAssertionsV2 ExpectV2() => new(this);
 }
