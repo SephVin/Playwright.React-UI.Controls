@@ -90,7 +90,7 @@ public class SelectExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("select--filled-button")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        await select.WaitValueAsync("Two").ConfigureAwait(false);
+        await select.WaitToHaveValueAsync("Two").ConfigureAwait(false);
     }
 
     [Test]
@@ -99,7 +99,7 @@ public class SelectExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("select--filled-link")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        await select.WaitValueAsync("Two").ConfigureAwait(false);
+        await select.WaitToHaveValueAsync("Two").ConfigureAwait(false);
     }
 
     [Test]
@@ -109,7 +109,7 @@ public class SelectExtensionsTests : TestsBase
         var select = new Select(Page.GetByTestId("SelectId"));
 
         // ReSharper disable StringLiteralTypo
-        await select.WaitValueAsync("Ничего не выбрано").ConfigureAwait(false);
+        await select.WaitToHaveValueAsync("Ничего не выбрано").ConfigureAwait(false);
         // ReSharper restore StringLiteralTypo
     }
 
@@ -120,7 +120,7 @@ public class SelectExtensionsTests : TestsBase
         var select = new Select(Page.GetByTestId("SelectId"));
 
         // ReSharper disable StringLiteralTypo
-        await select.WaitValueAsync("Ничего не выбрано").ConfigureAwait(false);
+        await select.WaitToHaveValueAsync("Ничего не выбрано").ConfigureAwait(false);
         // ReSharper restore StringLiteralTypo
     }
 
@@ -130,7 +130,7 @@ public class SelectExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        await select.WaitEnabledAsync().ConfigureAwait(false);
+        await select.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -139,7 +139,7 @@ public class SelectExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        await select.WaitEnabledAsync().ConfigureAwait(false);
+        await select.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -148,7 +148,7 @@ public class SelectExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("select--disabled-button")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        await select.WaitDisabledAsync().ConfigureAwait(false);
+        await select.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -157,6 +157,6 @@ public class SelectExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("select--disabled-link")).ConfigureAwait(false);
         var select = new Select(Page.GetByTestId("SelectId"));
 
-        await select.WaitDisabledAsync().ConfigureAwait(false);
+        await select.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 }

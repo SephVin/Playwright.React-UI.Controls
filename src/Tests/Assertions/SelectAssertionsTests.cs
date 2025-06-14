@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class SelectExpectTests : TestsBase
+public class SelectAssertionsTests : TestsBase
 {
     [Test]
     [TestCase("select--default-button")]
