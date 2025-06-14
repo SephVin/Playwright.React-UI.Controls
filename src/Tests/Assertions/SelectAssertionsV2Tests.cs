@@ -27,6 +27,8 @@ public class SelectAssertionsV2Tests : TestsBase
     public async Task ToBeHidden()
     {
         var select = await GetSelectAsync("hidden").ConfigureAwait(false);
+        await select.WaitForAsync().ConfigureAwait(false);
+
         await select.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
     }
 

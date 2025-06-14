@@ -27,7 +27,7 @@ public class TabsAssertionsV2 : ControlBaseAssertionsV2
         await tab.ExpectV2().ToBeInactiveAsync().ConfigureAwait(false);
     }
 
-    public async Task ToContainTabsAsync(string[] tabNames, int timeoutInMilliseconds = 15000)
+    public async Task ToContainTabsAsync(string[] tabNames, int timeoutInMilliseconds = 10000)
     {
         using var cts = new CancellationTokenSource(timeoutInMilliseconds);
 

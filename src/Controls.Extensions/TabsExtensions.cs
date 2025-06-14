@@ -13,6 +13,6 @@ public static class TabsExtensions
     public static async Task WaitToContainTabsAsync(
         this Tabs tabs,
         string[] tabNames,
-        int timeoutInMilliseconds = 15000)
-        => await tabs.ExpectV2().ToContainTabsAsync(tabNames, timeoutInMilliseconds).ConfigureAwait(false);
+        int timeoutInMilliseconds = 10000
+    ) => await tabs.ExpectV2().ToContainTabsAsync(tabNames, timeoutInMilliseconds).ConfigureAwait(false);
 }
