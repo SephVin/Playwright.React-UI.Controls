@@ -1,9 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { Gapped, Loader } from '@skbkontur/react-ui';
-import React, { useEffect, useState } from 'react';
+import type { Meta, StoryObj } from "@storybook/react";
+import { Gapped, Loader } from "@skbkontur/react-ui";
+import React, { useEffect, useState } from "react";
+
+export enum LoaderTestIds {
+  LoaderId = "LoaderId",
+}
 
 const meta: Meta<typeof Loader> = {
-  title: 'Loader',
+  title: "Loader",
   component: Loader,
 };
 export default meta;
@@ -14,7 +18,12 @@ export const Default: Story = {
   render() {
     return (
       <Gapped>
-        <Loader type="big" caption="Loading" active />
+        <Loader
+          data-tid={LoaderTestIds.LoaderId}
+          type="big"
+          caption="Loading"
+          active
+        />
       </Gapped>
     );
   },
@@ -34,7 +43,11 @@ export const Hidden: Story = {
 
     return (
       <Gapped>
-        <Loader type="big" active={isVisible} />
+        <Loader
+          data-tid={LoaderTestIds.LoaderId}
+          type="big"
+          active={isVisible}
+        />
       </Gapped>
     );
   },
@@ -54,7 +67,11 @@ export const WaitLoading: Story = {
 
     return (
       <Gapped>
-        <Loader type="big" active={isVisible} />
+        <Loader
+          data-tid={LoaderTestIds.LoaderId}
+          type="big"
+          active={isVisible}
+        />
       </Gapped>
     );
   },
