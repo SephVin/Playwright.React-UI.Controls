@@ -46,7 +46,7 @@ public class Header : ControlBase
 
 + netstandard2.0 / NET6
 + Playwright 1.51.0
-+ @skbkontur/react-ui 4.22.5 (рекомендуется использовать последние версии)
++ @skbkontur/react-ui 4.25.2 (рекомендуется использовать последние версии)
 
 # Запуск Storybook
 

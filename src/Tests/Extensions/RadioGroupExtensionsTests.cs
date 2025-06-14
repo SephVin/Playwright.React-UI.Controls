@@ -9,121 +9,143 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class RadioGroupExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--default")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitPresenceAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--disabled")).ConfigureAwait(false);
-        var visibleRadioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-        var notExistingRadioGroup = new RadioGroup(Page.GetByTestId("UnknownRadioGroupId"));
-        await visibleRadioGroup.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("hidden").ConfigureAwait(false);
+        await radioGroup.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingRadioGroup.WaitAbsenceAsync().ConfigureAwait(false);
+        await radioGroup.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError_When_All_Items_With_Error()
+    public async Task WaitToBeEnabled_When_RadioGroup_Is_Enabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--error")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitErrorAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence_When_Not_All_Items_With_Error()
+    public async Task WaitToBeEnabled_When_Not_All_Radio_Are_Enabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--error-item")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("disabled-item").ConfigureAwait(false);
+        await radioGroup.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--default")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("disabled").ConfigureAwait(false);
+        await radioGroup.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning_When_All_Items_With_Warning()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--warning")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitWarningAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("error").ConfigureAwait(false);
+        await radioGroup.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence_When_Not_All_Items_With_Warning()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--warning-item")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--default")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("warning").ConfigureAwait(false);
+        await radioGroup.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitCheckedByValue()
+    public async Task WaitNotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--checked")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitCheckedByValueAsync("2").ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitCheckedByText()
+    public async Task WaitToBeCheckedByValue()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--checked")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitCheckedByTextAsync("TODO 2").ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("checked").ConfigureAwait(false);
+        await radioGroup.WaitToBeCheckedByValueAsync("2").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitCheckedByIndex()
+    public async Task WaitToBeCheckedByIndex()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--checked")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitCheckedByIndexAsync(1).ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("checked").ConfigureAwait(false);
+        await radioGroup.WaitToBeCheckedByIndexAsync(1).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToBeCheckedByText()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--default")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
-
-        await radioGroup.WaitEnabledAsync().ConfigureAwait(false);
+        var radioGroup = await GetRadioGroupAsync("checked").ConfigureAwait(false);
+        await radioGroup.WaitToBeCheckedByTextAsync("TODO 2").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitToBeUncheckedByValue()
     {
-        await Page.GotoAsync(StorybookUrl.Get("radiogroup--disabled")).ConfigureAwait(false);
-        var radioGroup = new RadioGroup(Page.GetByTestId("RadioGroupId"));
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToBeUncheckedByValueAsync("1").ConfigureAwait(false);
+    }
 
-        await radioGroup.WaitDisabledAsync().ConfigureAwait(false);
+    [Test]
+    public async Task WaitToBeUncheckedByIndex()
+    {
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToBeUncheckedByIndexAsync(0).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeUncheckedByText()
+    {
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToBeUncheckedByTextAsync("TODO 1").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
+    {
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToHaveAttributeAsync("data-tid", "RadioGroupId").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    {
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
+        await radioGroup.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    private async Task<RadioGroup> GetRadioGroupAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"radiogroup--{storyName}")).ConfigureAwait(false);
+        return new RadioGroup(Page.GetByTestId("RadioGroupId"));
     }
 }

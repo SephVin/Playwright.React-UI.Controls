@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class RadioGroupExpectTests : TestsBase
+public class RadioGroupAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeAttached()
