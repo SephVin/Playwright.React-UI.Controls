@@ -11,7 +11,7 @@ public class TabAssertionsV2 : ControlBaseAssertionsV2
     private readonly Tab tab;
 
     public TabAssertionsV2(Tab tab)
-        : base(tab.RootLocator)
+        : base(tab)
     {
         this.tab = tab;
     }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Controls.Extensions;
@@ -9,85 +10,161 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public sealed class ButtonExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitPresenceAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
-        var visibleButton = new Button(Page.GetByTestId("ButtonId"));
-        var notExistingButton = new Button(Page.GetByTestId("UnknownButtonId"));
-        await visibleButton.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("hidden").ConfigureAwait(false);
+        await button.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingButton.WaitAbsenceAsync().ConfigureAwait(false);
+        await button.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitEnabledAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--disabled")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitDisabledAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("disabled").ConfigureAwait(false);
+        await button.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--error")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitErrorAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("error").ConfigureAwait(false);
+        await button.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--warning")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitWarningAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("warning").ConfigureAwait(false);
+        await button.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitNotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
-
-        await button.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitText()
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("button--default")).ConfigureAwait(false);
-        var button = new Button(Page.GetByTestId("ButtonId"));
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToHaveAttributeAsync("data-tid", "ButtonId").ConfigureAwait(false);
+    }
 
-        await button.WaitTextAsync("TODO").ConfigureAwait(false);
+    [Test]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveText()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToHaveTextAsync("TODO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveText_With_Regex()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToHaveTextAsync(new Regex("^TO.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveText()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToHaveTextAsync("TODO777").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveText_With_Regex()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToHaveTextAsync(new Regex("^TOD1.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToContainText()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToContainTextAsync("TO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToContainText_With_Regex()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitToContainTextAsync(new Regex("^T.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToContainText()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToContainTextAsync("777").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToContainText_With_Regex()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        await button.WaitNotToContainTextAsync(new Regex("^7.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    {
+        var button = await GetButtonAsync("default").ConfigureAwait(false);
+
+        await button.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await button.ButtonLocator.FocusAsync().ConfigureAwait(false);
+        await button.WaitToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    private async Task<Button> GetButtonAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"button--{storyName}")).ConfigureAwait(false);
+        return new Button(Page.GetByTestId("ButtonId"));
     }
 }

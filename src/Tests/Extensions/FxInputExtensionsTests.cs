@@ -106,7 +106,7 @@ public class FxInputExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
         var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
 
-        await fxInput.WaitValueAsync("TODO").ConfigureAwait(false);
+        await fxInput.WaitToHaveValueAsync("TODO").ConfigureAwait(false);
     }
 
     [Test]
@@ -115,7 +115,7 @@ public class FxInputExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
         var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
 
-        await fxInput.WaitValueAbsenceAsync().ConfigureAwait(false);
+        await fxInput.WaitToBeEmptyAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -124,7 +124,7 @@ public class FxInputExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
         var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
 
-        await fxInput.WaitEnabledAsync().ConfigureAwait(false);
+        await fxInput.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -133,6 +133,6 @@ public class FxInputExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("fxinput--disabled")).ConfigureAwait(false);
         var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
 
-        await fxInput.WaitDisabledAsync().ConfigureAwait(false);
+        await fxInput.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 }

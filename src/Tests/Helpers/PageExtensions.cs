@@ -5,5 +5,5 @@ namespace Playwright.ReactUI.Tests.Helpers;
 public static class PageExtensions
 {
     public static IPageAssertions Expect(this IPage page)
-        => Assertions.Expect(page);
+        => Microsoft.Playwright.Assertions.Expect(page);
 }

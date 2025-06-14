@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Constants;
@@ -7,35 +7,15 @@ namespace Playwright.ReactUI.Controls.Extensions;
 
 public static class TabExtensions
 {
-    [Obsolete("Use WaitToBeEnabledAsync")]
-    public static async Task WaitEnabledAsync(
-        this Tab tab,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.WaitToBeEnabledAsync(options).ConfigureAwait(false);
-
-    [Obsolete("Use WaitToBeDisabledAsync")]
-    public static async Task WaitDisabledAsync(
-        this Tab tab,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.WaitToBeDisabledAsync(options).ConfigureAwait(false);
-
     public static async Task WaitToBeEnabledAsync(
         this Tab tab,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.ExpectV2().ToBeEnabledAsync(options).ConfigureAwait(false);
+        LocatorAssertionsToHaveAttributeOptions? options = default
+    ) => await tab.ExpectV2().ToBeEnabledAsync(options).ConfigureAwait(false);
 
     public static async Task WaitToBeDisabledAsync(
         this Tab tab,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.ExpectV2().ToBeDisabledAsync(options).ConfigureAwait(false);
-
-    [Obsolete("Use WaitToBeActiveAsync")]
-    public static async Task WaitActiveAsync(this Tab tab, LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.WaitToBeActiveAsync(options).ConfigureAwait(false);
-
-    [Obsolete("Use WaitToBeInactiveAsync")]
-    public static async Task WaitInactiveAsync(this Tab tab, LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.WaitToBeInactiveAsync(options).ConfigureAwait(false);
+        LocatorAssertionsToHaveAttributeOptions? options = default
+    ) => await tab.ExpectV2().ToBeDisabledAsync(options).ConfigureAwait(false);
 
     public static async Task WaitToHaveTextAsync(
         this Tab tab,
@@ -49,6 +29,18 @@ public static class TabExtensions
         LocatorAssertionsToHaveTextOptions? options = default
     ) => await tab.ExpectV2().NotToHaveTextAsync(text, options).ConfigureAwait(false);
 
+    public static async Task WaitToHaveTextAsync(
+        this Tab tab,
+        Regex regex,
+        LocatorAssertionsToHaveTextOptions? options = default
+    ) => await tab.ExpectV2().ToHaveTextAsync(regex, options).ConfigureAwait(false);
+
+    public static async Task WaitNotToHaveTextAsync(
+        this Tab tab,
+        Regex regex,
+        LocatorAssertionsToHaveTextOptions? options = default
+    ) => await tab.ExpectV2().NotToHaveTextAsync(regex, options).ConfigureAwait(false);
+
     public static async Task WaitToContainTextAsync(
         this Tab tab,
         string text,
@@ -60,6 +52,18 @@ public static class TabExtensions
         string text,
         LocatorAssertionsToContainTextOptions? options = default
     ) => await tab.ExpectV2().NotToContainTextAsync(text, options).ConfigureAwait(false);
+
+    public static async Task WaitToContainTextAsync(
+        this Tab tab,
+        Regex regex,
+        LocatorAssertionsToContainTextOptions? options = default
+    ) => await tab.ExpectV2().ToContainTextAsync(regex, options).ConfigureAwait(false);
+
+    public static async Task WaitNotToContainTextAsync(
+        this Tab tab,
+        Regex regex,
+        LocatorAssertionsToContainTextOptions? options = default
+    ) => await tab.ExpectV2().NotToContainTextAsync(regex, options).ConfigureAwait(false);
 
     public static async Task WaitToBeFocusedAsync(
         this Tab tab,
@@ -73,11 +77,11 @@ public static class TabExtensions
 
     public static async Task WaitToBeActiveAsync(
         this Tab tab,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.ExpectV2().ToHaveAttributeAsync(DataVisualState.Active, options: options).ConfigureAwait(false);
+        LocatorAssertionsToHaveAttributeOptions? options = default
+    ) => await tab.ExpectV2().ToHaveAttributeAsync(DataVisualState.Active, options: options).ConfigureAwait(false);
 
     public static async Task WaitToBeInactiveAsync(
         this Tab tab,
-        LocatorAssertionsToHaveAttributeOptions? options = default)
-        => await tab.ExpectV2().NotToHaveAttributeAsync(DataVisualState.Active, options: options).ConfigureAwait(false);
+        LocatorAssertionsToHaveAttributeOptions? options = default
+    ) => await tab.ExpectV2().NotToHaveAttributeAsync(DataVisualState.Active, options: options).ConfigureAwait(false);
 }

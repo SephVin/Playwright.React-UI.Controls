@@ -4,11 +4,11 @@ using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
-using Playwright.ReactUI.Controls.Helpers;
+using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class Tab : ControlBase
+public class Tab : ControlBase, IFocusable
 {
     public Tab(ILocator rootLocator)
         : base(rootLocator)

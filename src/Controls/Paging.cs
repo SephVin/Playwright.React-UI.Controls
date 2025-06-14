@@ -45,13 +45,15 @@ public class Paging : ControlBase
         try
         {
             var page = await Pages
-                .GetItemAsync(async x => (await x.GetTextAsync().ConfigureAwait(false)).Equals(pageNumber.ToString()))
+                .GetItemAsync(
+                    async x => (await x.GetTextAsync().ConfigureAwait(false)).Equals(pageNumber.ToString()),
+                    (int)(options?.Timeout ?? 10000f))
                 .ConfigureAwait(false);
             await page.ClickAsync(options).ConfigureAwait(false);
         }
-        catch (InvalidOperationException)
+        catch (TimeoutException)
         {
-            throw new InvalidOperationException($"Page with number {pageNumber} is not visible or exist");
+            throw new TimeoutException($"Page with number {pageNumber} is not visible or exist");
         }
     }
 

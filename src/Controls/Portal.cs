@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -22,6 +24,7 @@ public class Portal : ControlBase
 
     private async Task<string> GetContainerIdAsync()
     {
+        await RootLocator.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
         var containerId = await GetAttributeValueAsync("data-render-container-id").ConfigureAwait(false);
 
         if (containerId == null)
@@ -31,4 +34,6 @@ public class Portal : ControlBase
 
         return containerId;
     }
+
+    public new PortalAssertionsV2 ExpectV2() => new(this);
 }

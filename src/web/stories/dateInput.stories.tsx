@@ -1,80 +1,112 @@
-import React, { useState } from "react";
-import { DateInput, Gapped } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import {
+  DateInput,
+  DateInputProps,
+  DatePicker,
+  Gapped,
+  Tooltip,
+} from "@skbkontur/react-ui";
+import React, { useEffect, useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react";
 
-export default {
+export enum DateInputTestIds {
+  DateInputId = "DateInputId",
+}
+
+const DateInputTemplate = (props: DateInputProps) => {
+  const [value, setValue] = useState(props.value);
+
+  return (
+    <Gapped>
+      <DateInput
+        {...props}
+        data-attribute-without-value={""}
+        data-tid={DateInputTestIds.DateInputId}
+        value={value}
+        onValueChange={setValue}
+      />
+    </Gapped>
+  );
+};
+
+const meta: Meta<typeof DateInputTemplate> = {
   title: "DateInput",
-} as Meta;
+  component: DateInputTemplate,
+};
+export default meta;
 
-export const Default = () => {
-  const [value, setValue] = useState("");
+type Story = StoryObj<typeof meta>;
 
-  return (
-    <Gapped>
-      <DateInput
-        data-tid="DateInputId"
-        value={value}
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+export const Default: Story = {};
+
+export const Disabled: Story = {
+  args: {
+    ...Default.args,
+    disabled: true,
+  },
 };
 
-export const Disabled = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <DateInput
-        data-tid="DateInputId"
-        value={value}
-        onValueChange={setValue}
-        disabled
-      />
-    </Gapped>
-  );
+export const Error: Story = {
+  args: {
+    ...Default.args,
+    error: true,
+  },
 };
 
-export const Error = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <DateInput
-        data-tid="DateInputId"
-        value={value}
-        onValueChange={setValue}
-        error
-      />
-    </Gapped>
-  );
+export const Warning: Story = {
+  args: {
+    ...Default.args,
+    warning: true,
+  },
 };
 
-export const Warning = () => {
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <DateInput
-        data-tid="DateInputId"
-        value={value}
-        onValueChange={setValue}
-        warning
-      />
-    </Gapped>
-  );
+export const Filled: Story = {
+  args: {
+    ...Default.args,
+    value: "01.01.2024",
+  },
 };
 
-export const Filled = () => {
-  const [value, setValue] = useState("24.08.2022");
+export const Hidden: Story = {
+  render: () => {
+    const [value, setValue] = useState("");
+    const [isVisible, setIsVisible] = useState(true);
 
-  return (
-    <Gapped>
-      <DateInput
-        data-tid="DateInputId"
-        value={value}
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Gapped>
+        {isVisible && (
+          <DatePicker
+            data-tid={DateInputTestIds.DateInputId}
+            value={value}
+            onValueChange={setValue}
+          />
+        )}
+      </Gapped>
+    );
+  },
+};
+
+export const WithTooltip: Story = {
+  render: () => {
+    const [value, setValue] = useState("");
+
+    return (
+      <Gapped>
+        <Tooltip render={() => <div>TooltipText</div>}>
+          <DatePicker
+            data-tid={DateInputTestIds.DateInputId}
+            value={value}
+            onValueChange={setValue}
+          />
+        </Tooltip>
+      </Gapped>
+    );
+  },
 };

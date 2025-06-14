@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
-using Playwright.ReactUI.Controls.Helpers;
+using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -33,29 +34,19 @@ public class DropdownMenu : ControlBase, IFocusable
     public async Task SelectFirstByTextAsync(string text, bool isMenuClosedAfterSelect = true)
     {
         var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
-        await item.First.ClickAsync().ConfigureAwait(false);
-
-        if (isMenuClosedAfterSelect)
-        {
-            await portal.Expect().ToHaveCountAsync(0).ConfigureAwait(false);
-        }
+        await SelectFirstByTextAsync(item, isMenuClosedAfterSelect).ConfigureAwait(false);
     }
 
-    public async Task SelectByIndexAsync(int index, bool isMenuClosedAfterSelect = true)
+    public async Task SelectFirstByTextAsync(Regex regex, bool isMenuClosedAfterSelect = true)
     {
-        var items = await GetMenuItemsLocatorAsync(null).ConfigureAwait(false);
-        await items.Nth(index).ClickAsync().ConfigureAwait(false);
-
-        if (isMenuClosedAfterSelect)
-        {
-            await portal.Expect().ToHaveCountAsync(0).ConfigureAwait(false);
-        }
+        var item = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
+        await SelectFirstByTextAsync(item, isMenuClosedAfterSelect).ConfigureAwait(false);
     }
 
     public async Task SelectByDataTidAsync(string dataTid, bool isMenuClosedAfterSelect = true)
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        var item = container.Locator($"[data-tid='{dataTid}]");
+        var item = container.Locator($"[data-tid='{dataTid}']");
 
         if (await item.CountAsync().ConfigureAwait(false) > 1)
         {
@@ -66,15 +57,25 @@ public class DropdownMenu : ControlBase, IFocusable
 
         if (isMenuClosedAfterSelect)
         {
-            await portal.Expect().ToHaveCountAsync(0).ConfigureAwait(false);
+            // note: ожидание закрытия меню, чтобы не было гонок
+            await portal.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
+        }
+    }
+
+    public async Task SelectByIndexAsync(int index, bool isMenuClosedAfterSelect = true)
+    {
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        await items.Nth(index).ClickAsync().ConfigureAwait(false);
+
+        if (isMenuClosedAfterSelect)
+        {
+            // note: ожидание закрытия меню, чтобы не было гонок
+            await portal.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
         }
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
-
-    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
-        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
     public async Task FocusAsync()
     {
@@ -84,6 +85,9 @@ public class DropdownMenu : ControlBase, IFocusable
 
     public async Task BlurAsync()
         => await ButtonLocator.BlurAsync().ConfigureAwait(false);
+
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
     public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
@@ -101,22 +105,35 @@ public class DropdownMenu : ControlBase, IFocusable
         );
     }
 
+    [Obsolete("Используй ToContainItems из DropdownAssertionsV2. Или WaitToContainItems из Control.Extensions")]
     public async Task WaitItemWithTextAsync(string text)
     {
         var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
         await item.Expect().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
-    public override ILocatorAssertions Expect() => new DropdownMenuAssertions(RootLocator.Expect(), ButtonLocator.Expect());
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
+    public override ILocatorAssertions Expect()
+        => new DropdownMenuAssertions(RootLocator.Expect(), ButtonLocator.Expect());
 
-    private async Task<ILocator> GetMenuItemsLocatorAsync(string? byText)
+    public new DropdownMenuAssertionsV2 ExpectV2() => new(this);
+
+    private async Task<ILocator> GetMenuItemsLocatorAsync(string byText)
     {
-        var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        var items = container.Locator("[data-tid='MenuItem__root']");
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        return items.GetByText(byText);
+    }
 
-        return byText == null
-            ? items
-            : items.GetByText(byText);
+    private async Task<ILocator> GetMenuItemsLocatorAsync(Regex regex)
+    {
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        return items.GetByText(regex);
+    }
+
+    private async Task<ILocator> GetMenuItemsLocatorAsync()
+    {
+        var portalContainer = await GetPortalContainerAsync().ConfigureAwait(false);
+        return portalContainer.Locator("[data-tid='MenuItem__root']");
     }
 
     private async Task<ILocator> GetPortalContainerAsync()
@@ -130,6 +147,17 @@ public class DropdownMenu : ControlBase, IFocusable
         if (!await IsMenuOpenedAsync().ConfigureAwait(false))
         {
             await ButtonLocator.ClickAsync().ConfigureAwait(false);
+        }
+    }
+
+    private async Task SelectFirstByTextAsync(ILocator item, bool isMenuClosedAfterSelect = true)
+    {
+        await item.First.ClickAsync().ConfigureAwait(false);
+
+        if (isMenuClosedAfterSelect)
+        {
+            // note: ожидание закрытия меню, чтобы не было гонок
+            await portal.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
         }
     }
 }

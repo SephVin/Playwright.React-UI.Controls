@@ -94,7 +94,7 @@ public class PagingTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
         var paging = new Paging(Page.GetByTestId("PagingId"));
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => paging.GoToPageAsync(6));
+        Assert.ThrowsAsync<TimeoutException>(() => paging.GoToPageAsync(6));
     }
 
     [Test]
@@ -103,7 +103,7 @@ public class PagingTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
         var paging = new Paging(Page.GetByTestId("PagingId"));
 
-        Assert.ThrowsAsync<InvalidOperationException>(() => paging.GoToPageAsync(777));
+        Assert.ThrowsAsync<TimeoutException>(() => paging.GoToPageAsync(777));
     }
 
     [Test]

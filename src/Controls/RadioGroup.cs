@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
-using Playwright.ReactUI.Controls.Helpers;
+using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -23,20 +24,8 @@ public class RadioGroup : ControlBase
     public async Task<IReadOnlyList<Radio>> GetItemsAsync()
         => await list.GetItemsAsync().ConfigureAwait(false);
 
-    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
-    {
-        var radioList = await list.GetItemsAsync().ConfigureAwait(false);
-
-        foreach (var radio in radioList)
-        {
-            if (await radio.IsDisabledAsync(options).ConfigureAwait(false) == false)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
+        => await GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) != null;
 
     public async Task CheckByValueAsync(string value)
     {
@@ -79,4 +68,6 @@ public class RadioGroup : ControlBase
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
+
+    public new RadioGroupAssertionsV2 ExpectV2() => new(this);
 }
