@@ -191,7 +191,7 @@ public sealed class InputTests : TestsBase
     }
 
     [Test]
-    public async Task Clear_Existing_Value()
+    public async Task Clear()
     {
         var input = await GetInputAsync("filled").ConfigureAwait(false);
         await input.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
