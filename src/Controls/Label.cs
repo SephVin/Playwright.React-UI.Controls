@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Providers;
 
@@ -17,4 +18,6 @@ public class Label : ControlBase
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
+
+    public new LabelAssertionsV2 ExpectV2() => new(this);
 }
