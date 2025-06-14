@@ -25,7 +25,7 @@ public sealed class InputTests : TestsBase
     public async Task IsVisible_Return_False_When_Input_Is_Not_Exist()
     {
         var visibleInput = await GetInputAsync("default").ConfigureAwait(false);
-        var notExistingInput = new CurrencyInput(Page.GetByTestId("HiddenInput"));
+        var notExistingInput = new Input(Page.GetByTestId("HiddenInput"));
         await visibleInput.WaitForAsync().ConfigureAwait(false);
 
         var actual = await notExistingInput.IsVisibleAsync().ConfigureAwait(false);

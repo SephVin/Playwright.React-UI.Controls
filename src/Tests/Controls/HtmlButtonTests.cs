@@ -25,7 +25,7 @@ public class HtmlButtonTests : TestsBase
     public async Task IsVisible_Return_False_When_HtmlButton_Is_Not_Exists()
     {
         var visibleHtmlButton = await GetHtmlButtonAsync("default").ConfigureAwait(false);
-        var notExistingHtmlButton = new Button(Page.GetByTestId("HiddenHtmlButton"));
+        var notExistingHtmlButton = new HtmlButton(Page.GetByTestId("HiddenHtmlButton"));
         await visibleHtmlButton.WaitForAsync().ConfigureAwait(false);
 
         var actual = await notExistingHtmlButton.IsVisibleAsync().ConfigureAwait(false);

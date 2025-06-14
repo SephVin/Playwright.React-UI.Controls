@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
@@ -44,5 +45,8 @@ public class Radio : ControlBase, IFocusable
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new RadioAssertions(RootLocator.Expect(), InputLocator.Expect());
+
+    public new RadioAssertionsV2 ExpectV2() => new(this);
 }

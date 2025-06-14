@@ -27,7 +27,7 @@ public class DropdownMenuTests : TestsBase
     public async Task IsVisible_Return_False_When_DropdownMenu_Is_Not_Exists()
     {
         var visibleDropdownMenu = await GetDropdownMenuAsync("default").ConfigureAwait(false);
-        var notExistingDropdownMenu = new Button(Page.GetByTestId("HiddenDropdownMenu"));
+        var notExistingDropdownMenu = new DropdownMenu(Page.GetByTestId("HiddenDropdownMenu"));
         await visibleDropdownMenu.WaitForAsync().ConfigureAwait(false);
 
         var actual = await notExistingDropdownMenu.IsVisibleAsync().ConfigureAwait(false);

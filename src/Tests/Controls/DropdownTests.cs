@@ -27,7 +27,7 @@ public class DropdownTests : TestsBase
     public async Task IsVisible_Return_False_When_Dropdown_Is_Not_Exists()
     {
         var visibleDropdown = await GetDropdownAsync("default").ConfigureAwait(false);
-        var notExistingDropdown = new Button(Page.GetByTestId("HiddenDropdown"));
+        var notExistingDropdown = new Dropdown(Page.GetByTestId("HiddenDropdown"));
         await visibleDropdown.WaitForAsync().ConfigureAwait(false);
 
         var actual = await notExistingDropdown.IsVisibleAsync().ConfigureAwait(false);

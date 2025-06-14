@@ -23,7 +23,7 @@ public class LoaderTests : TestsBase
     public async Task IsVisible_Return_False_When_Loader_Is_Not_Exists()
     {
         var visibleLoader = await GetLoaderAsync("default").ConfigureAwait(false);
-        var notExistingLoader = new Button(Page.GetByTestId("HiddenLoader"));
+        var notExistingLoader = new Loader(Page.GetByTestId("HiddenLoader"));
         await visibleLoader.WaitForAsync().ConfigureAwait(false);
 
         var actual = await notExistingLoader.IsVisibleAsync().ConfigureAwait(false);
