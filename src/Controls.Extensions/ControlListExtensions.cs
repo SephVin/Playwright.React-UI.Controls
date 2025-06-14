@@ -48,6 +48,7 @@ public static class ControlListExtensions
         return await controlList.GetFirstItemAsync().ConfigureAwait(false);
     }
 
+    [Obsolete("Используй GetItemAsync из ControlList")]
     public static async Task<T> GetSingleItemAsync<T>(
         this ControlList<T> controlList,
         Func<T, Task<bool>> predicate,

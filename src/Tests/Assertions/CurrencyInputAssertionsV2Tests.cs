@@ -10,8 +10,8 @@ public class CurrencyInputAssertionsV2Tests : TestsBase
     [Test]
     public async Task ToBeVisible()
     {
-        var button = await GetCurrencyInputAsync("default").ConfigureAwait(false);
-        await button.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

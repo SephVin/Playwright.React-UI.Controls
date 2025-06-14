@@ -10,8 +10,8 @@ public class InputAssertionsV2Tests : TestsBase
     [Test]
     public async Task ToBeVisible()
     {
-        var button = await GetInputAsync("default").ConfigureAwait(false);
-        await button.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
+        var input = await GetInputAsync("default").ConfigureAwait(false);
+        await input.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

@@ -114,7 +114,6 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
-    [Obsolete("Используй GetSingleItemAsync из Controls.Extensions. В будущем этот метод будет удален")]
     public async Task<TItem> GetItemAsync(Func<TItem, Task<bool>> predicate, int timeoutInMilliseconds = 10000)
     {
         var list = await GetItemsAsync(predicate, timeoutInMilliseconds).ConfigureAwait(false);

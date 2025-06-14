@@ -11,8 +11,8 @@ public class CurrencyInputExtensionsTests : TestsBase
     [Test]
     public async Task WaitToBeVisible()
     {
-        var button = await GetCurrencyInputAsync("default").ConfigureAwait(false);
-        await button.WaitToBeVisibleAsync().ConfigureAwait(false);
+        var currencyInput = await GetCurrencyInputAsync("default").ConfigureAwait(false);
+        await currencyInput.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

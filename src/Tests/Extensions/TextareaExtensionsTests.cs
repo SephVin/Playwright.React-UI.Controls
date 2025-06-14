@@ -11,8 +11,8 @@ public class TextareaExtensionsTests : TestsBase
     [Test]
     public async Task WaitToBeVisible()
     {
-        var button = await GetTextareaAsync("default").ConfigureAwait(false);
-        await button.WaitToBeVisibleAsync().ConfigureAwait(false);
+        var textarea = await GetTextareaAsync("default").ConfigureAwait(false);
+        await textarea.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

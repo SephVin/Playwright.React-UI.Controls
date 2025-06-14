@@ -11,8 +11,8 @@ public sealed class InputExtensionsTests : TestsBase
     [Test]
     public async Task WaitToBeVisible()
     {
-        var button = await GetInputAsync("default").ConfigureAwait(false);
-        await button.WaitToBeVisibleAsync().ConfigureAwait(false);
+        var input = await GetInputAsync("default").ConfigureAwait(false);
+        await input.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

@@ -10,8 +10,8 @@ public class TextareaAssertionsV2Tests : TestsBase
     [Test]
     public async Task ToBeVisible()
     {
-        var button = await GetTextareaAsync("default").ConfigureAwait(false);
-        await button.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
+        var textarea = await GetTextareaAsync("default").ConfigureAwait(false);
+        await textarea.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]

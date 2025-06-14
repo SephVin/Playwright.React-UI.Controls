@@ -9,177 +9,204 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class AutocompleteExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitPresenceAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var visibleAutocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-        var notExistingAutocomplete = new Autocomplete(Page.GetByTestId("UnknownAutocompleteId"));
-        await visibleAutocomplete.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("hidden").ConfigureAwait(false);
+        await autocomplete.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingAutocomplete.WaitAbsenceAsync().ConfigureAwait(false);
+        await autocomplete.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--error")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitErrorAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("disabled").ConfigureAwait(false);
+        await autocomplete.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--warning")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitWarningAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("error").ConfigureAwait(false);
+        await autocomplete.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task AppendText_When_Autocomplete_Is_Empty()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-        await autocomplete.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("warning").ConfigureAwait(false);
+        await autocomplete.WaitToHaveWarningAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task NotToHaveWarning()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitNotToHaveWarningAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitToHaveAttributeAsync("data-tid", "InputId").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue()
+    {
+        var autocomplete = await GetAutocompleteAsync("filled").ConfigureAwait(false);
+        await autocomplete.WaitToHaveValueAsync("TODO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue_After_Fill()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.FillAsync("TO").ConfigureAwait(false);
+
+        await autocomplete.WaitToHaveValueAsync("TO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNoToHaveValue()
+    {
+        var autocomplete = await GetAutocompleteAsync("filled").ConfigureAwait(false);
+        await autocomplete.WaitNoToHaveValueAsync("TO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNoToHaveValue_After_Fill()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.FillAsync("1").ConfigureAwait(false);
+
+        await autocomplete.WaitNoToHaveValueAsync("TO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeEmpty()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.WaitToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNoToBeEmpty()
+    {
+        var autocomplete = await GetAutocompleteAsync("filled").ConfigureAwait(false);
+        await autocomplete.WaitNoToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+
+        await autocomplete.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await autocomplete.InputLocator.FocusAsync().ConfigureAwait(false);
+        await autocomplete.WaitToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task AppendText_When_Input_Is_Empty()
+    {
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
         await autocomplete.AppendTextAsync("newValue").ConfigureAwait(false);
 
-        await autocomplete.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task AppendText_When_Autocomplete_Is_Not_Empty()
+    public async Task AppendText_When_Input_Is_Not_Empty()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--filled")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-        await autocomplete.Expect().ToHaveValueAsync("Resident Sleeper").ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("filled").ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await autocomplete.AppendTextAsync("a").ConfigureAwait(false);
 
-        // ReSharper disable once StringLiteralTypo
-        await autocomplete.Expect().ToHaveValueAsync("Resident Sleepera").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task FillAndSelectFirstSuggestion()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.FillAndSelectFirstSuggestionAsync("Grey").ConfigureAwait(false);
-
-        await autocomplete.Expect().ToHaveValueAsync("Grey Face").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task FillAndSelectSuggestionByIndex()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.FillAndSelectSuggestionByIndexAsync("Grey", 1).ConfigureAwait(false);
-
-        await autocomplete.Expect().ToHaveValueAsync("Grey Space").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task SelectFirstSuggestion()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-        await autocomplete.FillAsync("Grey").ConfigureAwait(false);
-
-        await autocomplete.SelectFirstSuggestionAsync().ConfigureAwait(false);
-
-        await autocomplete.Expect().ToHaveValueAsync("Grey Face").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task AppendTextAndSelectFirstSuggestion()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-        await autocomplete.FillAsync("Grey").ConfigureAwait(false);
-
-        await autocomplete.AppendTextAndSelectFirstSuggestionAsync(" F").ConfigureAwait(false);
-
-        await autocomplete.Expect().ToHaveValueAsync("Grey Face").ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("TODOa").ConfigureAwait(false);
     }
 
     [Test]
     public async Task FocusAndBlur()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-        await autocomplete.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
 
         await autocomplete.FocusAndBlurAsync().ConfigureAwait(false);
 
-        await autocomplete.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue()
+    public async Task FillAndSelectFirstSuggestion()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--filled")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
 
-        await autocomplete.WaitToHaveValueAsync("Resident Sleeper").ConfigureAwait(false);
+        await autocomplete.FillAndSelectFirstSuggestionAsync("Grey").ConfigureAwait(false);
+
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("Grey Face").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValueAbsence()
+    public async Task FillAndSelectSuggestion()
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
+        var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
 
-        await autocomplete.WaitToBeEmptyAsync().ConfigureAwait(false);
+        await autocomplete.FillAndSelectSuggestionAsync("Grey", 1).ConfigureAwait(false);
+
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("Grey Space").ConfigureAwait(false);
     }
 
-    [Test]
-    public async Task WaitEnabled()
+    private async Task<Autocomplete> GetAutocompleteAsync(string storyName)
     {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitToBeEnabledAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task WaitDisabled()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("autocomplete--disabled")).ConfigureAwait(false);
-        var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
-
-        await autocomplete.WaitToBeDisabledAsync().ConfigureAwait(false);
+        await Page.GotoAsync(StorybookUrl.Get($"autocomplete--{storyName}")).ConfigureAwait(false);
+        return new Autocomplete(Page.GetByTestId("AutocompleteId"));
     }
 }

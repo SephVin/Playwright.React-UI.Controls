@@ -107,17 +107,17 @@ public class KebabExpectTests : TestsBase
     public async Task ToHaveAttribute()
     {
         await Page.GotoAsync(StorybookUrl.Get("kebab--default")).ConfigureAwait(false);
-        var button = new Kebab(Page.GetByTestId("KebabId"));
+        var kebab = new Kebab(Page.GetByTestId("KebabId"));
 
-        await button.Expect().ToHaveAttributeAsync("data-tid", "KebabId").ConfigureAwait(false);
+        await kebab.Expect().ToHaveAttributeAsync("data-tid", "KebabId").ConfigureAwait(false);
     }
 
     [Test]
     public async Task NotToHaveAttribute()
     {
         await Page.GotoAsync(StorybookUrl.Get("kebab--default")).ConfigureAwait(false);
-        var button = new Kebab(Page.GetByTestId("KebabId"));
+        var kebab = new Kebab(Page.GetByTestId("KebabId"));
 
-        await button.Expect().Not.ToHaveAttributeAsync("data-tid", "not-KebabId").ConfigureAwait(false);
+        await kebab.Expect().Not.ToHaveAttributeAsync("data-tid", "not-KebabId").ConfigureAwait(false);
     }
 }

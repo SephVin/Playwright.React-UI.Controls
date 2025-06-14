@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Playwright;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Controls;
@@ -11,9 +13,8 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task IsVisible_Return_True_When_FxInput_Is_Visible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        await fxInput.WaitForAsync().ConfigureAwait(false);
 
         var actual = await fxInput.IsVisibleAsync().ConfigureAwait(false);
 
@@ -21,12 +22,11 @@ public class FxInputTests : TestsBase
     }
 
     [Test]
-    public async Task IsVisible_Return_False_When_FxInput_Is_Not_Exists()
+    public async Task IsVisible_Return_False_When_FxInput_Is_Not_Exist()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var visibleFxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        var notExistingFxInput = new FxInput(Page.GetByTestId("UnknownFxInputId"));
-        await visibleFxInput.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var visibleFxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        var notExistingFxInput = new FxInput(Page.GetByTestId("HiddenFxInput"));
+        await visibleFxInput.WaitForAsync().ConfigureAwait(false);
 
         var actual = await notExistingFxInput.IsVisibleAsync().ConfigureAwait(false);
 
@@ -36,8 +36,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task IsDisabled_Return_True_When_FxInput_Is_Disabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--disabled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("disabled").ConfigureAwait(false);
 
         var actual = await fxInput.IsDisabledAsync().ConfigureAwait(false);
 
@@ -47,8 +46,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task IsDisabled_Return_False_When_FxInput_Is_Enabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
 
         var actual = await fxInput.IsDisabledAsync().ConfigureAwait(false);
 
@@ -58,9 +56,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task IsAuto_Return_True_WHen_FxInput_In_AutoMode()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--auto")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("auto").ConfigureAwait(false);
 
         var actual = await fxInput.IsAutoAsync().ConfigureAwait(false);
 
@@ -68,11 +64,9 @@ public class FxInputTests : TestsBase
     }
 
     [Test]
-    public async Task IsAuto_Return_False_WHen_FxInput_In_AutoMode()
+    public async Task IsAuto_Return_False_When_FxInput_In_AutoMode()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
 
         var actual = await fxInput.IsAutoAsync().ConfigureAwait(false);
 
@@ -82,8 +76,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task HasError_Return_True_When_FxInput_With_Error()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--error")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("error").ConfigureAwait(false);
 
         var actual = await fxInput.HasErrorAsync().ConfigureAwait(false);
 
@@ -93,8 +86,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task HasError_Return_False_When_FxInput_Without_Error()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
 
         var actual = await fxInput.HasErrorAsync().ConfigureAwait(false);
 
@@ -104,8 +96,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task HasWarning_Return_True_When_FxInput_With_Warning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--warning")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("warning").ConfigureAwait(false);
 
         var actual = await fxInput.HasWarningAsync().ConfigureAwait(false);
 
@@ -115,8 +106,7 @@ public class FxInputTests : TestsBase
     [Test]
     public async Task HasWarning_Return_False_When_FxInput_Without_Warning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
 
         var actual = await fxInput.HasWarningAsync().ConfigureAwait(false);
 
@@ -124,33 +114,9 @@ public class FxInputTests : TestsBase
     }
 
     [Test]
-    public async Task Click_Should_Focus_Into_Input()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
-
-        await fxInput.ClickAsync().ConfigureAwait(false);
-
-        await fxInput.Expect().ToBeFocusedAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task GetValue_Return_Empty_When_FxInput_Is_Not_Filled()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-
-        var actual = await fxInput.GetValueAsync().ConfigureAwait(false);
-
-        actual.Should().BeEmpty();
-    }
-
-    [Test]
     public async Task GetValue_Return_Value_When_FxInput_Is_Filled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
 
         var actual = await fxInput.GetValueAsync().ConfigureAwait(false);
 
@@ -158,135 +124,216 @@ public class FxInputTests : TestsBase
     }
 
     [Test]
+    public async Task GetValue_Return_Empty_When_FxInput_Is_Not_Filled()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+
+        var actual = await fxInput.GetValueAsync().ConfigureAwait(false);
+
+        actual.Should().BeEmpty();
+    }
+
+    [Test]
     public async Task Fill_New_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
         await fxInput.FillAsync("newValue").ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
     }
 
     [Test]
     public async Task Fill_Rewrite_Existing_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await fxInput.FillAsync("newValue").ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
     }
 
     [Test]
     public async Task Fill_With_Empty_String()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await fxInput.FillAsync(string.Empty).ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task Press_Add_Char_When_FxInput_Is_Empty()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
         await fxInput.PressAsync("a").ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("a").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("a").ConfigureAwait(false);
     }
 
     [Test]
     public async Task Press_Add_Char_At_The_Beginning_Of_Existing_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await fxInput.PressAsync("a").ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("aTODO").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("aTODO").ConfigureAwait(false);
     }
 
     [Test]
     public async Task PressSequentially_New_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
         await fxInput.PressSequentiallyAsync("newValue").ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);
     }
 
     [Test]
     public async Task PressSequentially_Add_Value_At_The_Beginning_Of_Existing_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await fxInput.PressSequentiallyAsync("newValue").ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("newValueTODO").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("newValueTODO").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task Clear_Existing_Value()
+    public async Task Clear()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await fxInput.ClearAsync().ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync(string.Empty).ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task Focus()
+    public async Task Click()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+
+        await fxInput.ClickAsync().ConfigureAwait(false);
+
+        await fxInput.InputLocator.Expect().ToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Focus_And_Blur()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
 
         await fxInput.FocusAsync().ConfigureAwait(false);
-
-        await fxInput.Expect().ToBeFocusedAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task Blur()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--default")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.ClickAsync().ConfigureAwait(false);
-        await fxInput.Expect().ToBeFocusedAsync().ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToBeFocusedAsync().ConfigureAwait(false);
 
         await fxInput.BlurAsync().ConfigureAwait(false);
-
-        await fxInput.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task SetAuto_Should_Change_Value_On_Auto()
     {
-        await Page.GotoAsync(StorybookUrl.Get("fxinput--filled")).ConfigureAwait(false);
-        var fxInput = new FxInput(Page.GetByTestId("FxInputId"));
-        await fxInput.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        var fxInput = await GetFxInputAsync("filled").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
 
         await fxInput.SetAutoAsync().ConfigureAwait(false);
 
-        await fxInput.Expect().ToHaveValueAsync("auto").ConfigureAwait(false);
+        await fxInput.InputLocator.Expect().ToHaveValueAsync("auto").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task Hover()
+    {
+        var fxInput = await GetFxInputAsync("with-tooltip").ConfigureAwait(false);
+        await fxInput.WaitForAsync().ConfigureAwait(false);
+        var tooltipLocator = Page.GetByText("TooltipText");
+        await tooltipLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
+            .ConfigureAwait(false);
+
+        await fxInput.HoverAsync().ConfigureAwait(false);
+
+        await tooltipLocator.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task GetTooltip()
+    {
+        var fxInput = await GetFxInputAsync("with-tooltip").ConfigureAwait(false);
+        await fxInput.RootLocator.HoverAsync().ConfigureAwait(false);
+
+        var tooltip = await fxInput.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
+
+        await tooltip.RootLocator.Expect().ToHaveTextAsync("TooltipText").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task HasAttribute_Return_True_When_Attribute_Exist()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+
+        var actual = await fxInput.HasAttributeAsync("data-tid").ConfigureAwait(false);
+
+        actual.Should().BeTrue();
+    }
+
+    [Test]
+    public async Task HasAttribute_Return_False_When_Attribute_Not_Exist()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+
+        var actual = await fxInput.HasAttributeAsync("data-tid-2").ConfigureAwait(false);
+
+        actual.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task GetAttribute_Return_Attribute_Value_When_Attribute_Exist_With_Value()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+
+        var actual = await fxInput.GetAttributeValueAsync("data-tid").ConfigureAwait(false);
+
+        actual.Should().Be("FxInputId");
+    }
+
+    [Test]
+    public async Task GetAttribute_Return_Empty_When_Attribute_Exist_Without_Value()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+
+        var actual = await fxInput.GetAttributeValueAsync("data-attribute-without-value").ConfigureAwait(false);
+
+        actual.Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task GetAttribute_Return_Null_When_Attribute_Not_Exist()
+    {
+        var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
+
+        var actual = await fxInput.GetAttributeValueAsync("data-tid-2").ConfigureAwait(false);
+
+        actual.Should().BeNull();
+    }
+
+    private async Task<FxInput> GetFxInputAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"fxinput--{storyName}")).ConfigureAwait(false);
+        return new FxInput(Page.GetByTestId("FxInputId"));
     }
 }

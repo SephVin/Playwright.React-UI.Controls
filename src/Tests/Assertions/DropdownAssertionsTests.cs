@@ -125,17 +125,17 @@ public class DropdownAssertionsTests : TestsBase
     public async Task ToHaveText()
     {
         await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
-        var button = new Dropdown(Page.GetByTestId("DropdownId"));
+        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
 
-        await button.Expect().ToHaveTextAsync("TODO").ConfigureAwait(false);
+        await dropdown.Expect().ToHaveTextAsync("TODO").ConfigureAwait(false);
     }
 
     [Test]
     public async Task NotToHaveText()
     {
         await Page.GotoAsync(StorybookUrl.Get("dropdown--default")).ConfigureAwait(false);
-        var button = new Dropdown(Page.GetByTestId("DropdownId"));
+        var dropdown = new Dropdown(Page.GetByTestId("DropdownId"));
 
-        await button.Expect().Not.ToHaveTextAsync("Not-TODO").ConfigureAwait(false);
+        await dropdown.Expect().Not.ToHaveTextAsync("Not-TODO").ConfigureAwait(false);
     }
 }
