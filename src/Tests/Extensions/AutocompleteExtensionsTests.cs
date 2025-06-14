@@ -153,7 +153,7 @@ public class AutocompleteExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("autocomplete--filled")).ConfigureAwait(false);
         var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
 
-        await autocomplete.WaitValueAsync("Resident Sleeper").ConfigureAwait(false);
+        await autocomplete.WaitToHaveValueAsync("Resident Sleeper").ConfigureAwait(false);
     }
 
     [Test]
@@ -162,7 +162,7 @@ public class AutocompleteExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
         var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
 
-        await autocomplete.WaitValueAbsenceAsync().ConfigureAwait(false);
+        await autocomplete.WaitToBeEmptyAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -171,7 +171,7 @@ public class AutocompleteExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("autocomplete--default")).ConfigureAwait(false);
         var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
 
-        await autocomplete.WaitEnabledAsync().ConfigureAwait(false);
+        await autocomplete.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
@@ -180,6 +180,6 @@ public class AutocompleteExtensionsTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("autocomplete--disabled")).ConfigureAwait(false);
         var autocomplete = new Autocomplete(Page.GetByTestId("AutocompleteId"));
 
-        await autocomplete.WaitDisabledAsync().ConfigureAwait(false);
+        await autocomplete.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 }
