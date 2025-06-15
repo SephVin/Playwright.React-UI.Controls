@@ -33,7 +33,7 @@ public class PagingAssertionsV2 : ControlBaseAssertionsV2
             try
             {
                 var pageItem = await paging.Pages.GetLastItemAsync().ConfigureAwait(false);
-                var pageNumber = await pageItem.GetPageNumberAsync().ConfigureAwait(false);
+                var pageNumber = await pageItem.GetNumberAsync().ConfigureAwait(false);
 
                 if (pageNumber == count)
                 {
@@ -63,7 +63,7 @@ public class PagingAssertionsV2 : ControlBaseAssertionsV2
                     .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
                     .ConfigureAwait(false);
 
-                var pageNumber = await pageItem.GetPageNumberAsync().ConfigureAwait(false);
+                var pageNumber = await pageItem.GetNumberAsync().ConfigureAwait(false);
 
                 if (pageNumber == activePageNumber)
                 {

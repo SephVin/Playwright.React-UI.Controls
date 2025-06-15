@@ -8,7 +8,7 @@ using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class FxInput : ControlBase
+public class FxInput : ControlBase, IFocusable
 {
     public FxInput(ILocator rootLocator)
         : base(rootLocator)

@@ -71,10 +71,10 @@ public class PagingTests : TestsBase
         await paging.GoToPageAsync(8).ConfigureAwait(false);
 
         var lastPage = await paging.Pages.GetLastItemAsync().ConfigureAwait(false);
-        var pageNumber = await lastPage.GetPageNumberAsync().ConfigureAwait(false);
+        var pageNumber = await lastPage.GetNumberAsync().ConfigureAwait(false);
         pageNumber.Should().Be(8);
 
-        var isActivePage = await lastPage.IsActivePageAsync().ConfigureAwait(false);
+        var isActivePage = await lastPage.IsActiveAsync().ConfigureAwait(false);
         isActivePage.Should().BeTrue();
     }
 
@@ -108,7 +108,7 @@ public class PagingTests : TestsBase
         var secondPageItem = await paging.Pages
             .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
             .ConfigureAwait(false);
-        var secondPageNumber = await secondPageItem.GetPageNumberAsync().ConfigureAwait(false);
+        var secondPageNumber = await secondPageItem.GetNumberAsync().ConfigureAwait(false);
         secondPageNumber.Should().Be(2);
 
         await paging.GoToLastPageAsync().ConfigureAwait(false);
@@ -116,11 +116,11 @@ public class PagingTests : TestsBase
         var lastPageItem = await paging.Pages
             .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
             .ConfigureAwait(false);
-        var lastPageNumber = await lastPageItem.GetPageNumberAsync().ConfigureAwait(false);
+        var lastPageNumber = await lastPageItem.GetNumberAsync().ConfigureAwait(false);
         lastPageNumber.Should().Be(8);
 
-        (await secondPageItem.IsActivePageAsync().ConfigureAwait(false)).Should().BeFalse();
-        (await lastPageItem.IsActivePageAsync().ConfigureAwait(false)).Should().BeTrue();
+        (await secondPageItem.IsActiveAsync().ConfigureAwait(false)).Should().BeFalse();
+        (await lastPageItem.IsActiveAsync().ConfigureAwait(false)).Should().BeTrue();
     }
 
     [Test]
@@ -130,7 +130,7 @@ public class PagingTests : TestsBase
         var pageItem = await paging.Pages
             .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
             .ConfigureAwait(false);
-        var pageNumber = await pageItem.GetPageNumberAsync().ConfigureAwait(false);
+        var pageNumber = await pageItem.GetNumberAsync().ConfigureAwait(false);
         pageNumber.Should().Be(8);
 
         Assert.ThrowsAsync<InvalidOperationException>(() => paging.GoToLastPageAsync());
@@ -156,7 +156,7 @@ public class PagingTests : TestsBase
         var pageItem = await paging.Pages
             .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
             .ConfigureAwait(false);
-        var pageNumber = await pageItem.GetPageNumberAsync().ConfigureAwait(false);
+        var pageNumber = await pageItem.GetNumberAsync().ConfigureAwait(false);
         pageNumber.Should().Be(3);
     }
 

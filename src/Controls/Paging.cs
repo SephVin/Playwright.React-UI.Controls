@@ -32,7 +32,7 @@ public class Paging : ControlBase
 
         try
         {
-            return await lastPage.GetPageNumberAsync().ConfigureAwait(false);
+            return await lastPage.GetNumberAsync().ConfigureAwait(false);
         }
         catch (InvalidOperationException)
         {
@@ -65,7 +65,7 @@ public class Paging : ControlBase
 
         try
         {
-            var lastPageNumber = await lastPage.GetPageNumberAsync().ConfigureAwait(false);
+            var lastPageNumber = await lastPage.GetNumberAsync().ConfigureAwait(false);
             await CheckPageConstraintAsync(lastPageNumber).ConfigureAwait(false);
             await lastPage.ClickAsync(options).ConfigureAwait(false);
         }
@@ -81,7 +81,7 @@ public class Paging : ControlBase
             .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
             .ConfigureAwait(false);
 
-        return await pageItem.GetPageNumberAsync().ConfigureAwait(false);
+        return await pageItem.GetNumberAsync().ConfigureAwait(false);
     }
 
     public async Task GoToNextPageAsync(LocatorClickOptions? options = default)
@@ -110,15 +110,15 @@ public class Paging : ControlBase
 
 public class Page : Label
 {
-    public Page(ILocator rootLocator)
+    internal Page(ILocator rootLocator)
         : base(rootLocator)
     {
     }
 
-    public async Task<bool> IsActivePageAsync()
+    public async Task<bool> IsActiveAsync()
         => await GetAttributeValueAsync(DataVisualState.Active).ConfigureAwait(false) != null;
 
-    public async Task<int> GetPageNumberAsync()
+    public async Task<int> GetNumberAsync()
     {
         var pageNumber = await RootLocator.Locator("[data-tid='Paging__pageLink']").InnerTextAsync()
             .ConfigureAwait(false);

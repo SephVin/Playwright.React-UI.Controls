@@ -8,7 +8,7 @@ using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class CurrencyInput : ControlBase
+public class CurrencyInput : ControlBase, IFocusable
 {
     public CurrencyInput(ILocator rootLocator)
         : base(rootLocator)

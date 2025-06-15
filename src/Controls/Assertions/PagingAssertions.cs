@@ -144,7 +144,7 @@ public class PagingAssertions : ILocatorAssertions
             try
             {
                 var pageItem = await paging.Pages.GetLastItemAsync().ConfigureAwait(false);
-                var pageNumber = await pageItem.GetPageNumberAsync().ConfigureAwait(false);
+                var pageNumber = await pageItem.GetNumberAsync().ConfigureAwait(false);
 
                 if (pageNumber == count)
                 {
