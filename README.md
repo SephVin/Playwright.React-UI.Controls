@@ -4,7 +4,7 @@
 
 ### Как использовать  
 
-В качестве примера взят компонент [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input):  
+В качестве примера взят компонент [Input](https://tech.skbkontur.ru/kontur-ui/?path=/docs/react-ui_input-data-input--docs):  
 `<Input data-tid="InputId" />`
 
 **Инициализация**  
@@ -14,39 +14,61 @@
 `await input.FillAsync("newValue").ConfigureAwait(false);`  
 
 **Проверка**  
-`await input.Expect().ToHaveValueAsync("newValue").ConfigureAwait(false);`  
+`await input.ExpectV2().ToHaveValueAsync("newValue").ConfigureAwait(false);`  
 
 **Создание своего компонента**  
 ```
 public class Header : ControlBase
 {
-    public Header(ILocator context)
-        : base(context)
+    public Header(ILocator rootLocator)
+        : base(rootLocator)
     {
-        Input = new Input(context.GetByTestId("InputId"));
+        SomeInput = new Input(rootLocator.GetByTestId("InputId"));
     }
     
-    public Input Input { get; }
+    public Input SomeInput { get; }
 }
+```
+
+**Создание набора ассертов к своему компоненту**
+```
+public class HeaderAssertions : ControlBaseAssertionsV2
+{
+    private readonly Header header;
+    
+    public HeaderAssertions(Header header)
+        : base(header)
+    {
+        this.header = header;
+    }
+    
+    public async Task ToBeVisibleAsync()
+        => await header.RootLocator.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+}
+```
+
+Для "подключения" набора достаточно добавить к своему компоненту следующую строчку:
+```
+public new HeaderAssertions ExpectV2() => new(this);
 ```
 
 # Playwright.ReactUI.Controls.Extensions
 
-Библиотека предоставляет набор расширений к библиотеке **Playwright.ReactUI.Controls**
+Библиотека предоставляет набор расширений к **Playwright.ReactUI.Controls**
 
 ### Как использовать  
 
-**Примеры для компонента [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input):**  
+**Примеры для компонента [Input](https://tech.skbkontur.ru/kontur-ui/?path=/docs/react-ui_input-data-input--docs):**  
 
 + `await input.AppendTextAsync("newValue").ConfigureAwait(false);` - добавление значения `newValue` к уже существующему в Input  
-+ `await input.WaitPresenceAsync().ConfigureAwait(false);` - ожидание видимости компонента на странице  
-+ `await input.WaitValueAsync("TODO").ConfigureAwait(false);` - ожидание значения `TODO` в Input'e  
++ `await input.WaitToBeVisibleAsync().ConfigureAwait(false);` - ожидание видимости компонента на странице  
++ `await input.WaitToHaveValueAsync("TODO").ConfigureAwait(false);` - ожидание значения `TODO` в Input'e  
 
 # Минимальные требования
 
-+ netstandard2.1 / NET6
-+ Playwright 1.48.0
-+ @skbkontur/react-ui 4.22.5 (рекомендуется использовать последние версии)
++ netstandard2.0 / NET6
++ Playwright 1.51.0
++ @skbkontur/react-ui 4.25.2 (рекомендуется использовать последние версии)
 
 # Запуск Storybook
 

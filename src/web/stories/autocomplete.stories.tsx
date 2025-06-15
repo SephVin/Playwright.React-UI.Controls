@@ -1,90 +1,122 @@
-import React, { useState } from "react";
-import { Autocomplete, Gapped } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import React, { useEffect, useState } from "react";
+import { Autocomplete, Gapped, Tooltip } from "@skbkontur/react-ui";
+import { Meta, type StoryObj } from "@storybook/react";
 
-export default {
+export enum AutocompleteTestIds {
+  AutocompleteId = "AutocompleteId",
+}
+
+const meta: Meta<typeof Autocomplete> = {
   title: "Autocomplete",
-} as Meta;
+  component: Autocomplete,
+};
+export default meta;
 
-export const Default = () => {
-  const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
-  const [value, setValue] = useState("");
+type Story = StoryObj<typeof meta>;
 
-  return (
-    <Gapped>
-      <Autocomplete
-        data-tid="AutocompleteId"
-        source={items}
-        value={value}
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+export const Default: Story = {
+  render(args) {
+    const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
+    const [value, setValue] = useState("");
+
+    return (
+      <Gapped>
+        <Autocomplete
+          {...args}
+          data-attribute-without-value={""}
+          data-tid={AutocompleteTestIds.AutocompleteId}
+          source={items}
+          value={value}
+          onValueChange={setValue}
+        />
+      </Gapped>
+    );
+  },
 };
 
-export const Disabled = () => {
-  const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <Autocomplete
-        data-tid="AutocompleteId"
-        source={items}
-        value={value}
-        onValueChange={setValue}
-        disabled
-      />
-    </Gapped>
-  );
+export const Disabled: Story = {
+  ...Default,
+  args: {
+    disabled: true,
+  },
 };
 
-export const Error = () => {
-  const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <Autocomplete
-        data-tid="AutocompleteId"
-        source={items}
-        value={value}
-        onValueChange={setValue}
-        error
-      />
-    </Gapped>
-  );
+export const Error: Story = {
+  ...Default,
+  args: {
+    error: true,
+  },
 };
 
-export const Warning = () => {
-  const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
-  const [value, setValue] = useState("");
-
-  return (
-    <Gapped>
-      <Autocomplete
-        data-tid="AutocompleteId"
-        source={items}
-        value={value}
-        onValueChange={setValue}
-        warning
-      />
-    </Gapped>
-  );
+export const Warning: Story = {
+  ...Default,
+  args: {
+    warning: true,
+  },
 };
 
-export const Filled = () => {
-  const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
-  const [value, setValue] = useState("Resident Sleeper");
+export const Filled: Story = {
+  render: () => {
+    const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
+    const [value, setValue] = useState("Resident Sleeper");
 
-  return (
-    <Gapped>
-      <Autocomplete
-        data-tid="AutocompleteId"
-        source={items}
-        value={value}
-        onValueChange={setValue}
-      />
-    </Gapped>
-  );
+    return (
+      <Gapped>
+        <Autocomplete
+          data-tid={AutocompleteTestIds.AutocompleteId}
+          source={items}
+          value={value}
+          onValueChange={setValue}
+        />
+      </Gapped>
+    );
+  },
+};
+
+export const Hidden: Story = {
+  render: () => {
+    const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
+    const [value, setValue] = useState("");
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Gapped>
+        {isVisible && (
+          <Autocomplete
+            data-tid={AutocompleteTestIds.AutocompleteId}
+            source={items}
+            value={value}
+            onValueChange={setValue}
+          />
+        )}
+      </Gapped>
+    );
+  },
+};
+
+export const WithTooltip: Story = {
+  render: () => {
+    const items = ["Grey Face", "Grey Space", "Resident Sleeper"];
+    const [value, setValue] = useState("");
+    return (
+      <Gapped>
+        <Tooltip render={() => <div>TooltipText</div>}>
+          <Autocomplete
+            data-tid={AutocompleteTestIds.AutocompleteId}
+            source={items}
+            value={value}
+            onValueChange={setValue}
+          />
+        </Tooltip>
+      </Gapped>
+    );
+  },
 };

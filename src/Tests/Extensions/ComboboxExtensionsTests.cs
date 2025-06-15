@@ -9,94 +9,201 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class ComboBoxExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitPresenceAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
-        var visibleCombobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-        var notExistingCombobox = new Combobox(Page.GetByTestId("UnknownComboboxId"));
-        await visibleCombobox.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("hidden").ConfigureAwait(false);
+        await combobox.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingCombobox.WaitAbsenceAsync().ConfigureAwait(false);
+        await combobox.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--error")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitErrorAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("disabled").ConfigureAwait(false);
+        await combobox.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--warning")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitWarningAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("error").ConfigureAwait(false);
+        await combobox.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitEnabledAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("warning").ConfigureAwait(false);
+        await combobox.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitNotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--disabled")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitDisabledAsync().ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue()
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--filled")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
-
-        await combobox.WaitValueAsync("First").ConfigureAwait(false);
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitToHaveAttributeAsync("data-tid", "ComboBoxId").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValueAbsence()
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
     {
-        await Page.GotoAsync(StorybookUrl.Get("combobox--default")).ConfigureAwait(false);
-        var combobox = new Combobox(Page.GetByTestId("ComboBoxId"));
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
 
-        await combobox.WaitValueAbsenceAsync().ConfigureAwait(false);
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue_When_ComboBox_Is_Focused()
+    {
+        var combobox = await GetComboBoxAsync("filled").ConfigureAwait(false);
+        await combobox.RootLocator.ClickAsync().ConfigureAwait(false);
+
+        await combobox.WaitToHaveValueAsync("First").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue_When_ComboBox_Is_Not_Focused()
+    {
+        var combobox = await GetComboBoxAsync("filled").ConfigureAwait(false);
+
+        await combobox.WaitToHaveValueAsync("First").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveValue_When_ComboBox_Is_Focused()
+    {
+        var combobox = await GetComboBoxAsync("filled").ConfigureAwait(false);
+        await combobox.RootLocator.ClickAsync().ConfigureAwait(false);
+
+        await combobox.WaitNotToHaveValueAsync("Second").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveValue_When_ComboBox_Is_Not_Focused()
+    {
+        var combobox = await GetComboBoxAsync("filled").ConfigureAwait(false);
+
+        await combobox.WaitNotToHaveValueAsync("Second").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeEmpty_When_ComboBox_Is_Focused()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.RootLocator.ClickAsync().ConfigureAwait(false);
+
+        await combobox.WaitToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeEmpty_When_ComboBox_Is_Not_Focused()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+
+        await combobox.WaitToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToBeEmpty_When_Focused()
+    {
+        var combobox = await GetComboBoxAsync("filled").ConfigureAwait(false);
+        await combobox.RootLocator.ClickAsync().ConfigureAwait(false);
+
+        await combobox.WaitNotToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToBeEmpty_When_Not_Focused()
+    {
+        var combobox = await GetComboBoxAsync("filled").ConfigureAwait(false);
+
+        await combobox.WaitNotToBeEmptyAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+        await combobox.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await combobox.RootLocator.ClickAsync().ConfigureAwait(false);
+        await combobox.WaitToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeContainItems()
+    {
+        var combobox = await GetComboBoxAsync("loading").ConfigureAwait(false);
+
+        await combobox.WaitToBeContainItemsAsync(new[] { "First", "Third", "Fifth", "MenuItem" })
+            .ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task FillAndSelect()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+
+        await combobox.FillAndSelectAsync("First").ConfigureAwait(false);
+
+        await combobox.ExpectV2().ToHaveValueAsync("First").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task FillAndSelectFirst()
+    {
+        var combobox = await GetComboBoxAsync("default").ConfigureAwait(false);
+
+        await combobox.FillAndSelectFirstAsync("Fir").ConfigureAwait(false);
+
+        await combobox.ExpectV2().ToHaveValueAsync("First").ConfigureAwait(false);
+    }
+
+    private async Task<Combobox> GetComboBoxAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"combobox--{storyName}")).ConfigureAwait(false);
+        return new Combobox(Page.GetByTestId("ComboBoxId"));
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Controls.Extensions;
@@ -9,94 +10,203 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public sealed class CheckboxExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitPresenceAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
-        var visibleCheckbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-        var notExistingCheckbox = new Checkbox(Page.GetByTestId("UnknownCheckboxId"));
-        await visibleCheckbox.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("hidden").ConfigureAwait(false);
+        await checkbox.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingCheckbox.WaitAbsenceAsync().ConfigureAwait(false);
+        await checkbox.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--error")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitErrorAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("disabled").ConfigureAwait(false);
+        await checkbox.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--warning")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitWarningAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("error").ConfigureAwait(false);
+        await checkbox.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitChecked()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--checked")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitCheckedAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("warning").ConfigureAwait(false);
+        await checkbox.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitUnchecked()
+    public async Task WaitNotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitUncheckedAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToBeChecked()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--default")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
-
-        await checkbox.WaitEnabledAsync().ConfigureAwait(false);
+        var checkbox = await GetCheckboxAsync("checked").ConfigureAwait(false);
+        await checkbox.WaitToBeCheckedAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitToBeUnchecked()
     {
-        await Page.GotoAsync(StorybookUrl.Get("checkbox--disabled")).ConfigureAwait(false);
-        var checkbox = new Checkbox(Page.GetByTestId("CheckboxId"));
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToBeUncheckedAsync().ConfigureAwait(false);
+    }
 
-        await checkbox.WaitDisabledAsync().ConfigureAwait(false);
+    [Test]
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToHaveAttributeAsync("data-tid", "CheckboxId").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveText()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToHaveTextAsync("TODO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveText_With_Regex()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToHaveTextAsync(new Regex("^TO.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveText()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveTextAsync("TODO777").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveText_With_Regex()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveTextAsync(new Regex("^TOD1.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToContainText()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToContainTextAsync("DO").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToContainText_With_Regex()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitToContainTextAsync(new Regex("^T.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToContainText()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToContainTextAsync("777").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToContainText_With_Regex()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToContainTextAsync(new Regex("^7.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue()
+    {
+        var checkbox = await GetCheckboxAsync("with-value").ConfigureAwait(false);
+        await checkbox.WaitToHaveValueAsync("CheckboxValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveValue_With_Regex()
+    {
+        var checkbox = await GetCheckboxAsync("with-value").ConfigureAwait(false);
+        await checkbox.WaitToHaveValueAsync(new Regex("^Checkbox.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveValue()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveValueAsync("CheckboxValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveValue_With_Regex()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+        await checkbox.WaitNotToHaveValueAsync(new Regex("^Checkbox1.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    {
+        var checkbox = await GetCheckboxAsync("default").ConfigureAwait(false);
+
+        await checkbox.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await checkbox.InputLocator.FocusAsync().ConfigureAwait(false);
+        await checkbox.WaitToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    private async Task<Checkbox> GetCheckboxAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"checkbox--{storyName}")).ConfigureAwait(false);
+        return new Checkbox(Page.GetByTestId("CheckboxId"));
     }
 }

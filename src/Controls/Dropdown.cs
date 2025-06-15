@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
-using Playwright.ReactUI.Controls.Helpers;
+using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -39,16 +40,22 @@ public class Dropdown : ControlBase, IFocusable
         await item.First.ClickAsync().ConfigureAwait(false);
     }
 
+    public async Task SelectFirstByTextAsync(Regex regex)
+    {
+        var item = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
+        await item.First.ClickAsync().ConfigureAwait(false);
+    }
+
     public async Task SelectByIndexAsync(int index)
     {
-        var items = await GetMenuItemsLocatorAsync(null).ConfigureAwait(false);
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
         await items.Nth(index).ClickAsync().ConfigureAwait(false);
     }
 
     public async Task SelectByDataTidAsync(string dataTid)
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        var item = container.Locator($"[data-tid='{dataTid}]");
+        var item = container.Locator($"[data-tid='{dataTid}']");
 
         if (await item.CountAsync().ConfigureAwait(false) > 1)
         {
@@ -89,22 +96,34 @@ public class Dropdown : ControlBase, IFocusable
         );
     }
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
+    public override ILocatorAssertions Expect() => new DropdownAssertions(RootLocator.Expect(), ButtonLocator.Expect());
+
+    public new DropdownAssertionsV2 ExpectV2() => new(this);
+
+    [Obsolete("Используй ToContainItems из DropdownAssertionsV2. Или WaitToContainItems из Control.Extensions")]
     public async Task WaitItemWithTextAsync(string text)
     {
         var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
         await item.Expect().ToBeVisibleAsync().ConfigureAwait(false);
     }
 
-    public override ILocatorAssertions Expect() => new DropdownAssertions(RootLocator.Expect(), ButtonLocator.Expect());
-
-    private async Task<ILocator> GetMenuItemsLocatorAsync(string? byText)
+    private async Task<ILocator> GetMenuItemsLocatorAsync(string byText)
     {
-        var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        var items = container.Locator("[data-tid='MenuItem__root']");
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        return items.GetByText(byText);
+    }
 
-        return byText == null
-            ? items
-            : items.GetByText(byText);
+    private async Task<ILocator> GetMenuItemsLocatorAsync(Regex regex)
+    {
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        return items.GetByText(regex);
+    }
+
+    private async Task<ILocator> GetMenuItemsLocatorAsync()
+    {
+        var portalContainer = await GetPortalContainerAsync().ConfigureAwait(false);
+        return portalContainer.Locator("[data-tid='MenuItem__root']");
     }
 
     private async Task<ILocator> GetPortalContainerAsync()

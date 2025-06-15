@@ -7,7 +7,7 @@ public class DateRangePickerAssertionsV2 : ControlBaseAssertionsV2
     private readonly DateRangePicker dateRangePicker;
 
     public DateRangePickerAssertionsV2(DateRangePicker dateRangePicker)
-        : base(dateRangePicker.RootLocator)
+        : base(dateRangePicker)
     {
         this.dateRangePicker = dateRangePicker;
     }

@@ -1,169 +1,193 @@
-import React, { useState } from "react";
-import { FxInput, Gapped } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import React, { useEffect, useState } from "react";
+import { FxInput, Gapped, Tooltip } from "@skbkontur/react-ui";
+import type { Meta } from "@storybook/react";
+import { type StoryObj } from "@storybook/react";
 
-export default {
+export enum FxInputTestIds {
+  FxInputId = "FxInputId",
+}
+
+const meta: Meta<typeof FxInput> = {
   title: "FxInput",
-} as Meta;
+  component: FxInput,
+};
+export default meta;
 
-export const Default = () => {
-  const [auto, setAuto] = useState(false);
-  const [value, setValue] = useState("");
+type Story = StoryObj<typeof meta>;
 
-  function handleValueChange(value: any) {
-    setAuto(false);
-    setValue(value);
-  }
+export const Default: Story = {
+  render(args) {
+    const [auto, setAuto] = useState(false);
+    const [value, setValue] = useState("");
 
-  function handleRestore() {
-    setAuto(true);
-    setValue("auto");
-  }
+    function handleValueChange(value: string) {
+      setAuto(false);
+      setValue(value);
+    }
 
-  return (
-    <Gapped>
-      <FxInput
-        data-tid="FxInputId"
-        auto={auto}
-        value={value}
-        onValueChange={handleValueChange}
-        onRestore={handleRestore}
-      />
-    </Gapped>
-  );
+    function handleRestore() {
+      setAuto(true);
+      setValue("auto");
+    }
+
+    return (
+      <Gapped>
+        <FxInput
+          {...args}
+          data-tid={FxInputTestIds.FxInputId}
+          data-attribute-without-value={""}
+          auto={auto}
+          value={value}
+          onValueChange={handleValueChange}
+          onRestore={handleRestore}
+        />
+      </Gapped>
+    );
+  },
 };
 
-export const Disabled = () => {
-  const [auto, setAuto] = useState(false);
-  const [value, setValue] = useState("");
-
-  function handleValueChange(value: any) {
-    setAuto(false);
-    setValue(value);
-  }
-
-  function handleRestore() {
-    setAuto(true);
-    setValue("auto");
-  }
-
-  return (
-    <Gapped>
-      <FxInput
-        data-tid="FxInputId"
-        auto={auto}
-        value={value}
-        onValueChange={handleValueChange}
-        onRestore={handleRestore}
-        disabled
-      />
-    </Gapped>
-  );
+export const Disabled: Story = {
+  ...Default,
+  args: {
+    disabled: true,
+  },
 };
 
-export const Error = () => {
-  const [auto, setAuto] = useState(false);
-  const [value, setValue] = useState("");
-
-  function handleValueChange(value: any) {
-    setAuto(false);
-    setValue(value);
-  }
-
-  function handleRestore() {
-    setAuto(true);
-    setValue("auto");
-  }
-
-  return (
-    <Gapped>
-      <FxInput
-        data-tid="FxInputId"
-        auto={auto}
-        value={value}
-        onValueChange={handleValueChange}
-        onRestore={handleRestore}
-        error
-      />
-    </Gapped>
-  );
+export const Error: Story = {
+  ...Default,
+  args: {
+    error: true,
+  },
 };
 
-export const Warning = () => {
-  const [auto, setAuto] = useState(false);
-  const [value, setValue] = useState("");
-
-  function handleValueChange(value: any) {
-    setAuto(false);
-    setValue(value);
-  }
-
-  function handleRestore() {
-    setAuto(true);
-    setValue("auto");
-  }
-
-  return (
-    <Gapped>
-      <FxInput
-        data-tid="FxInputId"
-        auto={auto}
-        value={value}
-        onValueChange={handleValueChange}
-        onRestore={handleRestore}
-        warning
-      />
-    </Gapped>
-  );
+export const Warning: Story = {
+  ...Default,
+  args: {
+    warning: true,
+  },
 };
 
-export const Filled = () => {
-  const [auto, setAuto] = useState(false);
-  const [value, setValue] = useState("TODO");
+export const Filled: Story = {
+  render: () => {
+    const [auto, setAuto] = useState(false);
+    const [value, setValue] = useState("TODO");
 
-  function handleValueChange(value: any) {
-    setAuto(false);
-    setValue(value);
-  }
+    function handleValueChange(value: string) {
+      setAuto(false);
+      setValue(value);
+    }
 
-  function handleRestore() {
-    setAuto(true);
-    setValue("auto");
-  }
+    function handleRestore() {
+      setAuto(true);
+      setValue("auto");
+    }
 
-  return (
-    <Gapped>
-      <FxInput
-        data-tid="FxInputId"
-        auto={auto}
-        value={value}
-        onValueChange={handleValueChange}
-        onRestore={handleRestore}
-      />
-    </Gapped>
-  );
+    return (
+      <Gapped>
+        <FxInput
+          data-tid={FxInputTestIds.FxInputId}
+          auto={auto}
+          value={value}
+          onValueChange={handleValueChange}
+          onRestore={handleRestore}
+        />
+      </Gapped>
+    );
+  },
 };
 
-export const Auto = () => {
-  const [value, setValue] = useState("TODO");
+export const Auto: Story = {
+  render: () => {
+    const [value, setValue] = useState("TODO");
 
-  function handleValueChange(value: any) {
-    setValue(value);
-  }
+    function handleValueChange(value: string) {
+      setValue(value);
+    }
 
-  function handleRestore() {
-    setValue("auto");
-  }
+    function handleRestore() {
+      setValue("auto");
+    }
 
-  return (
-    <Gapped>
-      <FxInput
-        data-tid="FxInputId"
-        auto={true}
-        value={value}
-        onValueChange={handleValueChange}
-        onRestore={handleRestore}
-      />
-    </Gapped>
-  );
+    return (
+      <Gapped>
+        <FxInput
+          data-tid={FxInputTestIds.FxInputId}
+          auto={true}
+          value={value}
+          onValueChange={handleValueChange}
+          onRestore={handleRestore}
+        />
+      </Gapped>
+    );
+  },
+};
+
+export const Hidden: Story = {
+  render: () => {
+    const [isVisible, setIsVisible] = useState(true);
+    const [auto, setAuto] = useState(false);
+    const [value, setValue] = useState("");
+
+    function handleValueChange(value: string) {
+      setAuto(false);
+      setValue(value);
+    }
+
+    function handleRestore() {
+      setAuto(true);
+      setValue("auto");
+    }
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, []);
+
+    return (
+      <Gapped>
+        {isVisible && (
+          <FxInput
+            data-tid={FxInputTestIds.FxInputId}
+            auto={auto}
+            value={value}
+            onValueChange={handleValueChange}
+            onRestore={handleRestore}
+          />
+        )}
+      </Gapped>
+    );
+  },
+};
+
+export const WithTooltip: Story = {
+  render: () => {
+    const [auto, setAuto] = useState(false);
+    const [value, setValue] = useState("");
+
+    function handleValueChange(value: string) {
+      setAuto(false);
+      setValue(value);
+    }
+
+    function handleRestore() {
+      setAuto(true);
+      setValue("auto");
+    }
+    return (
+      <Gapped>
+        <Tooltip render={() => <div>TooltipText</div>}>
+          <FxInput
+            data-tid={FxInputTestIds.FxInputId}
+            auto={auto}
+            value={value}
+            onValueChange={handleValueChange}
+            onRestore={handleRestore}
+          />
+        </Tooltip>
+      </Gapped>
+    );
+  },
 };

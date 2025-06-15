@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
 using Playwright.ReactUI.Controls.Extensions;
@@ -8,155 +10,184 @@ namespace Playwright.ReactUI.Tests.Extensions;
 
 public class SelectExtensionsTests : TestsBase
 {
-    [Test]
-    public async Task WaitPresence_For_SelectButton()
+    private static IEnumerable<TestCaseData> SelectCases()
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitPresenceAsync().ConfigureAwait(false);
+        yield return new TestCaseData("button");
+        yield return new TestCaseData("link");
     }
 
     [Test]
-    public async Task WaitPresence_For_SelectLink()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToBeVisible(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitPresenceAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+        await select.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence_For_SelectButton()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var visibleSelect = new Select(Page.GetByTestId("SelectId"));
-        var notExistingSelect = new Select(Page.GetByTestId("UnknownSelectId"));
-        await visibleSelect.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync("hidden").ConfigureAwait(false);
+        await select.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingSelect.WaitAbsenceAsync().ConfigureAwait(false);
+        await select.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence_For_SelectLink()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToBeEnabled(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
-        var visibleSelect = new Select(Page.GetByTestId("SelectId"));
-        var notExistingSelect = new Select(Page.GetByTestId("UnknownSelectId"));
-        await visibleSelect.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        await notExistingSelect.WaitAbsenceAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+        await select.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitError()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToBeDisabled(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--error")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitErrorAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync($"disabled-{selectType}").ConfigureAwait(false);
+        await select.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitErrorAbsence()
+    public async Task WaitToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitErrorAbsenceAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync("error").ConfigureAwait(false);
+        await select.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarning()
+    public async Task WaitNotToHaveError()
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--warning")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitWarningAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync("default").ConfigureAwait(false);
+        await select.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitWarningAbsence()
+    public async Task WaitToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitWarningAbsenceAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync("warning").ConfigureAwait(false);
+        await select.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue_For_SelectButton_When_Value_Is_Selected()
+    public async Task WaitNotToHaveWarning()
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--filled-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitValueAsync("Two").ConfigureAwait(false);
+        var select = await GetSelectAsync("default").ConfigureAwait(false);
+        await select.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue_For_SelectLink_When_Value_Is_Selected()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToHaveAttribute_With_Attribute_Value(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--filled-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitValueAsync("Two").ConfigureAwait(false);
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+        await select.WaitToHaveAttributeAsync("data-tid", "SelectId").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue_For_SelectButton_When_Value_Is_Not_Selected()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        // ReSharper disable StringLiteralTypo
-        await select.WaitValueAsync("Ничего не выбрано").ConfigureAwait(false);
-        // ReSharper restore StringLiteralTypo
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+        await select.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitValue_For_SelectLink_When_Value_Is_Not_Selected()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        // ReSharper disable StringLiteralTypo
-        await select.WaitValueAsync("Ничего не выбрано").ConfigureAwait(false);
-        // ReSharper restore StringLiteralTypo
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+        await select.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled_For_SelectButton()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitEnabledAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+        await select.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled_For_SelectLink()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToHaveValue(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--default-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitEnabledAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitToHaveValueAsync("Two").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled_For_SelectButton()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToHaveValue_With_Regex(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--disabled-button")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
-
-        await select.WaitDisabledAsync().ConfigureAwait(false);
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitToHaveValueAsync(new Regex("^Tw.*")).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled_For_SelectLink()
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitNotToHaveValue(string selectType)
     {
-        await Page.GotoAsync(StorybookUrl.Get("select--disabled-link")).ConfigureAwait(false);
-        var select = new Select(Page.GetByTestId("SelectId"));
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitNotToHaveValueAsync("Three").ConfigureAwait(false);
+    }
 
-        await select.WaitDisabledAsync().ConfigureAwait(false);
+    [Test]
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitNotToHaveValue_With_Regex(string selectType)
+    {
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitNotToHaveValueAsync(new Regex("^Thr.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToContainValue(string selectType)
+    {
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitToContainValueAsync("Tw").ConfigureAwait(false);
+    }
+
+    [Test]
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToContainValue_With_Regex(string selectType)
+    {
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitToContainValueAsync(new Regex("^Tw.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitNotToContainValue(string selectType)
+    {
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitNotToContainValueAsync("Twos").ConfigureAwait(false);
+    }
+
+    [Test]
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitNotToContainValue_With_Regex(string selectType)
+    {
+        var select = await GetSelectAsync($"filled-{selectType}").ConfigureAwait(false);
+        await select.WaitNotToContainValueAsync(new Regex("^Twos.*")).ConfigureAwait(false);
+    }
+
+    [Test]
+    [TestCaseSource(nameof(SelectCases))]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused(string selectType)
+    {
+        var select = await GetSelectAsync($"default-{selectType}").ConfigureAwait(false);
+
+        await select.WaitNotToBeFocusedAsync().ConfigureAwait(false);
+
+        await select.ClickAsync().ConfigureAwait(false);
+        await select.WaitToBeFocusedAsync().ConfigureAwait(false);
+    }
+
+    private async Task<Select> GetSelectAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"select--{storyName}")).ConfigureAwait(false);
+        return new Select(Page.GetByTestId("SelectId"));
     }
 }

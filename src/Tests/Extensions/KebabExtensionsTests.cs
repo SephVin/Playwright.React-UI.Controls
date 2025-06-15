@@ -9,40 +9,47 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class KebabExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("kebab--default")).ConfigureAwait(false);
-        var kebab = new Kebab(Page.GetByTestId("KebabId"));
-
-        await kebab.WaitPresenceAsync().ConfigureAwait(false);
+        var kebab = await GetKebabAsync("default").ConfigureAwait(false);
+        await kebab.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("kebab--default")).ConfigureAwait(false);
-        var visibleKebab = new Kebab(Page.GetByTestId("KebabId"));
-        var notExistingKebab = new Kebab(Page.GetByTestId("UnknownKebabId"));
-        await visibleKebab.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var kebab = await GetKebabAsync("hidden").ConfigureAwait(false);
+        await kebab.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingKebab.WaitAbsenceAsync().ConfigureAwait(false);
+        await kebab.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("kebab--disabled")).ConfigureAwait(false);
-        var kebab = new Kebab(Page.GetByTestId("KebabId"));
-
-        await kebab.WaitDisabledAsync().ConfigureAwait(false);
+        var kebab = await GetKebabAsync("default").ConfigureAwait(false);
+        await kebab.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("kebab--default")).ConfigureAwait(false);
-        var kebab = new Kebab(Page.GetByTestId("KebabId"));
+        var kebab = await GetKebabAsync("disabled").ConfigureAwait(false);
+        await kebab.WaitToBeDisabledAsync().ConfigureAwait(false);
+    }
 
-        await kebab.WaitEnabledAsync().ConfigureAwait(false);
+    [Test]
+    public async Task WaitToContainItems()
+    {
+        var kebab = await GetKebabAsync("default").ConfigureAwait(false);
+
+        await kebab.WaitToContainItemsAsync(new[] { "TODO 1", "TODO 2" })
+            .ConfigureAwait(false);
+    }
+
+    private async Task<Kebab> GetKebabAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"kebab--{storyName}")).ConfigureAwait(false);
+        return new Kebab(Page.GetByTestId("KebabId"));
     }
 }

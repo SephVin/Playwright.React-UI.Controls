@@ -9,58 +9,80 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class PagingExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
-        await paging.WaitPresenceAsync().ConfigureAwait(false);
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var visiblePaging = new Paging(Page.GetByTestId("PagingId"));
-        var notExistingPaging = new Paging(Page.GetByTestId("UnknownPagingId"));
-        await visiblePaging.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var paging = await GetPagingAsync("hidden").ConfigureAwait(false);
+        await paging.WaitForAsync().ConfigureAwait(false);
 
-        await notExistingPaging.WaitAbsenceAsync().ConfigureAwait(false);
+        await paging.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitEnabled()
+    public async Task WaitToBeEnabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
-        await paging.WaitEnabledAsync().ConfigureAwait(false);
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitDisabled()
+    public async Task WaitToBeDisabled()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--disabled")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
-        await paging.WaitDisabledAsync().ConfigureAwait(false);
+        var paging = await GetPagingAsync("disabled").ConfigureAwait(false);
+        await paging.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitPageActive()
+    public async Task WaitActivePage()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
-        await paging.WaitPageActiveAsync(2).ConfigureAwait(false);
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitActivePageAsync(2).ConfigureAwait(false);
     }
 
     [Test]
     public async Task WaitPagesCount()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
         await paging.WaitPagesCountAsync(8).ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_With_Attribute_Value()
+    {
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitToHaveAttributeAsync("data-tid", "PagingId").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    {
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    {
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    {
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
+        await paging.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
+    }
+
+    private async Task<Paging> GetPagingAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"paging--{storyName}")).ConfigureAwait(false);
+        return new Paging(Page.GetByTestId("PagingId"));
     }
 }

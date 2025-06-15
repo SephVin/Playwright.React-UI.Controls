@@ -1,19 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using Playwright.ReactUI.Controls.Constants;
 
 namespace Playwright.ReactUI.Controls.Assertions;
 
 public class PagingAssertions : ILocatorAssertions
 {
+    private readonly Paging paging;
     private readonly ILocatorAssertions rootLocatorAssertions;
     private readonly ILocatorAssertions itemsLocatorAssertions;
 
     public PagingAssertions(
+        Paging paging,
         ILocatorAssertions rootLocatorAssertions,
         ILocatorAssertions itemsLocatorAssertions)
     {
+        this.paging = paging;
         this.rootLocatorAssertions = rootLocatorAssertions;
         this.itemsLocatorAssertions = itemsLocatorAssertions;
     }
@@ -26,8 +32,8 @@ public class PagingAssertions : ILocatorAssertions
 
     public async Task ToBeDisabledAsync(LocatorAssertionsToBeDisabledOptions? options = null)
         => await rootLocatorAssertions.ToHaveAttributeAsync(
-            "tabindex",
-            "-1",
+            DataVisualState.Disabled,
+            "",
             new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout }
         ).ConfigureAwait(false);
 
@@ -39,8 +45,8 @@ public class PagingAssertions : ILocatorAssertions
 
     public async Task ToBeEnabledAsync(LocatorAssertionsToBeEnabledOptions? options = null)
         => await rootLocatorAssertions.Not.ToHaveAttributeAsync(
-            "tabindex",
-            "-1",
+            DataVisualState.Disabled,
+            "",
             new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout }
         ).ConfigureAwait(false);
 
@@ -129,7 +135,32 @@ public class PagingAssertions : ILocatorAssertions
         => await rootLocatorAssertions.ToHaveClassAsync(expected, options).ConfigureAwait(false);
 
     public async Task ToHaveCountAsync(int count, LocatorAssertionsToHaveCountOptions? options = null)
-        => await rootLocatorAssertions.ToHaveAttributeAsync("data-pagescount", count.ToString()).ConfigureAwait(false);
+    {
+        var timeout = (int)(options?.Timeout ?? 10000f);
+        using var cts = new CancellationTokenSource(timeout);
+
+        while (true)
+        {
+            try
+            {
+                var pageItem = await paging.Pages.GetLastItemAsync().ConfigureAwait(false);
+                var pageNumber = await pageItem.GetNumberAsync().ConfigureAwait(false);
+
+                if (pageNumber == count)
+                {
+                    return;
+                }
+
+                await Task.Delay(100, cts.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+        }
+
+        throw new TimeoutException($"Не дождались определенного количества страница за {timeout}ms.");
+    }
 
     public async Task ToHaveCSSAsync(string name, string value, LocatorAssertionsToHaveCSSOptions? options = null)
         => await rootLocatorAssertions.ToHaveCSSAsync(name, value, options).ConfigureAwait(false);
@@ -183,5 +214,6 @@ public class PagingAssertions : ILocatorAssertions
         LocatorAssertionsToMatchAriaSnapshotOptions? options = null)
         => await rootLocatorAssertions.ToMatchAriaSnapshotAsync(expected, options).ConfigureAwait(false);
 
-    public ILocatorAssertions Not => new PagingAssertions(rootLocatorAssertions.Not, itemsLocatorAssertions.Not);
+    public ILocatorAssertions Not
+        => new PagingAssertions(paging, rootLocatorAssertions.Not, itemsLocatorAssertions.Not);
 }

@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
-using Playwright.ReactUI.Controls.Helpers;
+using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
@@ -23,25 +24,25 @@ public class Input : ControlBase, IFocusable
     public async Task<string> GetValueAsync(LocatorInputValueOptions? options = default)
         => await InputLocator.InputValueAsync(options).ConfigureAwait(false);
 
-    public virtual async Task FillAsync(string value, LocatorFillOptions? options = default)
+    public async Task FillAsync(string value, LocatorFillOptions? options = default)
     {
         await FocusAsync().ConfigureAwait(false);
         await ClearAsync().ConfigureAwait(false);
         await InputLocator.FillAsync(value, options).ConfigureAwait(false);
     }
 
-    public virtual async Task PressAsync(string value, LocatorPressOptions? options = default)
+    public async Task PressAsync(string value, LocatorPressOptions? options = default)
         => await InputLocator.PressAsync(value, options).ConfigureAwait(false);
 
-    public virtual async Task PressSequentiallyAsync(string value, LocatorPressSequentiallyOptions? options = default)
+    public async Task PressSequentiallyAsync(string value, LocatorPressSequentiallyOptions? options = default)
         => await InputLocator.PressSequentiallyAsync(value, options).ConfigureAwait(false);
 
-    public virtual async Task ClearAsync(LocatorClearOptions? options = default)
+    public async Task ClearAsync(LocatorClearOptions? options = default)
         => await InputLocator.ClearAsync(options).ConfigureAwait(false);
 
     public async Task FocusAsync()
     {
-        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await InputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
         await InputLocator.FocusAsync().ConfigureAwait(false);
     }
 
@@ -51,8 +52,11 @@ public class Input : ControlBase, IFocusable
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await InputLocator.ClickAsync(options).ConfigureAwait(false);
 
-    public virtual async Task<Tooltip> GetTooltipAsync(TooltipType type)
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new InputAssertions(RootLocator.Expect(), InputLocator.Expect());
+
+    public new InputAssertionsV2 ExpectV2() => new(this);
 }

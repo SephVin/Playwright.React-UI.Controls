@@ -10,131 +10,79 @@ namespace Playwright.ReactUI.Tests.Extensions;
 public class ControlListExtensionsTests : TestsBase
 {
     [Test]
-    public async Task WaitPresence()
+    public async Task WaitToBeVisible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-        await list.Expect().ToBeVisibleAsync().ConfigureAwait(false);
-
-        await list.WaitPresenceAsync().ConfigureAwait(false);
+        var list = await GetControlListAsync("default").ConfigureAwait(false);
+        await list.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitAbsence()
+    public async Task WaitToBeHidden()
     {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var visibleList = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-        var notExistList = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId2"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-        await visibleList.Expect().ToBeVisibleAsync().ConfigureAwait(false);
+        var list = await GetControlListAsync("hidden").ConfigureAwait(false);
+        await list.WaitForAsync().ConfigureAwait(false);
 
-        await notExistList.WaitAbsenceAsync().ConfigureAwait(false);
+        await list.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitCount()
+    public async Task WaitToHaveCount()
     {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-
-        await list.WaitCountAsync(3).ConfigureAwait(false);
+        var list = await GetControlListAsync("default").ConfigureAwait(false);
+        await list.WaitToHaveCountAsync(3).ConfigureAwait(false);
     }
 
     [Test]
     public async Task ClickFirstItem()
     {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
+        var list = await GetControlListAsync("default").ConfigureAwait(false);
 
         await list.ClickFirstItemAsync().ConfigureAwait(false);
 
         var items = await list.GetItemsAsync().ConfigureAwait(false);
-        await items.First().Expect().ToBeCheckedAsync().ConfigureAwait(false);
+        await items.First().RootLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task ClickLastItem()
     {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
+        var list = await GetControlListAsync("default").ConfigureAwait(false);
 
         await list.ClickLastItemAsync().ConfigureAwait(false);
 
         var items = await list.GetItemsAsync().ConfigureAwait(false);
-        await items.Last().Expect().ToBeCheckedAsync().ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task GetFirstItem()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-
-        var actual = await list.GetFirstItemAsync().ConfigureAwait(false);
-
-        await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task GetLastItem()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-
-        var actual = await list.GetLastItemAsync().ConfigureAwait(false);
-
-        await actual.Expect().ToHaveTextAsync("TODO 3").ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task GetSingleItem_By_Predicate()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--default")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
-
-        var actual = await list.GetSingleItemAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 1")
-            .ConfigureAwait(false);
-
-        await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
+        await items.Last().RootLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task GetSingleItem()
     {
-        await Page.GotoAsync(StorybookUrl.Get("controllist--single-element")).ConfigureAwait(false);
-        var list = new ControlList<Radio>(
-            Page.GetByTestId("RadioGroupId"),
-            "[data-tid='Radio__root']",
-            x => new Radio(x));
+        var list = await GetControlListAsync("single-element").ConfigureAwait(false);
 
         var actual = await list.GetSingleItemAsync().ConfigureAwait(false);
 
-        await actual.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
+        await actual.RootLocator.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task GetSingleItem_By_Predicate()
+    {
+        var list = await GetControlListAsync("default").ConfigureAwait(false);
+
+        var actual = await list
+            .GetSingleItemAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 2")
+            .ConfigureAwait(false);
+
+        await actual.RootLocator.Expect().ToHaveTextAsync("TODO 2").ConfigureAwait(false);
+    }
+
+    private async Task<ControlList<Radio>> GetControlListAsync(string storyName)
+    {
+        await Page.GotoAsync(StorybookUrl.Get($"controllist--{storyName}")).ConfigureAwait(false);
+
+        return new ControlList<Radio>(
+            Page.GetByTestId("RootId"),
+            locator => locator.Locator("[data-tid='Radio__root']"),
+            x => new Radio(x));
     }
 }

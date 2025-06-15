@@ -10,7 +10,7 @@ public class ToastAssertionsV2 : ControlBaseAssertionsV2
     private readonly Toast toast;
 
     public ToastAssertionsV2(Toast toast)
-        : base(toast.RootLocator)
+        : base(toast)
     {
         this.toast = toast;
     }

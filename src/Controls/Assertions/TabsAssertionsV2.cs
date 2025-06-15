@@ -10,7 +10,7 @@ public class TabsAssertionsV2 : ControlBaseAssertionsV2
     private readonly Tabs tabs;
 
     public TabsAssertionsV2(Tabs tabs)
-        : base(tabs.RootLocator)
+        : base(tabs)
     {
         this.tabs = tabs;
     }
@@ -27,22 +27,26 @@ public class TabsAssertionsV2 : ControlBaseAssertionsV2
         await tab.ExpectV2().ToBeInactiveAsync().ConfigureAwait(false);
     }
 
-    public async Task ToContainTabsAsync(string[] tabNames, int timeoutInMilliseconds = 15000)
+    public async Task ToContainTabsAsync(string[] tabNames, int timeoutInMilliseconds = 10000)
     {
         using var cts = new CancellationTokenSource(timeoutInMilliseconds);
 
         while (true)
         {
-            var tokens = await tabs.List.GetItemsAsync().ConfigureAwait(false);
-            var texts = await Task.WhenAll(tokens.Select(tab => tab.GetTextAsync())).ConfigureAwait(false);
-
-            if (tabNames.All(texts.Contains))
-            {
-                return;
-            }
-
             try
             {
+                var tokens = await tabs.List.GetItemsAsync().ConfigureAwait(false);
+                var texts = await tokens
+                    .ToAsyncEnumerable()
+                    .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
+                    .ToHashSetAsync(StringComparer.OrdinalIgnoreCase, cts.Token)
+                    .ConfigureAwait(false);
+
+                if (tabNames.All(texts.Contains))
+                {
+                    return;
+                }
+
                 await Task.Delay(100, cts.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
