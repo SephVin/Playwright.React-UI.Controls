@@ -77,7 +77,7 @@ public class DropdownMenuAssertionsV2 : ControlBaseAssertionsV2
             }
         }
 
-        throw new TimeoutException($"Не дождались наличия элементов в списке ComboBox за {timeoutInMilliseconds}ms.");
+        throw new TimeoutException($"Не дождались наличия элементов в списке DropdownMenu за {timeoutInMilliseconds}ms.");
     }
 
     public async Task ToBeFocusedAsync(LocatorAssertionsToBeFocusedOptions? options = default)

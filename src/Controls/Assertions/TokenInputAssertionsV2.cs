@@ -63,6 +63,6 @@ public class TokenInputAssertionsV2 : ControlBaseAssertionsV2
             }
         }
 
-        throw new TimeoutException($"Не дождались наличия элементов в списке ComboBox за {timeoutInMilliseconds}ms.");
+        throw new TimeoutException($"Не дождались наличия элементов в списке TokenInput за {timeoutInMilliseconds}ms.");
     }
 }

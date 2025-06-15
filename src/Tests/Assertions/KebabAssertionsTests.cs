@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class KebabExpectTests : TestsBase
+public class KebabAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeAttached()

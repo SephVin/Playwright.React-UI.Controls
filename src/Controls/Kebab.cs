@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
 using Playwright.ReactUI.Controls.Constants;
@@ -20,41 +22,80 @@ public class Kebab : ControlBase
     public ILocator CaptionLocator { get; }
 
     public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
-        => await RootLocator.GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) == string.Empty;
+        => await GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) != null;
 
     public async Task<bool> IsMenuOpenedAsync()
         => await portal.IsVisibleAsync().ConfigureAwait(false);
 
     public async Task SelectByTextAsync(string text, LocatorClickOptions? options = default)
     {
-        var item = await GetItemAsync(text).ConfigureAwait(false);
+        var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
+        await item.ClickAsync(options).ConfigureAwait(false);
+    }
+
+    public async Task SelectByTextAsync(Regex regex, LocatorClickOptions? options = default)
+    {
+        var item = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
         await item.ClickAsync(options).ConfigureAwait(false);
     }
 
     public async Task SelectByIndexAsync(int index, LocatorClickOptions? options = default)
     {
-        var items = await GetItemsAsync().ConfigureAwait(false);
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
         await items.Nth(index).ClickAsync(options).ConfigureAwait(false);
+    }
+
+    public async Task SelectByDataTidAsync(string dataTid, LocatorClickOptions? options = default)
+    {
+        var container = await GetPortalContainerAsync().ConfigureAwait(false);
+        var item = container.Locator($"[data-tid='{dataTid}']");
+
+        if (await item.CountAsync().ConfigureAwait(false) > 1)
+        {
+            throw new Exception("DataTid должен быть уникальным");
+        }
+
+        await item.ClickAsync(options).ConfigureAwait(false);
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
-        await Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await ExpectV2().ToBeEnabledAsync().ConfigureAwait(false);
         await CaptionLocator.ClickAsync().ConfigureAwait(false);
     }
 
-    public override ILocatorAssertions Expect() => new KebabAssertions(RootLocator.Expect(), CaptionLocator.Expect());
-
-    private async Task<ILocator> GetItemsAsync()
+    public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        return container.Locator("[data-tid='MenuItem__root']");
+
+        return new ControlList<MenuItem>(
+            container,
+            locator => locator.Locator("[data-tid='MenuItem__root']"),
+            locator => new MenuItem(locator)
+        );
     }
 
-    private async Task<ILocator> GetItemAsync(string text)
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
+    public override ILocatorAssertions Expect() => new KebabAssertions(RootLocator.Expect(), CaptionLocator.Expect());
+
+    public new KebabAssertionsV2 ExpectV2() => new(this);
+
+    private async Task<ILocator> GetMenuItemsLocatorAsync(string byText)
     {
-        var container = await GetPortalContainerAsync().ConfigureAwait(false);
-        return container.Locator("[data-tid='MenuItem__root']").GetByText(text);
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        return items.GetByText(byText);
+    }
+
+    private async Task<ILocator> GetMenuItemsLocatorAsync(Regex regex)
+    {
+        var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
+        return items.GetByText(regex);
+    }
+
+    private async Task<ILocator> GetMenuItemsLocatorAsync()
+    {
+        var portalContainer = await GetPortalContainerAsync().ConfigureAwait(false);
+        return portalContainer.Locator("[data-tid='MenuItem__root']");
     }
 
     private async Task<ILocator> GetPortalContainerAsync()

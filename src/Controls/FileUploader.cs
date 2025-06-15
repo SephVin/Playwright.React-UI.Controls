@@ -17,23 +17,23 @@ public class FileUploader : ControlBase
 
     public virtual async Task SetInputFilesAsync(
         string value,
-        LocatorSetInputFilesOptions? options = default) =>
-        await inputLocator.SetInputFilesAsync(value, options).ConfigureAwait(false);
+        LocatorSetInputFilesOptions? options = default
+    ) => await inputLocator.SetInputFilesAsync(value, options).ConfigureAwait(false);
 
     public virtual async Task SetInputFilesAsync(
         IEnumerable<string> files,
-        LocatorSetInputFilesOptions? options = default) =>
-        await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
+        LocatorSetInputFilesOptions? options = default
+    ) => await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
 
     public virtual async Task SetInputFilesAsync(
         FilePayload files,
-        LocatorSetInputFilesOptions? options = default) =>
-        await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
+        LocatorSetInputFilesOptions? options = default
+    ) => await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
 
     public virtual async Task SetInputFilesAsync(
         IEnumerable<FilePayload> files,
-        LocatorSetInputFilesOptions? options = default) =>
-        await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
+        LocatorSetInputFilesOptions? options = default
+    ) => await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
 
     public override ILocatorAssertions Expect() => inputLocator.Expect();
 }
