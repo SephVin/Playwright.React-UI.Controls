@@ -5,7 +5,7 @@ using Playwright.ReactUI.Tests.Helpers;
 
 namespace Playwright.ReactUI.Tests.Assertions;
 
-public class PagingExpectTests : TestsBase
+public class PagingAssertionsTests : TestsBase
 {
     [Test]
     public async Task ToBeAttached()
@@ -109,7 +109,7 @@ public class PagingExpectTests : TestsBase
         await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
         var paging = new Paging(Page.GetByTestId("PagingId"));
 
-        await paging.Expect().ToHaveAttributeAsync("data-pagescount", "8").ConfigureAwait(false);
+        await paging.Expect().ToHaveAttributeAsync("data-tid", "PagingId").ConfigureAwait(false);
     }
 
     [Test]
@@ -128,14 +128,5 @@ public class PagingExpectTests : TestsBase
         var paging = new Paging(Page.GetByTestId("PagingId"));
 
         await paging.Expect().ToHaveCountAsync(8).ConfigureAwait(false);
-    }
-
-    [Test]
-    public async Task NotToHaveCount()
-    {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
-        await paging.Expect().Not.ToHaveCountAsync(2).ConfigureAwait(false);
     }
 }

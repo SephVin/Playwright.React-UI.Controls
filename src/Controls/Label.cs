@@ -13,6 +13,9 @@ public class Label : ControlBase
     {
     }
 
+    public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
+        => await GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) != null;
+
     public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
         => await RootLocator.InnerTextAsync(options).ConfigureAwait(false);
 

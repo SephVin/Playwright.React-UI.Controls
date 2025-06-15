@@ -70,7 +70,7 @@ public class AutocompleteExtensionsTests : TestsBase
     public async Task WaitToHaveAttribute_With_Attribute_Value()
     {
         var autocomplete = await GetAutocompleteAsync("default").ConfigureAwait(false);
-        await autocomplete.WaitToHaveAttributeAsync("data-tid", "InputId").ConfigureAwait(false);
+        await autocomplete.WaitToHaveAttributeAsync("data-tid", "AutocompleteId").ConfigureAwait(false);
     }
 
     [Test]
@@ -98,7 +98,7 @@ public class AutocompleteExtensionsTests : TestsBase
     public async Task WaitToHaveValue()
     {
         var autocomplete = await GetAutocompleteAsync("filled").ConfigureAwait(false);
-        await autocomplete.WaitToHaveValueAsync("TODO").ConfigureAwait(false);
+        await autocomplete.WaitToHaveValueAsync("Resident Sleeper").ConfigureAwait(false);
     }
 
     [Test]
@@ -166,11 +166,12 @@ public class AutocompleteExtensionsTests : TestsBase
     public async Task AppendText_When_Input_Is_Not_Empty()
     {
         var autocomplete = await GetAutocompleteAsync("filled").ConfigureAwait(false);
-        await autocomplete.InputLocator.Expect().ToHaveValueAsync("TODO").ConfigureAwait(false);
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("Resident Sleeper").ConfigureAwait(false);
 
         await autocomplete.AppendTextAsync("a").ConfigureAwait(false);
 
-        await autocomplete.InputLocator.Expect().ToHaveValueAsync("TODOa").ConfigureAwait(false);
+        // ReSharper disable once StringLiteralTypo
+        await autocomplete.InputLocator.Expect().ToHaveValueAsync("Resident Sleepera").ConfigureAwait(false);
     }
 
     [Test]

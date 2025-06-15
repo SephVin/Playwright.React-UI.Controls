@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
+using Playwright.ReactUI.Controls.Constants;
 using Playwright.ReactUI.Controls.Extensions;
 
 namespace Playwright.ReactUI.Controls;
@@ -13,29 +14,30 @@ public class Paging : ControlBase
     public Paging(ILocator context)
         : base(context)
     {
-        Pages = new ControlList<Label>(
+        Pages = new ControlList<Page>(
             context,
-            locator => locator.Locator("[data-tid='Paging__pageLink']"),
-            x => new Label(x));
+            locator => locator.Locator("[data-tid='Paging__pageLinkWrapper']"),
+            x => new Page(x));
         nextPage = new Label(context.Locator("[data-tid='Paging__forwardLink']"));
     }
 
-    public ControlList<Label> Pages { get; }
+    public ControlList<Page> Pages { get; }
 
     public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
-        => await GetAttributeValueAsync("tabindex", options).ConfigureAwait(false) is "-1";
+        => await GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) != null;
 
-    public async Task<int> GetPagesCountAsync(LocatorGetAttributeOptions? options = default)
+    public async Task<int> GetPagesCountAsync()
     {
-        var attributeValue = await GetAttributeValueAsync("data-pagescount", options).ConfigureAwait(false);
+        var lastPage = await Pages.GetLastItemAsync().ConfigureAwait(false);
 
-        if (int.TryParse(attributeValue, out var pagesCount))
+        try
         {
-            return pagesCount;
+            return await lastPage.GetPageNumberAsync().ConfigureAwait(false);
         }
-
-        throw new InvalidOperationException(
-            "Can't get pages count. Maybe 'data-pagescount' attribute is not set or it's equal to Infinity");
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException("Не удалось получить количество страниц");
+        }
     }
 
     public async Task GoToPageAsync(int pageNumber, LocatorClickOptions? options = default)
@@ -53,53 +55,79 @@ public class Paging : ControlBase
         }
         catch (TimeoutException)
         {
-            throw new TimeoutException($"Page with number {pageNumber} is not visible or exist");
+            throw new TimeoutException($"Страницы с номером {pageNumber} не существует");
         }
     }
 
     public async Task GoToLastPageAsync(LocatorClickOptions? options = default)
     {
-        var pagesCount = await GetPagesCountAsync().ConfigureAwait(false);
-        await CheckPageConstraintAsync(pagesCount).ConfigureAwait(false);
-        var page = await Pages.GetItemAsync(await Pages.CountAsync().ConfigureAwait(false) - 1).ConfigureAwait(false);
-        await page.ClickAsync(options).ConfigureAwait(false);
+        var lastPage = await Pages.GetLastItemAsync().ConfigureAwait(false);
+
+        try
+        {
+            var lastPageNumber = await lastPage.GetPageNumberAsync().ConfigureAwait(false);
+            await CheckPageConstraintAsync(lastPageNumber).ConfigureAwait(false);
+            await lastPage.ClickAsync(options).ConfigureAwait(false);
+        }
+        catch (InvalidOperationException)
+        {
+            throw new InvalidOperationException("Не удалось получить номер последней страницы");
+        }
     }
 
-    public async Task<int> GetActivePageNumberAsync(LocatorGetAttributeOptions? options = default)
+    public async Task<int> GetActivePageNumberAsync()
     {
-        var attributeValue = await GetAttributeValueAsync("data-active", options).ConfigureAwait(false);
+        var pageItem = await Pages
+            .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
+            .ConfigureAwait(false);
 
-        if (int.TryParse(attributeValue, out var activePageNumber))
-        {
-            return activePageNumber;
-        }
-
-        throw new InvalidOperationException(
-            "Can't get Active page number. Maybe 'data-active' attribute is not set");
+        return await pageItem.GetPageNumberAsync().ConfigureAwait(false);
     }
 
     public async Task GoToNextPageAsync(LocatorClickOptions? options = default)
     {
-        var activePage = await GetActivePageNumberAsync().ConfigureAwait(false);
-        var pagesCount = await GetPagesCountAsync().ConfigureAwait(false);
+        if (await nextPage.IsDisabledAsync().ConfigureAwait(false))
+        {
+            throw new InvalidOperationException("Нельзя перейти на следующую страницу. Текущая страница последняя");
+        }
 
-        if (activePage < pagesCount)
-        {
-            await nextPage.ClickAsync(options).ConfigureAwait(false);
-        }
-        else
-        {
-            throw new InvalidOperationException("Can't go to next page. Current page is the last");
-        }
+        await nextPage.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public override ILocatorAssertions Expect() => new PagingAssertions(RootLocator.Expect(), Pages.Expect());
+    [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
+    public override ILocatorAssertions Expect() => new PagingAssertions(this, RootLocator.Expect(), Pages.Expect());
+
+    public new PagingAssertionsV2 ExpectV2() => new(this);
 
     private async Task CheckPageConstraintAsync(int pageNumber)
     {
         if (await GetActivePageNumberAsync().ConfigureAwait(false) == pageNumber)
         {
-            throw new InvalidOperationException("Can't go to active page");
+            throw new InvalidOperationException("Нельзя перейти на страницу, на которой уже находишься");
         }
+    }
+}
+
+public class Page : Label
+{
+    public Page(ILocator rootLocator)
+        : base(rootLocator)
+    {
+    }
+
+    public async Task<bool> IsActivePageAsync()
+        => await GetAttributeValueAsync(DataVisualState.Active).ConfigureAwait(false) != null;
+
+    public async Task<int> GetPageNumberAsync()
+    {
+        var pageNumber = await RootLocator.Locator("[data-tid='Paging__pageLink']").InnerTextAsync()
+            .ConfigureAwait(false);
+
+        if (int.TryParse(pageNumber, out var activePageNumber))
+        {
+            return activePageNumber;
+        }
+
+        throw new InvalidOperationException("Не удалось получить номер текущей страницы");
     }
 }

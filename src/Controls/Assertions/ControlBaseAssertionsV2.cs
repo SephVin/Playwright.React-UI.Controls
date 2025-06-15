@@ -58,7 +58,7 @@ public class ControlBaseAssertionsV2
             await WaitForAttributeAsync(
                 name,
                 expected: false,
-                timeout: (int)(options?.Timeout ?? 15000f)
+                timeout: (int)(options?.Timeout ?? 10000f)
             ).ConfigureAwait(false);
         }
     }

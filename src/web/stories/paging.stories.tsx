@@ -1,20 +1,19 @@
-import React, { useState } from "react";
-import { Gapped, Paging } from "@skbkontur/react-ui";
-import { Meta } from "@storybook/react";
+import React, { useEffect, useState } from "react";
+import { Gapped, Paging, PagingProps } from "@skbkontur/react-ui";
+import { Meta, type StoryObj } from "@storybook/react";
 
-export default {
-  title: "Paging",
-} as Meta;
+export enum PagingTestIds {
+  PagingId = "PagingId",
+}
 
-export const Default = () => {
+const PagingTemplate = (props: PagingProps) => {
   const [activePage, setActivePage] = useState(2);
 
   return (
     <Gapped>
       <Paging
-        data-tid="PagingId"
-        data-active={activePage}
-        data-pagesCount={8}
+        {...props}
+        data-tid={PagingTestIds.PagingId}
         onPageChange={(activePage) => setActivePage(activePage)}
         activePage={activePage}
         pagesCount={8}
@@ -23,69 +22,64 @@ export const Default = () => {
   );
 };
 
-export const Disabled = () => {
-  const [activePage, setActivePage] = useState(1);
+const meta: Meta<typeof PagingTemplate> = {
+  title: "Paging",
+  component: PagingTemplate,
+};
+export default meta;
 
-  return (
-    <Gapped>
-      <Paging
-        data-tid="PagingId"
-        disabled
-        data-active={activePage}
-        data-pagesCount={8}
-        onPageChange={(activePage) => setActivePage(activePage)}
-        activePage={activePage}
-        pagesCount={8}
-      />
-    </Gapped>
-  );
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
+
+export const Disabled: Story = {
+  ...Default,
+  args: {
+    disabled: true,
+  },
 };
 
-export const DataPagesCountIsNotSet = () => {
-  const [activePage, setActivePage] = useState(1);
+export const OnLastPage: Story = {
+  render: () => {
+    const [activePage, setActivePage] = useState(8);
 
-  return (
-    <Gapped>
-      <Paging
-        data-tid="PagingId"
-        data-active={activePage}
-        onPageChange={(activePage) => setActivePage(activePage)}
-        activePage={activePage}
-        pagesCount={8}
-      />
-    </Gapped>
-  );
+    return (
+      <Gapped>
+        <Paging
+          data-tid={PagingTestIds.PagingId}
+          onPageChange={(activePage) => setActivePage(activePage)}
+          activePage={activePage}
+          pagesCount={8}
+        />
+      </Gapped>
+    );
+  },
 };
 
-export const DataActiveIsNotSet = () => {
-  const [activePage, setActivePage] = useState(1);
+export const Hidden: Story = {
+  render: () => {
+    const [isVisible, setIsVisible] = useState(true);
+    const [activePage, setActivePage] = useState(8);
 
-  return (
-    <Gapped>
-      <Paging
-        data-tid="PagingId"
-        data-pagesCount={8}
-        onPageChange={(activePage) => setActivePage(activePage)}
-        activePage={activePage}
-        pagesCount={8}
-      />
-    </Gapped>
-  );
-};
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
 
-export const OnLastPage = () => {
-  const [activePage, setActivePage] = useState(8);
+      return () => clearTimeout(timer);
+    }, []);
 
-  return (
-    <Gapped>
-      <Paging
-        data-tid="PagingId"
-        data-active={activePage}
-        onPageChange={(activePage) => setActivePage(activePage)}
-        activePage={activePage}
-        pagesCount={8}
-        data-pagesCount={8}
-      />
-    </Gapped>
-  );
+    return (
+      <Gapped>
+        {isVisible && (
+          <Paging
+            data-tid={PagingTestIds.PagingId}
+            onPageChange={(activePage) => setActivePage(activePage)}
+            activePage={activePage}
+            pagesCount={8}
+          />
+        )}
+      </Gapped>
+    );
+  },
 };
