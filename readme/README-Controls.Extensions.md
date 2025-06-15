@@ -1,14 +1,14 @@
 # Playwright.ReactUI.Controls.Extensions
 
-Библиотека предоставляет набор расширений к библиотеке **Playwright.ReactUI.Controls**
+Библиотека предоставляет набор расширений к **Playwright.ReactUI.Controls**
 
 ### Как использовать  
 
-**Примеры для компонента [Input](https://tech.skbkontur.ru/react-ui/#/Components/Input):**  
+**Примеры для компонента [Input](https://tech.skbkontur.ru/kontur-ui/?path=/docs/react-ui_input-data-input--docs):**  
 
 + `await input.AppendTextAsync("newValue").ConfigureAwait(false);` - добавление значения `newValue` к уже существующему в Input  
-+ `await input.WaitPresenceAsync().ConfigureAwait(false);` - ожидание видимости компонента на странице  
-+ `await input.WaitValueAsync("TODO").ConfigureAwait(false);` - ожидание значения `TODO` в Input'e  
++ `await input.WaitToBeVisibleAsync().ConfigureAwait(false);` - ожидание видимости компонента на странице  
++ `await input.WaitToHaveValueAsync("TODO").ConfigureAwait(false);` - ожидание значения `TODO` в Input'e  
 
 
 # Минимальные требования
