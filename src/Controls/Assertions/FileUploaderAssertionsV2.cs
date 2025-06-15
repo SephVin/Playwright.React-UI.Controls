@@ -38,6 +38,7 @@ public class FileUploaderAssertionsV2 : ControlBaseAssertionsV2
             {
                 var fileNames = await fileUploader.GetUploadedFileNamesAsync().ConfigureAwait(false);
                 var set = new HashSet<string>(fileNames, StringComparer.OrdinalIgnoreCase);
+
                 if (expectedFileNames.All(x => set.Contains(x)))
                 {
                     return;
@@ -52,6 +53,6 @@ public class FileUploaderAssertionsV2 : ControlBaseAssertionsV2
         }
 
         throw new TimeoutException(
-            $"Не дождались наличия элементов в списке FileUploader за {timeoutInMilliseconds}ms.");
+            $"Не дождались наличия элементов [{string.Join(", ", expectedFileNames)}] в списке FileUploader за {timeoutInMilliseconds}ms.");
     }
 }

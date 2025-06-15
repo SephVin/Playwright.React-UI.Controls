@@ -48,7 +48,8 @@ public class PagingAssertionsV2 : ControlBaseAssertionsV2
             }
         }
 
-        throw new TimeoutException($"Не дождались определенного количества страница за {timeoutInMilliseconds}ms.");
+        throw new TimeoutException(
+            $"Не дождались, чтобы количество страниц в Paging было равно[{count}] за {timeoutInMilliseconds}ms.");
     }
 
     public async Task ToHaveActivePageAsync(int activePageNumber, int timeoutInMilliseconds = 10000)
@@ -79,6 +80,6 @@ public class PagingAssertionsV2 : ControlBaseAssertionsV2
         }
 
         throw new TimeoutException(
-            $"Не дождались активной страницы под номером {activePageNumber} за {timeoutInMilliseconds}ms.");
+            $"Не дождались, чтобы страница под номером {activePageNumber} стала активной за {timeoutInMilliseconds}ms.");
     }
 }

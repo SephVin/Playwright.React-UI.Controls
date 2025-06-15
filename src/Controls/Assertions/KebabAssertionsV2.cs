@@ -38,10 +38,10 @@ public class KebabAssertionsV2 : ControlBaseAssertionsV2
                 var itemsText = await items
                     .ToAsyncEnumerable()
                     .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
-                    .ToHashSetAsync(cts.Token)
+                    .ToHashSetAsync(StringComparer.OrdinalIgnoreCase, cts.Token)
                     .ConfigureAwait(false);
 
-                if (expectedItemsText.All(x => itemsText.Contains(x)))
+                if (expectedItemsText.All(itemsText.Contains))
                 {
                     return;
                 }
@@ -54,6 +54,7 @@ public class KebabAssertionsV2 : ControlBaseAssertionsV2
             }
         }
 
-        throw new TimeoutException($"Не дождались наличия элементов в списке Kebab за {timeoutInMilliseconds}ms.");
+        throw new TimeoutException(
+            $"Не дождались наличия элементов [{string.Join(", ", expectedItemsText)}] в списке Kebab за {timeoutInMilliseconds}ms.");
     }
 }

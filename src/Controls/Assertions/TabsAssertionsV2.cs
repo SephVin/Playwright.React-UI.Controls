@@ -33,16 +33,20 @@ public class TabsAssertionsV2 : ControlBaseAssertionsV2
 
         while (true)
         {
-            var tokens = await tabs.List.GetItemsAsync().ConfigureAwait(false);
-            var texts = await Task.WhenAll(tokens.Select(tab => tab.GetTextAsync())).ConfigureAwait(false);
-
-            if (tabNames.All(texts.Contains))
-            {
-                return;
-            }
-
             try
             {
+                var tokens = await tabs.List.GetItemsAsync().ConfigureAwait(false);
+                var texts = await tokens
+                    .ToAsyncEnumerable()
+                    .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
+                    .ToHashSetAsync(StringComparer.OrdinalIgnoreCase, cts.Token)
+                    .ConfigureAwait(false);
+
+                if (tabNames.All(texts.Contains))
+                {
+                    return;
+                }
+
                 await Task.Delay(100, cts.Token).ConfigureAwait(false);
             }
             catch (OperationCanceledException)

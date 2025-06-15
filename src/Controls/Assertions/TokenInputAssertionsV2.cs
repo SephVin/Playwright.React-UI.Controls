@@ -47,10 +47,10 @@ public class TokenInputAssertionsV2 : ControlBaseAssertionsV2
                 var itemsText = await items
                     .ToAsyncEnumerable()
                     .SelectAwait(async x => await x.GetTextAsync().ConfigureAwait(false))
-                    .ToHashSetAsync(cts.Token)
+                    .ToHashSetAsync(StringComparer.OrdinalIgnoreCase, cts.Token)
                     .ConfigureAwait(false);
 
-                if (tokenNames.All(x => itemsText.Contains(x)))
+                if (tokenNames.All(itemsText.Contains))
                 {
                     return;
                 }
@@ -63,6 +63,7 @@ public class TokenInputAssertionsV2 : ControlBaseAssertionsV2
             }
         }
 
-        throw new TimeoutException($"Не дождались наличия элементов в списке TokenInput за {timeoutInMilliseconds}ms.");
+        throw new TimeoutException(
+            $"Не дождались наличия элементов [{string.Join(", ", tokenNames)}] в списке TokenInput за {timeoutInMilliseconds}ms.");
     }
 }
