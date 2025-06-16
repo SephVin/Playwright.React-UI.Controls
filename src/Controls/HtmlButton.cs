@@ -8,6 +8,9 @@ using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
+/// <summary>
+/// Кнопка для react (а не @skbkontur/react-ui)
+/// </summary>
 public class HtmlButton : ControlBase, IFocusable
 {
     public HtmlButton(ILocator rootLocator)
