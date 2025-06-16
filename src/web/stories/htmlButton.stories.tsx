@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react";
 // eslint-disable-next-line
-import React, { useEffect, useState } from 'react';
-import { Gapped, Toast, Tooltip } from '@skbkontur/react-ui';
+import React, { useEffect, useState } from "react";
+import { Gapped, Toast, Tooltip } from "@skbkontur/react-ui";
 
 export enum HtmlButtonTestIds {
-  HtmlButtonId = 'HtmlButtonId',
-  LabelId = 'LabelId',
+  HtmlButtonId = "ButtonId",
+  LabelId = "LabelId",
 }
 
 const meta: Meta = {
-  title: 'HtmlButton',
+  title: "HtmlButton",
 };
 
 export default meta;
@@ -20,9 +20,9 @@ export const Default: Story = {
     return (
       <Gapped>
         <button
-          data-attribute-without-value={''}
+          data-attribute-without-value={""}
           data-tid={HtmlButtonTestIds.HtmlButtonId}
-          onClick={() => Toast.push('Clicked')}
+          onClick={() => Toast.push("Clicked")}
           {...args}
         >
           TODO
@@ -42,7 +42,13 @@ export const Disabled: Story = {
 export const WithTooltip: Story = {
   render: () => (
     <Gapped>
-      <Tooltip render={() => <div>TooltipText</div>}>
+      <Tooltip
+        render={() => (
+          <div>
+            TooltipText <a href="https://kontur.ru">ссылка</a>
+          </div>
+        )}
+      >
         <button data-tid={HtmlButtonTestIds.HtmlButtonId}>TODO</button>
       </Tooltip>
     </Gapped>
@@ -61,7 +67,13 @@ export const Hidden: Story = {
       return () => clearTimeout(timer);
     }, []);
 
-    return <Gapped>{isVisible && <button data-tid={HtmlButtonTestIds.HtmlButtonId}>TODO</button>}</Gapped>;
+    return (
+      <Gapped>
+        {isVisible && (
+          <button data-tid={HtmlButtonTestIds.HtmlButtonId}>TODO</button>
+        )}
+      </Gapped>
+    );
   },
 };
 
@@ -78,7 +90,9 @@ export const FocusAndBlur: Story = {
         >
           TODO
         </button>
-        {isShowLabel && <div data-tid={HtmlButtonTestIds.LabelId}>Hello world!</div>}
+        {isShowLabel && (
+          <div data-tid={HtmlButtonTestIds.LabelId}>Hello world!</div>
+        )}
       </Gapped>
     );
   },

@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Playwright.ReactUI.Controls;
@@ -9,152 +10,176 @@ namespace Playwright.ReactUI.Tests.Extensions;
 
 public sealed class ButtonExtensionsTests : TestsBase
 {
-    [Test]
-    public async Task WaitToBeVisible()
+    private static IEnumerable<TestCaseData> ButtonCases()
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        yield return new TestCaseData("button");
+        // ReSharper disable once StringLiteralTypo
+        yield return new TestCaseData("htmlbutton");
+    }
+
+    [Test]
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToBeVisible(string buttonType)
+    {
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToBeHidden()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToBeHidden(string buttonType)
     {
-        var button = await GetButtonAsync("hidden").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--hidden").ConfigureAwait(false);
         await button.WaitForAsync().ConfigureAwait(false);
 
         await button.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToBeEnabled()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToBeEnabled(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToBeDisabled()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToBeDisabled(string buttonType)
     {
-        var button = await GetButtonAsync("disabled").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--disabled").ConfigureAwait(false);
         await button.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task WaitToHaveError()
     {
-        var button = await GetButtonAsync("error").ConfigureAwait(false);
+        var button = await GetButtonAsync("button--error").ConfigureAwait(false);
         await button.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task WaitNotToHaveError()
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync("button--default").ConfigureAwait(false);
         await button.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task WaitToHaveWarning()
     {
-        var button = await GetButtonAsync("warning").ConfigureAwait(false);
+        var button = await GetButtonAsync("button--warning").ConfigureAwait(false);
         await button.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
     public async Task WaitNotToHaveWarning()
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync("button--default").ConfigureAwait(false);
         await button.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToHaveAttribute_With_Attribute_Value()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToHaveAttribute_With_Attribute_Value(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToHaveAttributeAsync("data-tid", "ButtonId").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToHaveAttribute_Without_Attribute_Value()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToHaveAttribute_Without_Attribute_Value(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitNotToHaveAttribute_With_Attribute_Value()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitNotToHaveAttribute_With_Attribute_Value(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitNotToHaveAttribute_Without_Attribute_Value(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToHaveText()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToHaveText(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToHaveTextAsync("TODO").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToHaveText_With_Regex()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToHaveText_With_Regex(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToHaveTextAsync(new Regex("^TO.*")).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitNotToHaveText()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitNotToHaveText(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitNotToHaveTextAsync("TODO777").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitNotToHaveText_With_Regex()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitNotToHaveText_With_Regex(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitNotToHaveTextAsync(new Regex("^TOD1.*")).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToContainText()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToContainText(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToContainTextAsync("TO").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToContainText_With_Regex()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToContainText_With_Regex(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitToContainTextAsync(new Regex("^T.*")).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitNotToContainText()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitNotToContainText(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitNotToContainTextAsync("777").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitNotToContainText_With_Regex()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitNotToContainText_With_Regex(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
         await button.WaitNotToContainTextAsync(new Regex("^7.*")).ConfigureAwait(false);
     }
 
     [Test]
-    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
+    [TestCaseSource(nameof(ButtonCases))]
+    public async Task WaitToBeFocused_And_WaitNotToBeFocused(string buttonType)
     {
-        var button = await GetButtonAsync("default").ConfigureAwait(false);
+        var button = await GetButtonAsync($"{buttonType}--default").ConfigureAwait(false);
 
         await button.WaitNotToBeFocusedAsync().ConfigureAwait(false);
 
@@ -164,7 +189,7 @@ public sealed class ButtonExtensionsTests : TestsBase
 
     private async Task<Button> GetButtonAsync(string storyName)
     {
-        await Page.GotoAsync(StorybookUrl.Get($"button--{storyName}")).ConfigureAwait(false);
+        await Page.GotoAsync(StorybookUrl.Get(storyName)).ConfigureAwait(false);
         return new Button(Page.GetByTestId("ButtonId"));
     }
 }

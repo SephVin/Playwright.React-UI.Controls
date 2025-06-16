@@ -115,7 +115,7 @@ public class HtmlButtonTests : TestsBase
 
         var tooltip = await htmlButton.GetTooltipAsync(TooltipType.Information).ConfigureAwait(false);
 
-        await tooltip.RootLocator.Expect().ToHaveTextAsync("TooltipText").ConfigureAwait(false);
+        await tooltip.RootLocator.Expect().ToHaveTextAsync("TooltipText ссылка").ConfigureAwait(false);
     }
 
     [Test]
@@ -145,7 +145,7 @@ public class HtmlButtonTests : TestsBase
 
         var actual = await htmlButton.GetAttributeValueAsync("data-tid").ConfigureAwait(false);
 
-        actual.Should().Be("HtmlButtonId");
+        actual.Should().Be("ButtonId");
     }
 
     [Test]
@@ -172,6 +172,6 @@ public class HtmlButtonTests : TestsBase
     {
         // ReSharper disable once StringLiteralTypo
         await Page.GotoAsync(StorybookUrl.Get($"htmlbutton--{storyName}")).ConfigureAwait(false);
-        return new HtmlButton(Page.GetByTestId("HtmlButtonId"));
+        return new HtmlButton(Page.GetByTestId("ButtonId"));
     }
 }

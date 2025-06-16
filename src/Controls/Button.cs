@@ -8,12 +8,17 @@ using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
+/// <summary>
+/// Button можно использовать как для @skbkontur/react-ui, так и для react
+/// Но часть функциональности (проверка на Error / Warning) не будет работать с button из react
+/// </summary>
 public class Button : ControlBase, IFocusable
 {
     public Button(ILocator rootLocator)
         : base(rootLocator)
     {
-        ButtonLocator = rootLocator.Locator("button");
+        // Or(rootLocator).Last сделан для кнопки из react (не react-ui)
+        ButtonLocator = rootLocator.Locator("button").Or(rootLocator).Last;
     }
 
     public ILocator ButtonLocator { get; }

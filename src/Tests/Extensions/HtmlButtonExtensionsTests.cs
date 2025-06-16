@@ -43,7 +43,7 @@ public class HtmlButtonExtensionsTests : TestsBase
     public async Task WaitToHaveAttribute_With_Attribute_Value()
     {
         var htmlButton = await GetHtmlButtonAsync("default").ConfigureAwait(false);
-        await htmlButton.WaitToHaveAttributeAsync("data-tid", "HtmlButtonId").ConfigureAwait(false);
+        await htmlButton.WaitToHaveAttributeAsync("data-tid", "ButtonId").ConfigureAwait(false);
     }
 
     [Test]
@@ -138,6 +138,6 @@ public class HtmlButtonExtensionsTests : TestsBase
     {
         // ReSharper disable once StringLiteralTypo
         await Page.GotoAsync(StorybookUrl.Get($"htmlbutton--{storyName}")).ConfigureAwait(false);
-        return new HtmlButton(Page.GetByTestId("HtmlButtonId"));
+        return new HtmlButton(Page.GetByTestId("ButtonId"));
     }
 }
