@@ -59,7 +59,7 @@ public static class FxInputExtensions
 
     public static async Task WaitToBeAutoAsync(
         this FxInput fxInput,
-        LocatorAssertionsToBeVisibleOptions? options = default
+        LocatorAssertionsToBeHiddenOptions? options = default
     ) => await fxInput.ExpectV2().ToBeAutoAsync(options).ConfigureAwait(false);
 
     public static async Task WaitNotToBeAutoAsync(

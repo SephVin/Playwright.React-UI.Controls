@@ -76,29 +76,29 @@ public class KebabTests : TestsBase
     }
 
     [Test]
-    public async Task SelectByText()
+    public async Task SelectFirstByText()
     {
         var kebab = await GetKebabAsync("default").ConfigureAwait(false);
         var toast = new Toast(Page.GetByTestId("ToastView__root"));
         await toast.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
             .ConfigureAwait(false);
 
-        await kebab.SelectByTextAsync("TODO 2").ConfigureAwait(false);
+        await kebab.SelectFirstByTextAsync("TODO 2").ConfigureAwait(false);
 
         await toast.RootLocator.Expect().ToHaveTextAsync("Clicked TODO 2").ConfigureAwait(false);
     }
 
     [Test]
-    public async Task SelectByText_With_Regex()
+    public async Task SelectFirstByText_With_Regex()
     {
         var kebab = await GetKebabAsync("default").ConfigureAwait(false);
         var toast = new Toast(Page.GetByTestId("ToastView__root"));
         await toast.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
             .ConfigureAwait(false);
 
-        await kebab.SelectByTextAsync(new Regex("^TODO 2.*")).ConfigureAwait(false);
+        await kebab.SelectFirstByTextAsync(new Regex("^TODO.*")).ConfigureAwait(false);
 
-        await toast.RootLocator.Expect().ToHaveTextAsync("Clicked TODO 2").ConfigureAwait(false);
+        await toast.RootLocator.Expect().ToHaveTextAsync("Clicked TODO 1").ConfigureAwait(false);
     }
 
     [Test]
@@ -141,13 +141,13 @@ public class KebabTests : TestsBase
     [Test]
     public async Task Hover()
     {
-        var dropdown = await GetKebabAsync("with-tooltip").ConfigureAwait(false);
-        await dropdown.WaitForAsync().ConfigureAwait(false);
+        var kebab = await GetKebabAsync("with-tooltip").ConfigureAwait(false);
+        await kebab.WaitForAsync().ConfigureAwait(false);
         var tooltipLocator = Page.GetByText("TooltipText");
         await tooltipLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
             .ConfigureAwait(false);
 
-        await dropdown.HoverAsync().ConfigureAwait(false);
+        await kebab.HoverAsync().ConfigureAwait(false);
 
         await tooltipLocator.Expect().ToBeVisibleAsync().ConfigureAwait(false);
     }

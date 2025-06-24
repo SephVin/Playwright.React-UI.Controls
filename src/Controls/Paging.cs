@@ -11,14 +11,14 @@ public class Paging : ControlBase
 {
     private readonly Label nextPage;
 
-    public Paging(ILocator context)
-        : base(context)
+    public Paging(ILocator rootLocator)
+        : base(rootLocator)
     {
         Pages = new ControlList<Page>(
-            context,
+            rootLocator,
             locator => locator.Locator("[data-tid='Paging__pageLinkWrapper']"),
             x => new Page(x));
-        nextPage = new Label(context.Locator("[data-tid='Paging__forwardLink']"));
+        nextPage = new Label(rootLocator.Locator("[data-tid='Paging__forwardLink']"));
     }
 
     public ControlList<Page> Pages { get; }

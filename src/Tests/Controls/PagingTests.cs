@@ -81,9 +81,7 @@ public class PagingTests : TestsBase
     [Test]
     public async Task GoToPage_Throws_When_Page_Is_Not_Visible()
     {
-        await Page.GotoAsync(StorybookUrl.Get("paging--default")).ConfigureAwait(false);
-        var paging = new Paging(Page.GetByTestId("PagingId"));
-
+        var paging = await GetPagingAsync("default").ConfigureAwait(false);
         Assert.ThrowsAsync<TimeoutException>(() => paging.GoToPageAsync(6));
     }
 
@@ -161,7 +159,7 @@ public class PagingTests : TestsBase
     }
 
     [Test]
-    public async Task GoToNextPage_Throws_When_Current_Is_Last()
+    public async Task GoToNextPage_Throws_When_Current_Page_Is_Last()
     {
         var paging = await GetPagingAsync("on-last-page").ConfigureAwait(false);
 

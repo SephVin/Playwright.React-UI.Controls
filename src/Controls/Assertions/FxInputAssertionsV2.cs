@@ -38,8 +38,11 @@ public class FxInputAssertionsV2 : ControlBaseAssertionsV2
     public async Task NotToBeFocusedAsync(LocatorAssertionsToBeFocusedOptions? options = default)
         => await fxInput.InputLocator.Expect().Not.ToBeFocusedAsync(options).ConfigureAwait(false);
 
-    public async Task ToBeAutoAsync(LocatorAssertionsToBeVisibleOptions? options = default)
-        => await fxInput.AutoButtonLocator.Expect().Not.ToBeVisibleAsync(options).ConfigureAwait(false);
+    public async Task ToBeAutoAsync(LocatorAssertionsToBeHiddenOptions? options = default)
+    {
+        await fxInput.WaitForAsync().ConfigureAwait(false);
+        await fxInput.AutoButtonLocator.Expect().ToBeHiddenAsync(options).ConfigureAwait(false);
+    }
 
     public async Task NotToBeAutoAsync(LocatorAssertionsToBeVisibleOptions? options = default)
         => await fxInput.AutoButtonLocator.Expect().ToBeVisibleAsync(options).ConfigureAwait(false);

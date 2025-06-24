@@ -1,50 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { FxInput, Gapped, Tooltip } from "@skbkontur/react-ui";
-import type { Meta } from "@storybook/react";
-import { type StoryObj } from "@storybook/react";
+import React, { useEffect, useState } from 'react';
+import type { FxInputProps } from '@skbkontur/react-ui';
+import { FxInput, Gapped, Tooltip } from '@skbkontur/react-ui';
+import type { Meta } from '@storybook/react';
+import { type StoryObj } from '@storybook/react';
 
 export enum FxInputTestIds {
-  FxInputId = "FxInputId",
+  FxInputId = 'FxInputId',
 }
 
+export const FxInputTemplate = (props: FxInputProps) => {
+  const [auto, setAuto] = useState(false);
+  const [value, setValue] = useState('');
+
+  function handleValueChange(value: string) {
+    setAuto(false);
+    setValue(value);
+  }
+
+  function handleRestore() {
+    setAuto(true);
+    setValue('auto');
+  }
+
+  return (
+    <Gapped>
+      <FxInput
+        {...props}
+        data-tid={FxInputTestIds.FxInputId}
+        data-attribute-without-value={''}
+        auto={auto}
+        value={value}
+        onValueChange={handleValueChange}
+        onRestore={handleRestore}
+      />
+    </Gapped>
+  );
+};
+
 const meta: Meta<typeof FxInput> = {
-  title: "FxInput",
-  component: FxInput,
+  title: 'FxInput',
+  component: FxInputTemplate,
 };
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render(args) {
-    const [auto, setAuto] = useState(false);
-    const [value, setValue] = useState("");
-
-    function handleValueChange(value: string) {
-      setAuto(false);
-      setValue(value);
-    }
-
-    function handleRestore() {
-      setAuto(true);
-      setValue("auto");
-    }
-
-    return (
-      <Gapped>
-        <FxInput
-          {...args}
-          data-tid={FxInputTestIds.FxInputId}
-          data-attribute-without-value={""}
-          auto={auto}
-          value={value}
-          onValueChange={handleValueChange}
-          onRestore={handleRestore}
-        />
-      </Gapped>
-    );
-  },
-};
+export const Default: Story = {};
 
 export const Disabled: Story = {
   ...Default,
@@ -70,7 +71,7 @@ export const Warning: Story = {
 export const Filled: Story = {
   render: () => {
     const [auto, setAuto] = useState(false);
-    const [value, setValue] = useState("TODO");
+    const [value, setValue] = useState('TODO');
 
     function handleValueChange(value: string) {
       setAuto(false);
@@ -79,7 +80,7 @@ export const Filled: Story = {
 
     function handleRestore() {
       setAuto(true);
-      setValue("auto");
+      setValue('auto');
     }
 
     return (
@@ -98,14 +99,14 @@ export const Filled: Story = {
 
 export const Auto: Story = {
   render: () => {
-    const [value, setValue] = useState("TODO");
+    const [value, setValue] = useState('TODO');
 
     function handleValueChange(value: string) {
       setValue(value);
     }
 
     function handleRestore() {
-      setValue("auto");
+      setValue('auto');
     }
 
     return (
@@ -126,7 +127,7 @@ export const Hidden: Story = {
   render: () => {
     const [isVisible, setIsVisible] = useState(true);
     const [auto, setAuto] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
 
     function handleValueChange(value: string) {
       setAuto(false);
@@ -135,7 +136,7 @@ export const Hidden: Story = {
 
     function handleRestore() {
       setAuto(true);
-      setValue("auto");
+      setValue('auto');
     }
 
     useEffect(() => {
@@ -165,7 +166,7 @@ export const Hidden: Story = {
 export const WithTooltip: Story = {
   render: () => {
     const [auto, setAuto] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('');
 
     function handleValueChange(value: string) {
       setAuto(false);
@@ -174,7 +175,7 @@ export const WithTooltip: Story = {
 
     function handleRestore() {
       setAuto(true);
-      setValue("auto");
+      setValue('auto');
     }
     return (
       <Gapped>

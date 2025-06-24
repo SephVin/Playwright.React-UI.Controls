@@ -128,15 +128,11 @@ public class Dropdown : ControlBase, IFocusable
 
     private async Task<ILocator> GetPortalContainerAsync()
     {
-        await OpenDropdownIfNeededAsync().ConfigureAwait(false);
-        return await portal.GetContainerAsync().ConfigureAwait(false);
-    }
-
-    private async Task OpenDropdownIfNeededAsync()
-    {
         if (!await IsMenuOpenedAsync().ConfigureAwait(false))
         {
             await ButtonLocator.ClickAsync().ConfigureAwait(false);
         }
+
+        return await portal.GetContainerAsync().ConfigureAwait(false);
     }
 }
