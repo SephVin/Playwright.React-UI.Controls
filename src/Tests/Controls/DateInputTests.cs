@@ -116,6 +116,7 @@ public class DateInputTests : TestsBase
     public async Task Fill_New_Value()
     {
         var dateInput = await GetDateInputAsync("default").ConfigureAwait(false);
+        await dateInput.NativeInputLocator.Expect().ToBeEmptyAsync().ConfigureAwait(false);
 
         await dateInput.FillAsync("02.01.2024").ConfigureAwait(false);
 

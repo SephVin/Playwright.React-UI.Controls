@@ -64,7 +64,7 @@ public class FxInputTests : TestsBase
     }
 
     [Test]
-    public async Task IsAuto_Return_False_When_FxInput_In_AutoMode()
+    public async Task IsAuto_Return_False_When_FxInput_In_Default_Mode()
     {
         var fxInput = await GetFxInputAsync("default").ConfigureAwait(false);
 

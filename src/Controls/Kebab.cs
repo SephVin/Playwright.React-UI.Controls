@@ -27,16 +27,16 @@ public class Kebab : ControlBase
     public async Task<bool> IsMenuOpenedAsync()
         => await portal.IsVisibleAsync().ConfigureAwait(false);
 
-    public async Task SelectByTextAsync(string text, LocatorClickOptions? options = default)
+    public async Task SelectFirstByTextAsync(string text, LocatorClickOptions? options = default)
     {
         var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
-        await item.ClickAsync(options).ConfigureAwait(false);
+        await item.First.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task SelectByTextAsync(Regex regex, LocatorClickOptions? options = default)
+    public async Task SelectFirstByTextAsync(Regex regex, LocatorClickOptions? options = default)
     {
         var item = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
-        await item.ClickAsync(options).ConfigureAwait(false);
+        await item.First.ClickAsync(options).ConfigureAwait(false);
     }
 
     public async Task SelectByIndexAsync(int index, LocatorClickOptions? options = default)
