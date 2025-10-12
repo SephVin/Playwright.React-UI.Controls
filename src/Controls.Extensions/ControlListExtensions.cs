@@ -45,10 +45,10 @@ public static class ControlListExtensions
     public static async Task<T> GetSingleItemAsync<T>(this ControlList<T> controlList) where T : ControlBase
     {
         await controlList.ExpectV2().ToHaveCountAsync(1).ConfigureAwait(false);
-        return await controlList.GetFirstItemAsync().ConfigureAwait(false);
+        return controlList.GetFirstItem();
     }
 
-    [Obsolete("Используй GetItemAsync из ControlList")]
+    [Obsolete("Используй GetItem из ControlList")]
     public static async Task<T> GetSingleItemAsync<T>(
         this ControlList<T> controlList,
         Func<T, Task<bool>> predicate,

@@ -103,7 +103,7 @@ public class FileUploaderTests : TestsBase
         await fileUploader.SetInputFilesAsync(filePath).ConfigureAwait(false);
 
         await fileUploader.Files.ExpectV2().ToHaveCountAsync(1).ConfigureAwait(false);
-        var file = await fileUploader.Files.GetFirstItemAsync().ConfigureAwait(false);
+        var file = fileUploader.Files.GetFirstItem();
         await file.Name.ExpectV2().ToHaveTextAsync("file-1.txt").ConfigureAwait(false);
     }
 

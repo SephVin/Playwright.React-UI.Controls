@@ -44,77 +44,98 @@ public class Combobox : ControlBase, IFocusable
     ///     Используй этот метод, когда в меню существует несколько элементов с одинаковым названием
     ///     В остальных случаях лучше использовать `SelectAsync`
     /// </summary>
-    public async Task SelectFirstAsync(string value)
+    public async Task SelectFirstAsync(string value, LocatorClickOptions? options = default)
     {
         var items = await GetComboboxMenuItemsLocatorAsync(value).ConfigureAwait(false);
-        await items.First.ClickAsync().ConfigureAwait(false);
+        await items.First.ClickAsync(options).ConfigureAwait(false);
     }
 
     /// <summary>
     ///     Используй этот метод, когда в меню существует несколько элементов с одинаковым названием
     ///     В остальных случаях лучше использовать `SelectAsync`
     /// </summary>
-    public async Task SelectFirstAsync(Regex value)
+    public async Task SelectFirstAsync(Regex value, LocatorClickOptions? options = default)
     {
         var items = await GetComboboxMenuItemsLocatorAsync(value).ConfigureAwait(false);
-        await items.First.ClickAsync().ConfigureAwait(false);
+        await items.First.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task SelectAsync(string value)
+    public async Task SelectAsync(string value, LocatorClickOptions? options = default)
     {
         var items = await GetComboboxMenuItemsLocatorAsync(value).ConfigureAwait(false);
-        await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-        await items.ClickAsync().ConfigureAwait(false);
+        await items.Expect()
+            .ToHaveCountAsync(1, new LocatorAssertionsToHaveCountOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await items.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task SelectAsync(Regex value)
+    public async Task SelectAsync(Regex value, LocatorClickOptions? options = default)
     {
         var items = await GetComboboxMenuItemsLocatorAsync(value).ConfigureAwait(false);
-        await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-        await items.ClickAsync().ConfigureAwait(false);
+        await items.Expect()
+            .ToHaveCountAsync(1, new LocatorAssertionsToHaveCountOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await items.ClickAsync(options).ConfigureAwait(false);
     }
 
     public async Task FillAsync(string value, LocatorFillOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await NativeInputLocator.FillAsync(value, options).ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorClearOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await NativeInputLocator.ClearAsync(options).ConfigureAwait(false);
     }
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await NativeInputLocator.Expect()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
         await RootLocator
             .Locator("input[type='text']")
             .Or(RootLocator.Locator("[data-tid='InputLikeText__root']"))
-            .FocusAsync()
+            .FocusAsync(options)
             .ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await NativeInputLocator.PressAsync("Tab").ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await NativeInputLocator.PressAsync(
+            "Tab",
+            new LocatorPressOptions { Timeout = options?.Timeout }
+        ).ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
         // NOTE: rootLocator всегда в состоянии enabled, даже если ComboBox disabled
-        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
         await base.ClickAsync(options).ConfigureAwait(false);
     }
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
+    /// <summary>
+    ///     Возвращает список меню по data-tid из react-ui:
+    ///         - MenuItem__root
+    ///         - MenuMessage__root
+    ///         - ComboBoxMenu__item
+    ///         - ComboBoxMenu__notFound
+    ///         - MenuHeader__root
+    ///         - MenuFooter__root
+    /// </summary>
     public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
         await FocusAsync().ConfigureAwait(false);
         var container = await portal.GetContainerAsync().ConfigureAwait(false);
         await container.Locator("[data-tid='Spinner__root']")
-            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden }).ConfigureAwait(false);
+            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
+            .ConfigureAwait(false);
 
         return new ControlList<MenuItem>(
             container,

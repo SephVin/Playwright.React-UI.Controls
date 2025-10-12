@@ -26,36 +26,44 @@ public class DateInput : ControlBase, IFocusable
 
     public async Task FillAsync(string date, LocatorPressSequentiallyOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
+        await ClearAsync(new LocatorPressOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await NativeInputLocator.PressSequentiallyAsync(date, options).ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorPressOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await RootLocator.PressAsync("Control+A", options).ConfigureAwait(false);
         await RootLocator.PressAsync("Meta+A", options).ConfigureAwait(false);
         await RootLocator.PressAsync("Backspace", options).ConfigureAwait(false);
     }
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await RootLocator.FocusAsync().ConfigureAwait(false);
+        await NativeInputLocator.Expect()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await RootLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await RootLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await RootLocator.BlurAsync(options).ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
-        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await RootLocator.Locator("span[data-fragment]").First.ClickAsync(
-            options ?? new LocatorClickOptions
-            {
-                Force = true
-            }
-        ).ConfigureAwait(false);
+        // NOTE: rootLocator всегда в состоянии enabled, даже если DateInput disabled
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        // NOTE: обычный клик по RootLocator может кликать в середину DateInput, в результате курсор оказывается во второй ячейке
+        await RootLocator.Locator("span[data-fragment]")
+            .First
+            .ClickAsync(
+                options ?? new LocatorClickOptions
+                {
+                    Force = true
+                }
+            ).ConfigureAwait(false);
     }
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
@@ -64,7 +72,8 @@ public class DateInput : ControlBase, IFocusable
     [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new DateInputAssertions(
         RootLocator.Expect(),
-        NativeInputLocator.Expect());
+        NativeInputLocator.Expect()
+    );
 
     public new DateInputAssertionsV2 ExpectV2() => new(this);
 }

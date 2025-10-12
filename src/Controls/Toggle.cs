@@ -33,10 +33,12 @@ public class Toggle : ControlBase, IFocusable
     public async Task UncheckAsync(LocatorUncheckOptions? options = default)
         => await RootLocator.UncheckAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await InputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await InputLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await InputLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)

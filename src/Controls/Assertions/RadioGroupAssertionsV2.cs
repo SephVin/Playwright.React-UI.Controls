@@ -30,7 +30,7 @@ public class RadioGroupAssertionsV2 : ControlBaseAssertionsV2
 
     public async Task ToBeCheckedByIndexAsync(int index, LocatorAssertionsToBeCheckedOptions? options = default)
     {
-        var radio = await radioGroup.GetByIndexAsync(index).ConfigureAwait(false);
+        var radio = radioGroup.GetByIndex(index);
         await radio.ExpectV2().ToBeCheckedAsync(options).ConfigureAwait(false);
     }
 
@@ -48,7 +48,7 @@ public class RadioGroupAssertionsV2 : ControlBaseAssertionsV2
 
     public async Task ToBeUncheckedByIndexAsync(int index, LocatorAssertionsToBeCheckedOptions? options = default)
     {
-        var radio = await radioGroup.GetByIndexAsync(index).ConfigureAwait(false);
+        var radio = radioGroup.GetByIndex(index);
         await radio.ExpectV2().ToBeUncheckedAsync(options).ConfigureAwait(false);
     }
 

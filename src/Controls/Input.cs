@@ -26,8 +26,8 @@ public class Input : ControlBase, IFocusable
 
     public async Task FillAsync(string value, LocatorFillOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
-        await ClearAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
+        await ClearAsync(new LocatorClearOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await InputLocator.FillAsync(value, options).ConfigureAwait(false);
     }
 
@@ -40,10 +40,12 @@ public class Input : ControlBase, IFocusable
     public async Task ClearAsync(LocatorClearOptions? options = default)
         => await InputLocator.ClearAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await InputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await InputLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await InputLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)

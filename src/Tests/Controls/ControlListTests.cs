@@ -77,7 +77,7 @@ public class ControlListTests : TestsBase
     {
         var list = await GetControlListAsync("default").ConfigureAwait(false);
 
-        var actual = await list.GetFirstItemAsync().ConfigureAwait(false);
+        var actual = list.GetFirstItem();
 
         (await actual.GetTextAsync().ConfigureAwait(false))
             .Should()
@@ -101,7 +101,7 @@ public class ControlListTests : TestsBase
     {
         var list = await GetControlListAsync("default").ConfigureAwait(false);
 
-        var actual = await list.GetItemAsync(1).ConfigureAwait(false);
+        var actual = list.GetItem(1);
 
         (await actual.GetTextAsync().ConfigureAwait(false))
             .Should()
@@ -224,7 +224,7 @@ public class ControlListTests : TestsBase
 
         await list.ClickItemAsync(1).ConfigureAwait(false);
 
-        var item = await list.GetItemAsync(1).ConfigureAwait(false);
+        var item = list.GetItem(1);
         await item.RootLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
@@ -236,7 +236,7 @@ public class ControlListTests : TestsBase
         await list.ClickItemAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == "TODO 2")
             .ConfigureAwait(false);
 
-        var item = await list.GetItemAsync(1).ConfigureAwait(false);
+        var item = list.GetItem(1);
         await item.RootLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 

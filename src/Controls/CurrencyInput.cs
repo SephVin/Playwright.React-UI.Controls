@@ -26,33 +26,35 @@ public class CurrencyInput : ControlBase, IFocusable
 
     public async Task FillAsync(string value, LocatorFillOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
+        await ClearAsync(new LocatorClearOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await InputLocator.FillAsync(value, options).ConfigureAwait(false);
     }
 
     public async Task PressAsync(string value, LocatorPressOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
+        await ClearAsync(new LocatorClearOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await InputLocator.PressAsync(value, options).ConfigureAwait(false);
     }
 
     public async Task PressSequentiallyAsync(string value, LocatorPressSequentiallyOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
+        await ClearAsync(new LocatorClearOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await InputLocator.PressSequentiallyAsync(value, options).ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorClearOptions? options = default)
     {
-        // note: not working without focus
-        await FocusAsync().ConfigureAwait(false);
+        // NOTE: без фокуса currencyInput полностью не очистится
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await InputLocator.ClearAsync(options).ConfigureAwait(false);
     }
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await InputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await InputLocator.FocusAsync().ConfigureAwait(false);
+        await InputLocator.Expect()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await InputLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)
@@ -65,7 +67,10 @@ public class CurrencyInput : ControlBase, IFocusable
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
     [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
-    public override ILocatorAssertions Expect() => new InputAssertions(RootLocator.Expect(), InputLocator.Expect());
+    public override ILocatorAssertions Expect() => new InputAssertions(
+        RootLocator.Expect(),
+        InputLocator.Expect()
+    );
 
     public new CurrencyInputAssertionsV2 ExpectV2() => new(this);
 }

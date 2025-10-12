@@ -196,7 +196,7 @@ public class RadioGroupTests : TestsBase
     {
         var radioGroup = await GetRadioGroupAsync("default").ConfigureAwait(false);
 
-        var actual = await radioGroup.GetByIndexAsync(1).ConfigureAwait(false);
+        var actual = radioGroup.GetByIndex(1);
 
         (await actual.RootLocator.InnerTextAsync().ConfigureAwait(false)).Should().Be("TODO 2");
     }

@@ -18,11 +18,11 @@ public class Token : ControlBase
     public async Task<bool> IsDisabledAsync(LocatorGetAttributeOptions? options = default)
         => await GetAttributeValueAsync(DataVisualState.Disabled, options).ConfigureAwait(false) != null;
 
-    public async Task<string> GetTextAsync()
-        => await RootLocator.InnerTextAsync().ConfigureAwait(false);
+    public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
+        => await RootLocator.InnerTextAsync(options).ConfigureAwait(false);
 
-    public async Task RemoveAsync()
-        => await RemoveIconLocator.ClickAsync().ConfigureAwait(false);
+    public async Task RemoveAsync(LocatorClickOptions? options = default)
+        => await RemoveIconLocator.ClickAsync(options).ConfigureAwait(false);
 
     public new TokenAssertionsV2 ExpectV2() => new(this);
 }

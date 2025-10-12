@@ -28,37 +28,45 @@ public class DatePicker : ControlBase, IFocusable
 
     public async Task FillAsync(string date, LocatorPressSequentiallyOptions? options = default)
     {
-        await ClearAsync().ConfigureAwait(false);
+        await ClearAsync(new LocatorPressOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await NativeInputLocator.PressSequentiallyAsync(date, options).ConfigureAwait(false);
         await BlurAsync().ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorPressOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await NativeInputLocator.PressAsync("Control+A", options).ConfigureAwait(false);
         await NativeInputLocator.PressAsync("Meta+A", options).ConfigureAwait(false);
         await NativeInputLocator.PressAsync("Backspace", options).ConfigureAwait(false);
     }
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await DatePickerInputLocator.FocusAsync().ConfigureAwait(false);
+        await NativeInputLocator.Expect()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await DatePickerInputLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await DatePickerInputLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await DatePickerInputLocator.BlurAsync(options).ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
-        await NativeInputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await RootLocator.Locator("span[data-fragment]").First.ClickAsync(
-            options ?? new LocatorClickOptions
-            {
-                Force = true
-            }
-        ).ConfigureAwait(false);
+        // NOTE: rootLocator всегда в состоянии enabled, даже если DatePicker disabled
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        // NOTE: обычный клик по RootLocator может кликать в середину DatePicker, в результате курсор оказывается во второй ячейке
+        await RootLocator.Locator("span[data-fragment]")
+            .First
+            .ClickAsync(
+                options ?? new LocatorClickOptions
+                {
+                    Force = true
+                }
+            ).ConfigureAwait(false);
     }
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)

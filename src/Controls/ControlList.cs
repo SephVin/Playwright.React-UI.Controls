@@ -31,26 +31,37 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
     public override async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
         => await ItemsLocator.First.IsVisibleAsync(options).ConfigureAwait(false);
 
+    /// <summary>
+    ///     Поведение метода идентично вызову Locator.All()
+    ///
+    ///     getItems не ждет появления элементов, соответствующих локатору, а сразу возвращает всё, что есть на странице в данный момент.
+    ///     Когда список элементов меняется динамически, использование getItems приведёт к непредсказуемым и нестабильным результатам.
+    ///     Когда список элементов стабилен, но загружается динамически, необходимо дождаться полной загрузки списка перед вызовом getItems
+    /// </summary>
     public async Task<IReadOnlyList<TItem>> GetItemsAsync()
     {
         var itemLocators = await GetItemLocatorsAsync().ConfigureAwait(false);
         return itemLocators.Select(x => itemFactory(x)).ToList();
     }
 
-    public async Task<TItem> GetFirstItemAsync()
-        => await GetItemAsync(0).ConfigureAwait(false);
+    /// <summary>
+    ///     Поведение метода идентично вызову Locator.Nth(0)
+    /// </summary>
+    public TItem GetFirstItem() => GetItem(0);
 
+    /// <summary>
+    ///     Поведение метода идентично вызову Locator.Nth(-1)
+    /// </summary>
     public async Task<TItem> GetLastItemAsync()
     {
         var itemsCount = await CountAsync().ConfigureAwait(false);
-        return await GetItemAsync(itemsCount - 1).ConfigureAwait(false);
+        return GetItem(itemsCount - 1);
     }
 
-    public async Task<TItem> GetItemAsync(int index)
-    {
-        var itemLocators = await GetItemLocatorsAsync().ConfigureAwait(false);
-        return itemFactory(itemLocators[index]);
-    }
+    /// <summary>
+    ///     Поведение метода идентично вызову Locator.Nth(index)
+    /// </summary>
+    public TItem GetItem(int index) => itemFactory(ItemsLocator.Nth(index));
 
     public async Task<TItem> GetFirstItemAsync(
         Func<TItem, Task<bool>> predicate,
@@ -125,7 +136,7 @@ public class ControlList<TItem> : ControlBase where TItem : ControlBase
         "Если вы его используете, то убедитесь, что Controls.Extensions у вас добавлен")]
     public async Task ClickItemAsync(int index, LocatorClickOptions? options = default)
     {
-        var item = await GetItemAsync(index).ConfigureAwait(false);
+        var item = GetItem(index);
         await item.ClickAsync(options).ConfigureAwait(false);
     }
 

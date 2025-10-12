@@ -22,8 +22,8 @@ public class DropdownMenu : ControlBase, IFocusable
 
     public ILocator ButtonLocator { get; }
 
-    public async Task<string> GetTextAsync()
-        => await ButtonLocator.InnerTextAsync().ConfigureAwait(false);
+    public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
+        => await ButtonLocator.InnerTextAsync(options).ConfigureAwait(false);
 
     public async Task<bool> IsMenuOpenedAsync()
     {
@@ -34,13 +34,13 @@ public class DropdownMenu : ControlBase, IFocusable
     public async Task SelectFirstByTextAsync(string text, bool isMenuClosedAfterSelect = true)
     {
         var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
-        await SelectFirstByTextAsync(item, isMenuClosedAfterSelect).ConfigureAwait(false);
+        await SelectFirstAsync(item, isMenuClosedAfterSelect).ConfigureAwait(false);
     }
 
     public async Task SelectFirstByTextAsync(Regex regex, bool isMenuClosedAfterSelect = true)
     {
         var item = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
-        await SelectFirstByTextAsync(item, isMenuClosedAfterSelect).ConfigureAwait(false);
+        await SelectFirstAsync(item, isMenuClosedAfterSelect).ConfigureAwait(false);
     }
 
     public async Task SelectByDataTidAsync(string dataTid, bool isMenuClosedAfterSelect = true)
@@ -57,7 +57,7 @@ public class DropdownMenu : ControlBase, IFocusable
 
         if (isMenuClosedAfterSelect)
         {
-            // note: ожидание закрытия меню, чтобы не было гонок
+            // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
             await portal.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
         }
     }
@@ -69,7 +69,7 @@ public class DropdownMenu : ControlBase, IFocusable
 
         if (isMenuClosedAfterSelect)
         {
-            // note: ожидание закрытия меню, чтобы не было гонок
+            // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
             await portal.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
         }
     }
@@ -77,23 +77,32 @@ public class DropdownMenu : ControlBase, IFocusable
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await ButtonLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await ButtonLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await ButtonLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await ButtonLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await ButtonLocator.BlurAsync(options).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
+    /// <summary>
+    ///     Возвращает список меню по data-tid из react-ui:
+    ///         - MenuItem__root
+    ///         - MenuHeader__root
+    ///         - MenuFooter__root
+    /// </summary>
     public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
         await container.Locator("[data-tid='Spinner__root']")
-            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden }).ConfigureAwait(false);
+            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
+            .ConfigureAwait(false);
 
         return new ControlList<MenuItem>(
             container,
@@ -103,6 +112,25 @@ public class DropdownMenu : ControlBase, IFocusable
                     .Or(locator.Locator("[data-tid='MenuFooter__root']")),
             locator => new MenuItem(locator)
         );
+    }
+
+    public async Task<MenuItem> GetMenuItemAsync(string text)
+    {
+        var items = await GetMenuItemsAsync().ConfigureAwait(false);
+
+        return await items.GetFirstItemAsync(
+            async item =>
+            {
+                var itemText = await item.GetTextAsync().ConfigureAwait(false);
+                return itemText.Equals(text, StringComparison.OrdinalIgnoreCase);
+            }
+        ).ConfigureAwait(false);
+    }
+
+    public async Task<MenuItem> GetMenuItemAsync(int index)
+    {
+        var items = await GetMenuItemsAsync().ConfigureAwait(false);
+        return items.GetItem(index);
     }
 
     [Obsolete("Используй ToContainItems из DropdownAssertionsV2. Или WaitToContainItems из Control.Extensions")]
@@ -146,13 +174,13 @@ public class DropdownMenu : ControlBase, IFocusable
         return await portal.GetContainerAsync().ConfigureAwait(false);
     }
 
-    private async Task SelectFirstByTextAsync(ILocator item, bool isMenuClosedAfterSelect = true)
+    private async Task SelectFirstAsync(ILocator item, bool isMenuClosedAfterSelect = true)
     {
         await item.First.ClickAsync().ConfigureAwait(false);
 
         if (isMenuClosedAfterSelect)
         {
-            // note: ожидание закрытия меню, чтобы не было гонок
+            // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
             await portal.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
         }
     }

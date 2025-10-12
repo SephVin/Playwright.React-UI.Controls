@@ -103,7 +103,7 @@ public class DropdownMenuTests : TestsBase
         isOpened.Should().BeTrue();
 
         var items = await dropdownMenu.GetMenuItemsAsync().ConfigureAwait(false);
-        var checkbox = new Checkbox((await items.GetFirstItemAsync().ConfigureAwait(false)).ContentLocator);
+        var checkbox = new Checkbox(items.GetFirstItem().ContentLocator);
         await checkbox.InputLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
@@ -118,7 +118,7 @@ public class DropdownMenuTests : TestsBase
         isOpened.Should().BeTrue();
 
         var items = await dropdownMenu.GetMenuItemsAsync().ConfigureAwait(false);
-        var checkbox = new Checkbox((await items.GetFirstItemAsync().ConfigureAwait(false)).ContentLocator);
+        var checkbox = new Checkbox(items.GetFirstItem().ContentLocator);
         await checkbox.InputLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
@@ -146,7 +146,7 @@ public class DropdownMenuTests : TestsBase
         isOpened.Should().BeTrue();
 
         var items = await dropdownMenu.GetMenuItemsAsync().ConfigureAwait(false);
-        var checkbox = new Checkbox((await items.GetFirstItemAsync().ConfigureAwait(false)).ContentLocator);
+        var checkbox = new Checkbox(items.GetFirstItem().ContentLocator);
         await checkbox.InputLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 
@@ -174,7 +174,7 @@ public class DropdownMenuTests : TestsBase
         isOpened.Should().BeTrue();
 
         var items = await dropdownMenu.GetMenuItemsAsync().ConfigureAwait(false);
-        var checkbox = new Checkbox((await items.GetFirstItemAsync().ConfigureAwait(false)).ContentLocator);
+        var checkbox = new Checkbox(items.GetFirstItem().ContentLocator);
         await checkbox.InputLocator.Expect().ToBeCheckedAsync().ConfigureAwait(false);
     }
 

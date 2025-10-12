@@ -21,16 +21,16 @@ public class ControlBase
     public virtual async Task<bool> IsVisibleAsync(LocatorIsVisibleOptions? options = default)
         => await RootLocator.IsVisibleAsync(options).ConfigureAwait(false);
 
-    public async Task<bool> HasErrorAsync()
+    public async Task<bool> HasErrorAsync(LocatorGetAttributeOptions? options = default)
     {
-        await WaitForAsync().ConfigureAwait(false);
-        return await HasAttributeAsync(DataVisualState.Error).ConfigureAwait(false);
+        await WaitForAsync(new LocatorWaitForOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
+        return await HasAttributeAsync(DataVisualState.Error, options).ConfigureAwait(false);
     }
 
-    public async Task<bool> HasWarningAsync()
+    public async Task<bool> HasWarningAsync(LocatorGetAttributeOptions? options = default)
     {
-        await WaitForAsync().ConfigureAwait(false);
-        return await HasAttributeAsync(DataVisualState.Warning).ConfigureAwait(false);
+        await WaitForAsync(new LocatorWaitForOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
+        return await HasAttributeAsync(DataVisualState.Warning, options).ConfigureAwait(false);
     }
 
     public virtual async Task ClickAsync(LocatorClickOptions? options = default)
@@ -45,10 +45,10 @@ public class ControlBase
     public async Task WaitForAsync(LocatorWaitForOptions? options = default)
         => await RootLocator.WaitForAsync(options).ConfigureAwait(false);
 
-    public async Task<bool> HasAttributeAsync(string name)
+    public async Task<bool> HasAttributeAsync(string name, LocatorGetAttributeOptions? options = default)
     {
-        await WaitForAsync().ConfigureAwait(false);
-        return await GetAttributeValueAsync(name).ConfigureAwait(false) != null;
+        await WaitForAsync(new LocatorWaitForOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
+        return await GetAttributeValueAsync(name, options).ConfigureAwait(false) != null;
     }
 
     public async Task<string?> GetAttributeValueAsync(

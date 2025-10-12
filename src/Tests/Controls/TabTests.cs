@@ -14,7 +14,7 @@ public class TabTests : TestsBase
     public async Task IsVisible_Return_True_When_Tab_Is_Visible()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
         await tab.WaitForAsync().ConfigureAwait(false);
 
         var actual = await tab.IsVisibleAsync().ConfigureAwait(false);
@@ -26,7 +26,7 @@ public class TabTests : TestsBase
     public async Task IsVisible_Return_False_When_Tab_Is_Not_Exists()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var visibleTab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var visibleTab = tabs.GetFirst();
         var notExistingTab = new Tab(Page.GetByTestId("HiddenTab"));
         await visibleTab.WaitForAsync().ConfigureAwait(false);
 
@@ -39,7 +39,7 @@ public class TabTests : TestsBase
     public async Task IsDisabled_Return_True_When_Tab_Is_Disabled()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(1).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(1);
 
         var actual = await tab.IsDisabledAsync().ConfigureAwait(false);
 
@@ -50,7 +50,7 @@ public class TabTests : TestsBase
     public async Task IsDisabled_Return_False_When_Tab_Is_Enabled()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.IsDisabledAsync().ConfigureAwait(false);
 
@@ -61,7 +61,7 @@ public class TabTests : TestsBase
     public async Task HasError_Return_True_When_Tab_With_Error()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(3).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(3);
 
         var actual = await tab.HasErrorAsync().ConfigureAwait(false);
 
@@ -72,7 +72,7 @@ public class TabTests : TestsBase
     public async Task HasError_Return_False_When_Tab_Without_Error()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.HasErrorAsync().ConfigureAwait(false);
 
@@ -83,7 +83,7 @@ public class TabTests : TestsBase
     public async Task HasWarning_Return_True_When_Tab_With_Warning()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         var actual = await tab.HasWarningAsync().ConfigureAwait(false);
 
@@ -94,7 +94,7 @@ public class TabTests : TestsBase
     public async Task HasWarning_Return_False_When_Tab_Without_Warning()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.HasWarningAsync().ConfigureAwait(false);
 
@@ -105,7 +105,7 @@ public class TabTests : TestsBase
     public async Task IsActive_Return_True_When_Tab_Is_Active()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.IsActiveAsync().ConfigureAwait(false);
 
@@ -116,7 +116,7 @@ public class TabTests : TestsBase
     public async Task IsActive_Return_False_When_Tab_Is_Inactive()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(1).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(1);
 
         var actual = await tab.IsActiveAsync().ConfigureAwait(false);
 
@@ -127,7 +127,7 @@ public class TabTests : TestsBase
     public async Task GetText()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.GetTextAsync().ConfigureAwait(false);
 
@@ -138,7 +138,7 @@ public class TabTests : TestsBase
     public async Task Click()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.ClickAsync().ConfigureAwait(false);
 
@@ -149,7 +149,7 @@ public class TabTests : TestsBase
     public async Task Hover()
     {
         var tabs = await GetTabsAsync("with-tooltip").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
         var tooltipLocator = Page.GetByText("TooltipText");
         await tooltipLocator.WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
             .ConfigureAwait(false);
@@ -163,7 +163,7 @@ public class TabTests : TestsBase
     public async Task Focus_And_Blur()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
         await tab.RootLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
 
         await tab.FocusAsync().ConfigureAwait(false);
@@ -177,7 +177,7 @@ public class TabTests : TestsBase
     public async Task GetTooltip()
     {
         var tabs = await GetTabsAsync("with-tooltip").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
         await tab.HoverAsync().ConfigureAwait(false);
 
         var tooltip = await tab.GetTooltipAsyncAsync(TooltipType.Information).ConfigureAwait(false);
@@ -189,7 +189,7 @@ public class TabTests : TestsBase
     public async Task HasAttribute_Return_True_When_Attribute_Exist()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.HasAttributeAsync("data-tid").ConfigureAwait(false);
 
@@ -200,7 +200,7 @@ public class TabTests : TestsBase
     public async Task HasAttribute_Return_False_When_Attribute_Not_Exist()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.HasAttributeAsync("data-tid-2").ConfigureAwait(false);
 
@@ -211,7 +211,7 @@ public class TabTests : TestsBase
     public async Task GetAttribute_Return_Attribute_Value_When_Attribute_Exist_With_Value()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.GetAttributeValueAsync("data-tid").ConfigureAwait(false);
 
@@ -222,7 +222,7 @@ public class TabTests : TestsBase
     public async Task GetAttributeValue_Return_Empty_When_Attribute_Exist_Without_Value()
     {
         var tabs = await GetTabsAsync("with-tooltip").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.GetAttributeValueAsync("data-attribute-without-value").ConfigureAwait(false);
 
@@ -233,7 +233,7 @@ public class TabTests : TestsBase
     public async Task GetAttributeValue_Return_Null_When_Attribute_Not_Exist()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         var actual = await tab.GetAttributeValueAsync("data-tid-2").ConfigureAwait(false);
 

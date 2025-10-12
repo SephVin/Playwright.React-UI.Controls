@@ -13,7 +13,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeVisible()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToBeVisibleAsync().ConfigureAwait(false);
     }
@@ -22,7 +22,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeHidden()
     {
         var tabs = await GetTabsAsync("hidden").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToBeHiddenAsync().ConfigureAwait(false);
     }
@@ -31,7 +31,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeEnabled()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToBeEnabledAsync().ConfigureAwait(false);
     }
@@ -40,7 +40,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeDisabled()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(1).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(1);
 
         await tab.WaitToBeDisabledAsync().ConfigureAwait(false);
     }
@@ -49,7 +49,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToHaveError()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(3).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(3);
 
         await tab.WaitToHaveErrorAsync().ConfigureAwait(false);
     }
@@ -58,7 +58,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToHaveError()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToHaveErrorAsync().ConfigureAwait(false);
     }
@@ -67,7 +67,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToHaveWarning()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.WaitToHaveWarningAsync().ConfigureAwait(false);
     }
@@ -76,7 +76,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToHaveWarning()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToHaveWarningAsync().ConfigureAwait(false);
     }
@@ -85,7 +85,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToHaveAttribute_With_Attribute_Value()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToHaveAttributeAsync("data-tid", "Tab__root").ConfigureAwait(false);
     }
@@ -94,7 +94,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToHaveAttribute_Without_Attribute_Value()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToHaveAttributeAsync("data-tid").ConfigureAwait(false);
     }
@@ -103,7 +103,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToHaveAttribute_With_Attribute_Value()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
     }
@@ -112,7 +112,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToHaveAttribute_Without_Attribute_Value()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
     }
@@ -121,7 +121,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToHaveText()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToHaveTextAsync("First").ConfigureAwait(false);
     }
@@ -130,7 +130,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToHaveText_With_Regex()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToHaveTextAsync(new Regex("^Firs.*")).ConfigureAwait(false);
     }
@@ -139,7 +139,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToHaveText()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToHaveTextAsync("TODO777").ConfigureAwait(false);
     }
@@ -148,7 +148,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToHaveText_With_Regex()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToHaveTextAsync(new Regex("^TODO77.*")).ConfigureAwait(false);
     }
@@ -157,7 +157,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToContainText()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToContainTextAsync("Fi").ConfigureAwait(false);
     }
@@ -166,7 +166,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToContainText_With_Regex()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitToContainTextAsync(new Regex("^Firs.*")).ConfigureAwait(false);
     }
@@ -175,7 +175,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToContainText()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToContainTextAsync("777").ConfigureAwait(false);
     }
@@ -184,7 +184,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitNotToContainText_With_Regex()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.WaitNotToContainTextAsync(new Regex("^TODO77.*")).ConfigureAwait(false);
     }
@@ -193,7 +193,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeActive()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
         await tab.ClickAsync().ConfigureAwait(false);
 
         await tab.WaitToBeActiveAsync().ConfigureAwait(false);
@@ -203,7 +203,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeInactive()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.WaitToBeInactiveAsync().ConfigureAwait(false);
     }
@@ -212,7 +212,7 @@ public class TabExtensionsTests : TestsBase
     public async Task WaitToBeFocused_And_WaitNotToBeFocused()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.WaitNotToBeFocusedAsync().ConfigureAwait(false);
 

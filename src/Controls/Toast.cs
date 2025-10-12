@@ -11,8 +11,8 @@ public class Toast : ControlBase
     {
     }
 
-    public async Task GetTextAsync()
-        => await RootLocator.InnerTextAsync().ConfigureAwait(false);
+    public async Task GetTextAsync(LocatorInnerTextOptions? options = default)
+        => await RootLocator.InnerTextAsync(options).ConfigureAwait(false);
 
     public new ToastAssertionsV2 ExpectV2() => new(this);
 }

@@ -34,7 +34,9 @@ public class AutoFillControlsTests : TestsBase
         var fieldInfo = locator.GetType().GetField("_selector", BindingFlags.Instance | BindingFlags.NonPublic);
 
         if (fieldInfo == null)
+        {
             throw new InvalidOperationException("Поле _selector не найдено");
+        }
 
         return fieldInfo.GetValue(locator)?.ToString() ?? string.Empty;
     }
