@@ -33,14 +33,16 @@ public class Radio : ControlBase, IFocusable
     public async Task CheckAsync(LocatorCheckOptions? options = default)
         => await RootLocator.CheckAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await InputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await InputLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await InputLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await InputLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await InputLocator.BlurAsync(options).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);

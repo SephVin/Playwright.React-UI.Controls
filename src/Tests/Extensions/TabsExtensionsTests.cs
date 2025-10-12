@@ -56,7 +56,7 @@ public class TabsExtensionsTests : TestsBase
     public async Task WaitToHaveActiveTab()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
         await tab.ClickAsync().ConfigureAwait(false);
 
         await tabs.WaitToHaveActiveTabAsync("Third").ConfigureAwait(false);
@@ -66,7 +66,7 @@ public class TabsExtensionsTests : TestsBase
     public async Task WaitNotToHaveActiveTab()
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
         await tab.ClickAsync().ConfigureAwait(false);
 
         await tabs.WaitNotToHaveActiveTabAsync("First").ConfigureAwait(false);

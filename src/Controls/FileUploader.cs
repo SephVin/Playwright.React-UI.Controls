@@ -27,8 +27,8 @@ public class FileUploader : ControlBase
 
     public ControlList<File> Files { get; }
 
-    public async Task<bool> IsDisabledAsync()
-        => await inputLocator.IsDisabledAsync().ConfigureAwait(false);
+    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
+        => await inputLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
     public async Task SetInputFilesAsync(
         string value,
@@ -50,31 +50,32 @@ public class FileUploader : ControlBase
         LocatorSetInputFilesOptions? options = default
     ) => await inputLocator.SetInputFilesAsync(files, options).ConfigureAwait(false);
 
-    public async Task RemoveAllFilesAsync()
+    public async Task RemoveAllFilesAsync(LocatorClickOptions? options = default)
     {
         var files = await Files.GetItemsAsync().ConfigureAwait(false);
 
         for (var i = files.Count - 1; i >= 0; i--)
         {
-            await files[i].RemoveAsync().ConfigureAwait(false);
+            await files[i].RemoveAsync(options).ConfigureAwait(false);
         }
     }
 
-    public async Task RemoveFileAsync(string text)
+    public async Task RemoveFileAsync(string name, LocatorClickOptions? options = default)
     {
         var file = await Files.GetFirstItemAsync(
-            async file => (await file.Name.GetTextAsync().ConfigureAwait(false)).Equals(
-                text,
-                StringComparison.OrdinalIgnoreCase)
-        ).ConfigureAwait(false);
+            async file =>
+            {
+                var fileNames = await file.Name.GetTextAsync().ConfigureAwait(false);
+                return fileNames.Equals(name, StringComparison.OrdinalIgnoreCase);
+            }).ConfigureAwait(false);
 
-        await file.RemoveAsync().ConfigureAwait(false);
+        await file.RemoveAsync(options).ConfigureAwait(false);
     }
 
-    public async Task RemoveFileAsync(int index)
+    public async Task RemoveFileAsync(int index, LocatorClickOptions? options = default)
     {
-        var file = await Files.GetItemAsync(index).ConfigureAwait(false);
-        await file.RemoveAsync().ConfigureAwait(false);
+        var file = Files.GetItem(index);
+        await file.RemoveAsync(options).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyList<string>> GetUploadedFileNamesAsync()
@@ -111,6 +112,6 @@ public class File : ControlBase
     public Label Size { get; }
     public Label Icon { get; }
 
-    public async Task RemoveAsync()
-        => await Icon.ClickAsync().ConfigureAwait(false);
+    public async Task RemoveAsync(LocatorClickOptions? options = default)
+        => await Icon.ClickAsync(options).ConfigureAwait(false);
 }

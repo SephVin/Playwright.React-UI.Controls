@@ -35,7 +35,7 @@ public class RadioGroup : ControlBase
 
     public async Task CheckByIndexAsync(int index)
     {
-        var radio = await GetByIndexAsync(index).ConfigureAwait(false);
+        var radio = GetByIndex(index);
         await radio.CheckAsync().ConfigureAwait(false);
     }
 
@@ -51,19 +51,22 @@ public class RadioGroup : ControlBase
 
     public async Task<Radio> GetByValueAsync(string value)
         => await list.GetFirstItemAsync(
-            async x => (await x.GetValueAsync().ConfigureAwait(false)).Equals(
-                value,
-                StringComparison.OrdinalIgnoreCase)
+            async radio =>
+            {
+                var radioValue = await radio.GetValueAsync().ConfigureAwait(false);
+                return radioValue.Equals(value, StringComparison.OrdinalIgnoreCase);
+            }
         ).ConfigureAwait(false);
 
-    public async Task<Radio> GetByIndexAsync(int index)
-        => await list.GetItemAsync(index).ConfigureAwait(false);
+    public Radio GetByIndex(int index) => list.GetItem(index);
 
     public async Task<Radio> GetByTextAsync(string text)
         => await list.GetFirstItemAsync(
-            async x => (await x.GetTextAsync().ConfigureAwait(false)).Equals(
-                text,
-                StringComparison.OrdinalIgnoreCase)
+            async radio =>
+            {
+                var radioText = await radio.GetTextAsync().ConfigureAwait(false);
+                return radioText.Equals(text, StringComparison.OrdinalIgnoreCase);
+            }
         ).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)

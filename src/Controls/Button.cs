@@ -32,10 +32,12 @@ public class Button : ControlBase, IFocusable
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await ButtonLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await ButtonLocator.FocusAsync().ConfigureAwait(false);
+        await ButtonLocator.Expect()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await ButtonLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)

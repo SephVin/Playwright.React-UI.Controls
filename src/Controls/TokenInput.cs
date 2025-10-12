@@ -28,37 +28,38 @@ public class TokenInput : ControlBase, IFocusable
     public ILocator TextareaLocator { get; }
     public ControlList<Token> Tokens { get; }
 
-    public async Task<bool> IsDisabledAsync()
-        => await TextareaLocator.IsDisabledAsync().ConfigureAwait(false);
+    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
+        => await TextareaLocator.IsDisabledAsync(options).ConfigureAwait(false);
 
-    public async Task FillAsync(string value)
-        => await TextareaLocator.FillAsync(value).ConfigureAwait(false);
+    public async Task FillAsync(string value, LocatorFillOptions? options = default)
+        => await TextareaLocator.FillAsync(value, options).ConfigureAwait(false);
 
-    public async Task ClearAsync()
+    public async Task ClearAsync(LocatorClickOptions? options = default)
     {
         var tokens = await Tokens.GetItemsAsync().ConfigureAwait(false);
 
         for (var i = tokens.Count - 1; i >= 0; i--)
         {
-            await tokens[i].RemoveAsync().ConfigureAwait(false);
+            await tokens[i].RemoveAsync(options).ConfigureAwait(false);
         }
     }
 
-    public async Task RemoveTokenAsync(string text)
+    public async Task RemoveTokenAsync(string text, LocatorClickOptions? options = default)
     {
         var token = await Tokens.GetFirstItemAsync(
-            async token => (await token.GetTextAsync().ConfigureAwait(false)).Equals(
-                text,
-                StringComparison.OrdinalIgnoreCase)
-        ).ConfigureAwait(false);
+            async token =>
+            {
+                var tokenText = await token.GetTextAsync().ConfigureAwait(false);
+                return tokenText.Equals(text, StringComparison.OrdinalIgnoreCase);
+            }).ConfigureAwait(false);
 
-        await token.RemoveAsync().ConfigureAwait(false);
+        await token.RemoveAsync(options).ConfigureAwait(false);
     }
 
-    public async Task RemoveTokenAsync(int index)
+    public async Task RemoveTokenAsync(int index, LocatorClickOptions? options = default)
     {
-        var token = await Tokens.GetItemAsync(index).ConfigureAwait(false);
-        await token.RemoveAsync().ConfigureAwait(false);
+        var token = Tokens.GetItem(index);
+        await token.RemoveAsync(options).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -71,57 +72,70 @@ public class TokenInput : ControlBase, IFocusable
     /// Используй этот метод, когда в меню существует несколько элементов с одинаковым названием
     /// В остальных случаях лучше использовать `SelectAsync`
     /// </summary>
-    public async Task SelectFirstAsync(string value)
+    public async Task SelectFirstAsync(string value, LocatorClickOptions? options = default)
     {
         var items = await GetMenuItemsLocatorAsync(value).ConfigureAwait(false);
-        await items.First.ClickAsync().ConfigureAwait(false);
+        await items.First.ClickAsync(options).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Используй этот метод, когда в меню существует несколько элементов с одинаковым названием
     /// В остальных случаях лучше использовать `SelectAsync`
     /// </summary>
-    public async Task SelectFirstAsync(Regex regex)
+    public async Task SelectFirstAsync(Regex regex, LocatorClickOptions? options = default)
     {
         var items = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
-        await items.First.ClickAsync().ConfigureAwait(false);
+        await items.First.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task SelectAsync(string value)
+    public async Task SelectAsync(string value, LocatorClickOptions? options = default)
     {
         var items = await GetMenuItemsLocatorAsync(value).ConfigureAwait(false);
-        await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
-        await items.ClickAsync().ConfigureAwait(false);
+        await items.Expect()
+            .ToHaveCountAsync(1, new LocatorAssertionsToHaveCountOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await items.ClickAsync(options).ConfigureAwait(false);
     }
 
-    public async Task SelectAsync(Regex regex)
+    public async Task SelectAsync(Regex regex, LocatorClickOptions? options = default)
     {
         var items = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
-        await items.Expect().ToHaveCountAsync(1).ConfigureAwait(false);
+        await items.Expect()
+            .ToHaveCountAsync(1, new LocatorAssertionsToHaveCountOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
         await items.ClickAsync().ConfigureAwait(false);
     }
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await TextareaLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await TextareaLocator.ClickAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await TextareaLocator.ClickAsync(new LocatorClickOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await TextareaLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await TextareaLocator.BlurAsync(options).ConfigureAwait(false);
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
-        => await TextareaLocator.ClickAsync().ConfigureAwait(false);
+        => await TextareaLocator.ClickAsync(options).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
+    /// <summary>
+    /// Возвращает список меню по data-tid из react-ui:
+    ///     - ComboBoxMenu__item
+    ///     - MenuHeader__root
+    ///     - MenuFooter__root
+    /// </summary>
     public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
         await FocusAsync().ConfigureAwait(false);
         var container = await portal.GetContainerAsync().ConfigureAwait(false);
         await container.Locator("[data-tid='Spinner__root']")
-            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden }).ConfigureAwait(false);
+            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
+            .ConfigureAwait(false);
 
         return new ControlList<MenuItem>(
             container,

@@ -34,25 +34,37 @@ public class Dropdown : ControlBase, IFocusable
     public virtual async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
         => await ButtonLocator.InnerTextAsync(options).ConfigureAwait(false);
 
-    public async Task SelectFirstByTextAsync(string text)
+    public async Task SelectFirstByTextAsync(string text, LocatorClickOptions? options = default)
     {
         var item = await GetMenuItemsLocatorAsync(text).ConfigureAwait(false);
-        await item.First.ClickAsync().ConfigureAwait(false);
+        await item.First.ClickAsync(options).ConfigureAwait(false);
+        // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
+        await portal.ExpectV2()
+            .ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
     }
 
-    public async Task SelectFirstByTextAsync(Regex regex)
+    public async Task SelectFirstByTextAsync(Regex regex, LocatorClickOptions? options = default)
     {
         var item = await GetMenuItemsLocatorAsync(regex).ConfigureAwait(false);
-        await item.First.ClickAsync().ConfigureAwait(false);
+        await item.First.ClickAsync(options).ConfigureAwait(false);
+        // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
+        await portal.ExpectV2()
+            .ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
     }
 
-    public async Task SelectByIndexAsync(int index)
+    public async Task SelectByIndexAsync(int index, LocatorClickOptions? options = default)
     {
         var items = await GetMenuItemsLocatorAsync().ConfigureAwait(false);
-        await items.Nth(index).ClickAsync().ConfigureAwait(false);
+        await items.Nth(index).ClickAsync(options).ConfigureAwait(false);
+        // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
+        await portal.ExpectV2()
+            .ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
     }
 
-    public async Task SelectByDataTidAsync(string dataTid)
+    public async Task SelectByDataTidAsync(string dataTid, LocatorClickOptions? options = default)
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
         var item = container.Locator($"[data-tid='{dataTid}']");
@@ -62,29 +74,39 @@ public class Dropdown : ControlBase, IFocusable
             throw new Exception("DataTid должен быть уникальным");
         }
 
-        await item.ClickAsync().ConfigureAwait(false);
+        await item.ClickAsync(options).ConfigureAwait(false);
+        // NOTE: ожидание закрытия меню, чтобы не было гонок, в случае, когда меню закрывается долго
+        await portal.ExpectV2()
+            .ToBeHiddenAsync(new LocatorAssertionsToBeHiddenOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
 
-    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
-        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
-
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await ButtonLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await ButtonLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await ButtonLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await ButtonLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await ButtonLocator.BlurAsync(options).ConfigureAwait(false);
 
+    /// <summary>
+    ///     Возвращает список меню по data-tid из react-ui:
+    ///         - MenuItem__root
+    ///         - MenuHeader__root
+    ///         - MenuFooter__root
+    /// </summary>
     public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);
         await container.Locator("[data-tid='Spinner__root']")
-            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden }).ConfigureAwait(false);
+            .WaitForAsync(new LocatorWaitForOptions { State = WaitForSelectorState.Hidden })
+            .ConfigureAwait(false);
 
         return new ControlList<MenuItem>(
             container,
@@ -95,6 +117,28 @@ public class Dropdown : ControlBase, IFocusable
             locator => new MenuItem(locator)
         );
     }
+
+    public async Task<MenuItem> GetMenuItemAsync(string text)
+    {
+        var items = await GetMenuItemsAsync().ConfigureAwait(false);
+
+        return await items.GetFirstItemAsync(
+            async item =>
+            {
+                var itemText = await item.GetTextAsync().ConfigureAwait(false);
+                return itemText.Equals(text, StringComparison.OrdinalIgnoreCase);
+            }
+        ).ConfigureAwait(false);
+    }
+
+    public async Task<MenuItem> GetMenuItemAsync(int index)
+    {
+        var items = await GetMenuItemsAsync().ConfigureAwait(false);
+        return items.GetItem(index);
+    }
+
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
     [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new DropdownAssertions(RootLocator.Expect(), ButtonLocator.Expect());

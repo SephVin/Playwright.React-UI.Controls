@@ -15,23 +15,28 @@ public class Tab : ControlBase, IFocusable
     {
     }
 
-    public async Task<bool> IsDisabledAsync()
-        => await HasAttributeAsync(DataVisualState.Disabled).ConfigureAwait(false);
+    public async Task<bool> IsDisabledAsync(LocatorIsDisabledOptions? options = default)
+        => await HasAttributeAsync(
+            DataVisualState.Disabled,
+            new LocatorGetAttributeOptions { Timeout = options?.Timeout }
+        ).ConfigureAwait(false);
 
-    public async Task<bool> IsActiveAsync()
-        => await HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false);
+    public async Task<bool> IsActiveAsync(LocatorGetAttributeOptions? options = default)
+        => await HasAttributeAsync(DataVisualState.Active, options).ConfigureAwait(false);
 
-    public async Task<string> GetTextAsync()
-        => await RootLocator.InnerTextAsync().ConfigureAwait(false);
+    public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
+        => await RootLocator.InnerTextAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await RootLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await RootLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await RootLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await RootLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await RootLocator.BlurAsync(options).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsyncAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);

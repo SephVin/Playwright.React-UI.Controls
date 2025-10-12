@@ -48,9 +48,13 @@ public class Paging : ControlBase
         {
             var page = await Pages
                 .GetItemAsync(
-                    async x => (await x.GetTextAsync().ConfigureAwait(false)).Equals(pageNumber.ToString()),
-                    (int)(options?.Timeout ?? 10000f))
-                .ConfigureAwait(false);
+                    async page =>
+                    {
+                        var pageText = await page.GetTextAsync().ConfigureAwait(false);
+                        return pageText.Equals(pageNumber.ToString());
+                    },
+                    (int)(options?.Timeout ?? 10000f)
+                ).ConfigureAwait(false);
             await page.ClickAsync(options).ConfigureAwait(false);
         }
         catch (TimeoutException)
@@ -78,7 +82,7 @@ public class Paging : ControlBase
     public async Task<int> GetActivePageNumberAsync()
     {
         var pageItem = await Pages
-            .GetItemAsync(async x => await x.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
+            .GetItemAsync(async page => await page.HasAttributeAsync(DataVisualState.Active).ConfigureAwait(false))
             .ConfigureAwait(false);
 
         return await pageItem.GetNumberAsync().ConfigureAwait(false);

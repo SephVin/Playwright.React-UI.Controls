@@ -12,7 +12,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
         await tab.WaitForAsync().ConfigureAwait(false);
 
         await tab.ExpectV2().ToBeVisibleAsync().ConfigureAwait(false);
@@ -23,7 +23,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--hidden")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
         await tab.WaitForAsync().ConfigureAwait(false);
 
         await tab.ExpectV2().ToBeHiddenAsync().ConfigureAwait(false);
@@ -34,7 +34,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().ToBeEnabledAsync().ConfigureAwait(false);
     }
@@ -44,7 +44,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetByIndexAsync(1).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(1);
 
         await tab.ExpectV2().ToBeDisabledAsync().ConfigureAwait(false);
     }
@@ -54,7 +54,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetByIndexAsync(3).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(3);
 
         await tab.ExpectV2().ToHaveErrorAsync().ConfigureAwait(false);
     }
@@ -64,7 +64,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().NotToHaveErrorAsync().ConfigureAwait(false);
     }
@@ -74,7 +74,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.ExpectV2().ToHaveWarningAsync().ConfigureAwait(false);
     }
@@ -84,7 +84,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().NotToHaveWarningAsync().ConfigureAwait(false);
     }
@@ -94,7 +94,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().ToHaveAttributeAsync("data-tid", "Tab__root").ConfigureAwait(false);
     }
@@ -104,7 +104,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().ToHaveAttributeAsync("data-tid").ConfigureAwait(false);
     }
@@ -114,7 +114,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().NotToHaveAttributeAsync("data-tid", "WrongValue").ConfigureAwait(false);
     }
@@ -124,7 +124,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().NotToHaveAttributeAsync("data-tid-2").ConfigureAwait(false);
     }
@@ -134,7 +134,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().ToHaveTextAsync("First").ConfigureAwait(false);
     }
@@ -144,7 +144,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().NotToHaveTextAsync("TODO777").ConfigureAwait(false);
     }
@@ -154,7 +154,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().ToContainTextAsync("Fi").ConfigureAwait(false);
     }
@@ -164,7 +164,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         await tab.ExpectV2().NotToContainTextAsync("777").ConfigureAwait(false);
     }
@@ -174,7 +174,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
         await tab.ClickAsync().ConfigureAwait(false);
 
         await tab.ExpectV2().ToBeActiveAsync().ConfigureAwait(false);
@@ -185,7 +185,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.ExpectV2().ToBeInactiveAsync().ConfigureAwait(false);
     }
@@ -195,7 +195,7 @@ public class TabAssertionsTests : TestsBase
     {
         await Page.GotoAsync(StorybookUrl.Get("tabs--default")).ConfigureAwait(false);
         var tabs = new Tabs(Page.GetByTestId("TabsId"));
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         await tab.ExpectV2().NotToBeFocusedAsync().ConfigureAwait(false);
 

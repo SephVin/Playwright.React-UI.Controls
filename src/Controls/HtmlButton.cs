@@ -27,10 +27,12 @@ public class HtmlButton : ControlBase, IFocusable
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await RootLocator.ClickAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await RootLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await RootLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await RootLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)

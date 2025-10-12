@@ -60,10 +60,16 @@ public class Kebab : ControlBase
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
     {
-        await ExpectV2().ToBeEnabledAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
         await CaptionLocator.ClickAsync().ConfigureAwait(false);
     }
 
+    /// <summary>
+    ///     Возвращает список меню по data-tid из react-ui:
+    ///         - MenuItem__root
+    /// </summary>
     public async Task<ControlList<MenuItem>> GetMenuItemsAsync()
     {
         var container = await GetPortalContainerAsync().ConfigureAwait(false);

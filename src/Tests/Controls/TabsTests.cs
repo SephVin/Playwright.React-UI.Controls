@@ -59,7 +59,7 @@ public class TabsTests : TestsBase
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
 
-        var tab = await tabs.GetFirstAsync().ConfigureAwait(false);
+        var tab = tabs.GetFirst();
 
         (await tab.RootLocator.InnerTextAsync().ConfigureAwait(false)).Should().Be("First");
     }
@@ -69,7 +69,7 @@ public class TabsTests : TestsBase
     {
         var tabs = await GetTabsAsync("default").ConfigureAwait(false);
 
-        var tab = await tabs.GetByIndexAsync(2).ConfigureAwait(false);
+        var tab = tabs.GetByIndex(2);
 
         (await tab.RootLocator.InnerTextAsync().ConfigureAwait(false)).Should().Be("Third");
     }

@@ -29,23 +29,25 @@ public class Textarea : ControlBase, IFocusable
 
     public async Task PressAsync(string value, LocatorPressOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await TextareaLocator.PressAsync(value, options).ConfigureAwait(false);
     }
 
     public async Task PressSequentiallyAsync(string value, LocatorPressSequentiallyOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await TextareaLocator.PressSequentiallyAsync(value, options).ConfigureAwait(false);
     }
 
     public async Task ClearAsync(LocatorClearOptions? options = default)
         => await TextareaLocator.ClearAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await TextareaLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await TextareaLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await TextareaLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)

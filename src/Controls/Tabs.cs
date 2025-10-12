@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
 using Playwright.ReactUI.Controls.Assertions;
@@ -25,28 +26,32 @@ public class Tabs : ControlBase
 
     public ControlList<Tab> List { get; }
 
-    public async Task SelectAsync(string tabName)
-        => await tabsLocator.GetByText(tabName).ClickAsync().ConfigureAwait(false);
+    public async Task SelectAsync(string tabName, LocatorClickOptions? options = default)
+        => await tabsLocator.GetByText(tabName).ClickAsync(options).ConfigureAwait(false);
 
     public Tab GetActive() => new(activeTabLocator);
+    public Tab GetFirst() => List.GetItem(0);
+    public Tab GetByIndex(int index) => List.GetItem(index);
 
-    public async Task<Tab> GetFirstAsync()
-        => await List.GetItemAsync(0).ConfigureAwait(false);
-
-    public async Task<Tab> GetByIndexAsync(int index)
-        => await List.GetItemAsync(index).ConfigureAwait(false);
-
-    public async Task<Tab> GetByNameAsync(string name)
-        => await List.GetFirstItemAsync(async x => await x.GetTextAsync().ConfigureAwait(false) == name)
-            .ConfigureAwait(false);
-
-    public async Task<Tab> GetByNameAsync(Regex regex)
+    public async Task<Tab> GetByNameAsync(string name, int timeoutInMilliseconds = 10000)
         => await List.GetFirstItemAsync(
-            async x =>
+            async tab =>
             {
-                var text = await x.GetTextAsync().ConfigureAwait(false);
-                return regex.IsMatch(text);
-            }).ConfigureAwait(false);
+                var tabName = await tab.GetTextAsync().ConfigureAwait(false);
+                return tabName.Equals(name, StringComparison.OrdinalIgnoreCase);
+            },
+            timeoutInMilliseconds
+        ).ConfigureAwait(false);
+
+    public async Task<Tab> GetByNameAsync(Regex regex, int timeoutInMilliseconds = 10000)
+        => await List.GetFirstItemAsync(
+            async tab =>
+            {
+                var tabName = await tab.GetTextAsync().ConfigureAwait(false);
+                return regex.IsMatch(tabName);
+            },
+            timeoutInMilliseconds
+        ).ConfigureAwait(false);
 
     public new TabsAssertionsV2 ExpectV2() => new(this);
 }

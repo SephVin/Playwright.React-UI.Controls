@@ -30,8 +30,8 @@ public class Autocomplete : ControlBase
 
     public async Task FillAsync(string value, LocatorFillOptions? options = default)
     {
-        await FocusAsync().ConfigureAwait(false);
-        await ClearAsync().ConfigureAwait(false);
+        await FocusAsync(new LocatorFocusOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
+        await ClearAsync(new LocatorClearOptions { Timeout = options?.Timeout }).ConfigureAwait(false);
         await InputLocator.FillAsync(value, options).ConfigureAwait(false);
     }
 
@@ -44,10 +44,12 @@ public class Autocomplete : ControlBase
     public async Task ClearAsync(LocatorClearOptions? options = default)
         => await InputLocator.ClearAsync(options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await InputLocator.Expect().ToBeEnabledAsync().ConfigureAwait(false);
-        await InputLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await InputLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
     public async Task BlurAsync(LocatorBlurOptions? options = default)
@@ -55,9 +57,6 @@ public class Autocomplete : ControlBase
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
         => await InputLocator.ClickAsync(options).ConfigureAwait(false);
-
-    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
-        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
     public async Task SelectFirstSuggestionAsync(LocatorClickOptions? options = default)
     {
@@ -82,6 +81,9 @@ public class Autocomplete : ControlBase
         var suggestions = await GetSuggestionsAsync().ConfigureAwait(false);
         await suggestions.GetByText(regex).ClickAsync(options).ConfigureAwait(false);
     }
+
+    public async Task<Tooltip> GetTooltipAsync(TooltipType type)
+        => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
 
     [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect() => new InputAssertions(RootLocator.Expect(), InputLocator.Expect());

@@ -24,14 +24,16 @@ public class Link : ControlBase, IFocusable
     public async Task<string?> GetUrlAsync(LocatorGetAttributeOptions? options = default)
         => await GetAttributeValueAsync("href", options).ConfigureAwait(false);
 
-    public async Task FocusAsync()
+    public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
-        await RootLocator.Expect().Not.ToHaveAttributeAsync(DataVisualState.Disabled, "").ConfigureAwait(false);
-        await RootLocator.FocusAsync().ConfigureAwait(false);
+        await ExpectV2()
+            .ToBeEnabledAsync(new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout })
+            .ConfigureAwait(false);
+        await RootLocator.FocusAsync(options).ConfigureAwait(false);
     }
 
-    public async Task BlurAsync()
-        => await RootLocator.BlurAsync().ConfigureAwait(false);
+    public async Task BlurAsync(LocatorBlurOptions? options = default)
+        => await RootLocator.BlurAsync(options).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
