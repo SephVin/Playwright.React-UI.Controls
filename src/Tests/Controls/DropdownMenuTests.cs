@@ -179,6 +179,26 @@ public class DropdownMenuTests : TestsBase
     }
 
     [Test]
+    public async Task GetMenuItem_By_Text()
+    {
+        var dropdownMenu = await GetDropdownMenuAsync("default").ConfigureAwait(false);
+
+        var actual = await dropdownMenu.GetMenuItemAsync("TODO 1").ConfigureAwait(false);
+
+        await actual.RootLocator.Expect().ToHaveTextAsync("TODO 1").ConfigureAwait(false);
+    }
+
+    [Test]
+    public async Task GetMenuItem_By_Index()
+    {
+        var dropdownMenu = await GetDropdownMenuAsync("default").ConfigureAwait(false);
+
+        var actual = await dropdownMenu.GetMenuItemAsync(2).ConfigureAwait(false);
+
+        await actual.RootLocator.Expect().ToHaveTextAsync("TODO 2").ConfigureAwait(false);
+    }
+
+    [Test]
     public async Task Click()
     {
         var dropdownMenu = await GetDropdownMenuAsync("default").ConfigureAwait(false);

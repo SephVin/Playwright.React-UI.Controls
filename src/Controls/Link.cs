@@ -27,7 +27,7 @@ public class Link : ControlBase, IFocusable
     public async Task FocusAsync(LocatorFocusOptions? options = default)
     {
         await ExpectV2()
-            .ToBeEnabledAsync(new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout})
+            .ToBeEnabledAsync(new LocatorAssertionsToHaveAttributeOptions { Timeout = options?.Timeout })
             .ConfigureAwait(false);
         await RootLocator.FocusAsync(options).ConfigureAwait(false);
     }
