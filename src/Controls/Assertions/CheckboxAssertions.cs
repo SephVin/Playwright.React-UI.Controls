@@ -46,6 +46,12 @@ public class CheckboxAssertions : ILocatorAssertions
     public async Task ToBeVisibleAsync(LocatorAssertionsToBeVisibleOptions? options = default)
         => await rootLocatorAssertions.ToBeVisibleAsync(options).ConfigureAwait(false);
 
+    public Task ToContainClassAsync(string expected, LocatorAssertionsToContainClassOptions? options = null)
+        => throw new System.NotImplementedException();
+
+    public Task ToContainClassAsync(IEnumerable<string> expected, LocatorAssertionsToContainClassOptions? options = null)
+        => throw new System.NotImplementedException();
+
     public async Task ToContainTextAsync(string expected, LocatorAssertionsToContainTextOptions? options = default)
         => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
 

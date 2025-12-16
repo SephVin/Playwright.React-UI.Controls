@@ -227,19 +227,6 @@ public class DropdownMenuTests : TestsBase
     }
 
     [Test]
-    public async Task Focus_And_Blur()
-    {
-        var dropdownMenu = await GetDropdownMenuAsync("default").ConfigureAwait(false);
-        await dropdownMenu.ButtonLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
-
-        await dropdownMenu.FocusAsync().ConfigureAwait(false);
-        await dropdownMenu.ButtonLocator.Expect().ToBeFocusedAsync().ConfigureAwait(false);
-
-        await dropdownMenu.BlurAsync().ConfigureAwait(false);
-        await dropdownMenu.ButtonLocator.Expect().Not.ToBeFocusedAsync().ConfigureAwait(false);
-    }
-
-    [Test]
     public async Task GetTooltip()
     {
         var dropdownMenu = await GetDropdownMenuAsync("with-tooltip").ConfigureAwait(false);

@@ -55,6 +55,12 @@ public class KebabAssertions : ILocatorAssertions
     public async Task ToBeVisibleAsync(LocatorAssertionsToBeVisibleOptions? options = null)
         => await captionLocatorAssertions.ToBeVisibleAsync(options).ConfigureAwait(false);
 
+    public Task ToContainClassAsync(string expected, LocatorAssertionsToContainClassOptions? options = null)
+        => throw new System.NotImplementedException();
+
+    public Task ToContainClassAsync(IEnumerable<string> expected, LocatorAssertionsToContainClassOptions? options = null)
+        => throw new System.NotImplementedException();
+
     public async Task ToContainTextAsync(string expected, LocatorAssertionsToContainTextOptions? options = null)
         => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
 

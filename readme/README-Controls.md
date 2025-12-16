@@ -56,5 +56,5 @@ public new HeaderAssertions ExpectV2() => new(this);
 # Минимальные требования
 
 + netstandard2.0 / NET6
-+ Playwright 1.51.0
++ Playwright 1.52.0
 + @skbkontur/react-ui 4.25.2 (рекомендуется использовать последние версии)

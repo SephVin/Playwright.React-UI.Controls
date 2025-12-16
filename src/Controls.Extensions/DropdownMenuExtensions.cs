@@ -70,14 +70,4 @@ public static class DropdownMenuExtensions
         int timeoutInMilliseconds = 10000
     ) => await dropdownMenu.ExpectV2().ToContainItemsAsync(expectedItemsText, timeoutInMilliseconds)
         .ConfigureAwait(false);
-
-    public static async Task WaitToBeFocusedAsync(
-        this DropdownMenu dropdownMenu,
-        LocatorAssertionsToBeFocusedOptions? options = default
-    ) => await dropdownMenu.ExpectV2().ToBeFocusedAsync(options).ConfigureAwait(false);
-
-    public static async Task WaitNotToBeFocusedAsync(
-        this DropdownMenu dropdownMenu,
-        LocatorAssertionsToBeFocusedOptions? options = default
-    ) => await dropdownMenu.ExpectV2().NotToBeFocusedAsync(options).ConfigureAwait(false);
 }
