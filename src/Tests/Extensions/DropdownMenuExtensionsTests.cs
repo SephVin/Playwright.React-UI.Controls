@@ -118,17 +118,6 @@ public class DropdownMenuExtensionsTests : TestsBase
             .ConfigureAwait(false);
     }
 
-    [Test]
-    public async Task WaitToBeFocused_And_WaitNotToBeFocused()
-    {
-        var dropdownMenu = await GetDropdownMenuAsync("default").ConfigureAwait(false);
-
-        await dropdownMenu.WaitNotToBeFocusedAsync().ConfigureAwait(false);
-
-        await dropdownMenu.ButtonLocator.FocusAsync().ConfigureAwait(false);
-        await dropdownMenu.WaitToBeFocusedAsync().ConfigureAwait(false);
-    }
-
     private async Task<DropdownMenu> GetDropdownMenuAsync(string storyName)
     {
         // ReSharper disable once StringLiteralTypo

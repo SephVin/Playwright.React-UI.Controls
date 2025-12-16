@@ -9,7 +9,7 @@ using Playwright.ReactUI.Controls.Providers;
 
 namespace Playwright.ReactUI.Controls;
 
-public class DropdownMenu : ControlBase, IFocusable
+public class DropdownMenu : ControlBase
 {
     private readonly Portal portal;
 
@@ -17,13 +17,13 @@ public class DropdownMenu : ControlBase, IFocusable
         : base(rootLocator)
     {
         portal = new Portal(rootLocator.Locator("noscript"));
-        ButtonLocator = RootLocator.Locator("button");
+        CaptionLocator = RootLocator.Locator("[data-tid='PopupMenu__caption']");
     }
 
-    public ILocator ButtonLocator { get; }
+    public ILocator CaptionLocator { get; }
 
     public async Task<string> GetTextAsync(LocatorInnerTextOptions? options = default)
-        => await ButtonLocator.InnerTextAsync(options).ConfigureAwait(false);
+        => await CaptionLocator.InnerTextAsync(options).ConfigureAwait(false);
 
     public async Task<bool> IsMenuOpenedAsync()
     {
@@ -75,18 +75,7 @@ public class DropdownMenu : ControlBase, IFocusable
     }
 
     public override async Task ClickAsync(LocatorClickOptions? options = default)
-        => await ButtonLocator.ClickAsync(options).ConfigureAwait(false);
-
-    public async Task FocusAsync(LocatorFocusOptions? options = default)
-    {
-        await ExpectV2()
-            .ToBeEnabledAsync(new LocatorAssertionsToBeEnabledOptions { Timeout = options?.Timeout })
-            .ConfigureAwait(false);
-        await ButtonLocator.FocusAsync(options).ConfigureAwait(false);
-    }
-
-    public async Task BlurAsync(LocatorBlurOptions? options = default)
-        => await ButtonLocator.BlurAsync(options).ConfigureAwait(false);
+        => await CaptionLocator.ClickAsync(options).ConfigureAwait(false);
 
     public async Task<Tooltip> GetTooltipAsync(TooltipType type)
         => await TooltipProvider.GetTooltipAsync(type, this).ConfigureAwait(false);
@@ -142,7 +131,7 @@ public class DropdownMenu : ControlBase, IFocusable
 
     [Obsolete("Используй ExpectV2. В будущих версиях этот метод будет удален")]
     public override ILocatorAssertions Expect()
-        => new DropdownMenuAssertions(RootLocator.Expect(), ButtonLocator.Expect());
+        => new DropdownMenuAssertions(RootLocator.Expect(), CaptionLocator.Expect());
 
     public new DropdownMenuAssertionsV2 ExpectV2() => new(this);
 
@@ -168,7 +157,7 @@ public class DropdownMenu : ControlBase, IFocusable
     {
         if (!await IsMenuOpenedAsync().ConfigureAwait(false))
         {
-            await ButtonLocator.ClickAsync().ConfigureAwait(false);
+            await CaptionLocator.ClickAsync().ConfigureAwait(false);
         }
 
         return await portal.GetContainerAsync().ConfigureAwait(false);
