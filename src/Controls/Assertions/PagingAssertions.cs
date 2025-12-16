@@ -62,6 +62,12 @@ public class PagingAssertions : ILocatorAssertions
     public async Task ToBeVisibleAsync(LocatorAssertionsToBeVisibleOptions? options = null)
         => await rootLocatorAssertions.ToBeVisibleAsync(options).ConfigureAwait(false);
 
+    public Task ToContainClassAsync(string expected, LocatorAssertionsToContainClassOptions? options = null)
+        => throw new NotImplementedException();
+
+    public Task ToContainClassAsync(IEnumerable<string> expected, LocatorAssertionsToContainClassOptions? options = null)
+        => throw new NotImplementedException();
+
     public async Task ToContainTextAsync(string expected, LocatorAssertionsToContainTextOptions? options = null)
         => await rootLocatorAssertions.ToContainTextAsync(expected, options).ConfigureAwait(false);
 
